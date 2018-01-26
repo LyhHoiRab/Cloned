@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'segoesc';
+    src: url('../fonts/segoesc.eot');
+    src: url('../fonts/segoesc.eot?#iefix') format('embedded-opentype'), 
+         url('../fonts/segoesc.woff2') format('woff2'),
+         url('../fonts/segoesc.woff') format('woff'),
+         url('../fonts/segoesc.ttf') format('truetype'),
+         url('../fonts/segoesc.svg') format('svg');
+}
+
+body {
+    font-family: '微软雅黑', Arial, sans-serif;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 13px;
+}
+
+a,
+a:hover,
+a:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+input, 
+textarea, 
+select, 
+button {
+    outline: none !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #ccc !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -ms-box-shadow: none !important;
+    -o-box-shadow: none !important;
+}
+
+ul {
+    padding-left: 0;
+    list-style: none;
+    list-style-type: none;
+}
+
+p,
+span {
+    cursor: default;
+}

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/aop 
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/tx 
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+       default-lazy-init="false">
+
+  <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath:/properties/datasource.properties"/>
+
+  <!-- 排除注解扫描 -->
+  <context:component-scan base-package="org.wah">
+    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+  </context:component-scan>
+
+  <!-- mybatis -->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource"      ref="dataSource"/>
+    <property name="configLocation"  value="classpath:/mybatis.xml"/>
+    <property name="mapperLocations" value="classpath*:org/wah/cloned/**/dao/mapper/*.xml"/>
+  </bean>
+
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="annotationClass"           value="org.springframework.stereotype.Repository"/>
+    <property name="basePackage"               value="org.wah.cloned.**.dao.mapper"/>
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+  </bean>
+
+  <!-- 事务 -->
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+  <!-- aspectj -->
+  <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+  <!-- dataSource -->
+  <beans profile="production">
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init" abstract="false">
+      <property name="driverClassName"               value="${jdbc.driver}"/>
+      <property name="url"                           value="${jdbc.url}"/>
+      <property name="username"                      value="${jdbc.username}"/>
+      <property name="password"                      value="${jdbc.password}"/>
+      <property name="initialSize"                   value="${druid.initialSize}"/>
+      <property name="minIdle"                       value="${druid.minIdle}"/>
+      <property name="maxActive"                     value="${druid.maxActive}"/>
+      <property name="maxWait"                       value="${druid.maxWait}"/>
+      <property name="testOnBorrow"                  value="${druid.testOnBorrow}"/>
+      <property name="testOnReturn"                  value="${druid.testOnReturn}"/>
+      <property name="testWhileIdle"                 value="true"/>
+      <property name="defaultAutoCommit"             value="false"/>
+      <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
+      <property name="minEvictableIdleTimeMillis"    value="${druid.minEvictableIdleTimeMillis}"/>
+      <property name="connectionInitSqls" value="set names utf8mb4;"/>
+    </bean>
+  </beans>
+
+  <beans profile="development">
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+      <property name="driverClassName"   value="${jdbc.driver}"/>
+      <property name="url"               value="${jdbc.url}"/>
+      <property name="username"          value="${jdbc.username}"/>
+      <property name="password"          value="${jdbc.password}"/>
+      <property name="defaultAutoCommit" value="false"/>
+    </bean>
+  </beans>
+
+  <beans profile="test">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+      <property name="driverClass"       value="${jdbc.driver}"/>
+      <property name="url"               value="${jdbc.url}"/>
+      <property name="username"          value="${jdbc.username}"/>
+      <property name="password"          value="${jdbc.password}"/>
+    </bean>
+  </beans>
+</beans>
