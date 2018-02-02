@@ -1,0 +1,96 @@
+<ol class="breadcrumb">
+    <li>
+        <span>系统设置</span>
+    </li><!-- item -->
+    <li>
+        <a ui-sref="organization">企业机构</a>
+    </li><!-- item -->
+    <li>
+    <span ng-show="organization.id">
+        修改企业机构
+    </span>
+    <span ng-show="!organization.id">
+        添加企业机构
+    </span>
+    </li><!-- item -->
+</ol><!-- 面包屑 -->
+
+<div class="table-info">
+    <div class="container-fluid">
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">名称</span>
+                <input type="text" class="form-control" placeholder="名称" ng-model="organization.name">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">TOKEN</span>
+                <input type="text" class="form-control" placeholder="TOKEN" ng-model="organization.token">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">企业机构全称</span>
+                <input type="text" class="form-control" placeholder="企业机构全称" ng-model="organization.companyName">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">营业执照注册号</span>
+                <input type="text" class="form-control" placeholder="营业执照注册号" ng-model="organization.licenseNumber">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">法定代表人</span>
+                <input type="text" class="form-control" placeholder="法定代表人" ng-model="organization.legalPerson">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">公司地址</span>
+                <input type="text" class="form-control" placeholder="公司地址" ng-model="organization.companyAddress">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">公司联系电话</span>
+                <input type="text" class="form-control" placeholder="公司联系电话" ng-model="organization.companyPhone">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">公司邮箱</span>
+                <input type="text" class="form-control" placeholder="公司邮箱" ng-model="organization.companyEmail">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">公司网址</span>
+                <input type="text" class="form-control" placeholder="公司网址" ng-model="organization.companyWebsite">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="button-group">
+                <button type="button" class="btn" ng-click="submit()">
+                    <i class="fa fa-check"></i>
+                    提交
+                </button>
+                <button type="button" class="btn" ng-click="reset()">
+                    <i class="fa fa-close"></i>
+                    重置
+                </button>
+            </div>
+        </div><!-- item -->
+    </div><!-- container -->
+</div><!-- table info -->

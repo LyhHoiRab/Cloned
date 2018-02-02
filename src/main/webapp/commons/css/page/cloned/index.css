@@ -1,0 +1,210 @@
+/* header */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+header .brand {
+    float: left;
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #1c2b36;
+}
+
+header .brand > a {
+    font-size: 16px;
+    color: #c4d0d9;
+}
+
+header .control-bar {
+    padding-left: 200px;
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
+
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
+    -ms-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
+    -o-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+header .control-bar .controller {
+    float: left;
+    height: 100%;
+    line-height: 50px;
+}
+
+header .control-bar .controller a {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 14px;
+    color: #363f44;
+}
+
+header .control-bar .controller a:hover {
+    background-color: #f6f8f8;
+}
+
+header .control-bar .user-info {
+    float: right;
+    padding: 0 30px;
+    height: 100%;
+    line-height: 45px;
+}
+
+header .control-bar .user-info:after,
+header .control-bar .controller:after {
+    clear: both;
+}
+
+header .control-bar .user-info img {
+    margin-left: 15px;
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+header .control-bar .user-info span {
+    vertical-align: middle;
+    font-size: 13px;
+    font-weight: lighter;
+    color: #363f44;
+}
+
+/* menu */
+.menu {
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    width: 200px;
+    background-color: #1c2b36;
+    overflow: hidden;
+}
+
+.menu .menu-wrap {
+    position: relative;
+    width: 220px;
+    height: 100%;
+    background-color: inherit;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    z-index: 999;
+}
+
+.men .menu-wrap:scrollbar,
+.men .menu-wrap:-webkit-scrollbar,
+.men .menu-wrap:-moz-scrollbar,
+.men .menu-wrap:-ms-scrollbar,
+.men .menu-wrap:-o-scrollbar {
+    display: none;
+}
+
+.menu .side {
+    padding: 20px 0;
+}
+
+.menu .side:not(:last-child){
+    border-bottom: 2px solid #131e26;
+}
+
+.menu .side .title {
+    margin-bottom: 15px;
+    padding-left: 15px;
+    color: #5c798f;
+}
+
+.menu .side .menu-item {
+    width: 100%;
+}
+
+.menu .side .menu-item a {
+    display: block;
+    padding: 10px 20px;
+    width: 100%;
+    font-size: 13px;
+    color: #c4d0d9;
+}
+
+.menu .side .menu-item a:focus,
+.menu .side .menu-item a:hover, 
+.menu .side .menu-item a:active,
+.menu .side .menu-item a.active {
+    background-color: #16232d;
+}
+
+.menu .side .menu-item i {
+    width: 15px;
+    margin-right: 20px;
+    font-size: 15px;
+}
+
+.menu .side .menu-item i:first-child, 
+.menu .side .menu-item i:nth-child(1) {
+    color: #51c6ea;
+}
+
+.menu .side .menu-item i:last-child {
+    float: right;
+    margin: 0;
+}
+
+/* content */
+.content {
+    margin-top: 50px;
+    margin-left: 200px;
+    height: 100%;
+}
+
+.content .view {
+    
+}
+
+/* media */
+@media(max-width: 1280px) {
+
+}
+
+@media(max-width: 1024px) {
+
+}
+
+@media(max-width: 980px) {
+    
+}
+
+@media(max-width: 768px) {
+    
+}
+
+@media(max-width: 640px) {
+    /* header */
+    header .brand {
+        float: none;
+        width: 100%;
+    }
+
+    header .control-bar {
+        display: none;
+    }
+}
+
+@media(max-width: 480px) {
+
+}
+
+@media(max-width: 320px) {
+    
+}

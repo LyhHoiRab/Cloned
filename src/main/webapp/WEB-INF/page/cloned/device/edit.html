@@ -1,0 +1,54 @@
+<ol class="breadcrumb">
+    <li>
+        <span>系统设置</span>
+    </li><!-- item -->
+    <li>
+        <a ui-sref="device">手机设备</a>
+    </li><!-- item -->
+    <li>
+    <span ng-show="device.id">
+        修改手机设备
+    </span>
+    <span ng-show="!device.id">
+        添加手机设备
+    </span>
+    </li><!-- item -->
+</ol><!-- 面包屑 -->
+
+<div class="table-info">
+    <div class="container-fluid">
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">型号</span>
+                <input type="text" class="form-control" placeholder="型号" ng-model="device.type">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">手机号码</span>
+                <input type="text" class="form-control" placeholder="手机号码" ng-model="device.phone">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">IMEI</span>
+                <input type="text" class="form-control" placeholder="IMEI" ng-model="device.imei">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="button-group">
+                <button type="button" class="btn" ng-click="submit()">
+                    <i class="fa fa-check"></i>
+                    提交
+                </button>
+                <button type="button" class="btn" ng-click="reset()">
+                    <i class="fa fa-close"></i>
+                    重置
+                </button>
+            </div>
+        </div><!-- item -->
+    </div><!-- container -->
+</div><!-- table info -->

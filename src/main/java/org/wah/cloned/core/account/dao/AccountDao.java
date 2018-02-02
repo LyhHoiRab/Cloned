@@ -69,21 +69,18 @@ public class AccountDao{
     }
 
     /**
-     * 判断账户是否注册
+     * 根据账户登录名称和密码查询
      */
-    public Boolean exists(String keyword){
+    public Account getByUsernameAndPassword(String username, String password){
         try{
-            Assert.hasText(keyword, "账户登录关键字不能为空");
+            Assert.hasText(username, "账户登录名称不能为空");
+            Assert.hasText(password, "账户登录密码不能为空");
 
             Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("isDelete", false));
-            criteria.and(Restrictions.or(Restrictions.eq("username", keyword),
-                                            Restrictions.eq("email", keyword),
-                                            Restrictions.eq("phone", keyword)));
+            criteria.and(Restrictions.eq("username", username));
+            criteria.and(Restrictions.eq("password", password));
 
-            Long count = mapper.countByParams(criteria);
-
-            return (count != null && count > 0);
+            return mapper.getByParams(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);
@@ -106,6 +103,28 @@ public class AccountDao{
                                             Restrictions.eq("phone", keyword)));
 
             return mapper.getByParams(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 判断账户是否注册
+     */
+    public Boolean exists(String keyword){
+        try{
+            Assert.hasText(keyword, "账户登录关键字不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("isDelete", false));
+            criteria.and(Restrictions.or(Restrictions.eq("username", keyword),
+                    Restrictions.eq("email", keyword),
+                    Restrictions.eq("phone", keyword)));
+
+            Long count = mapper.countByParams(criteria);
+
+            return (count != null && count > 0);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

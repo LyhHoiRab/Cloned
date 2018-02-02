@@ -74,10 +74,7 @@
       <bean class="org.wah.cloned.commons.security.interceptor.LoginInterceptor">
         <property name="excludes">
           <list>
-            <value>/page/*/auth/login</value>
-            <value>/page/*/auth/register</value>
-            <value>/api/1.0/*/auth/login</value>
-            <value>/api/1.0/*/auth/register</value>
+            <value>/**</value>
           </list>
         </property>
       </bean>
@@ -85,6 +82,7 @@
 
     <mvc:interceptor>
       <mvc:mapping path="/page/**"/>
+      <mvc:mapping path="/"/>
       <bean class="org.wah.cloned.commons.security.interceptor.ResourcesInterceptor"/>
     </mvc:interceptor>
   </mvc:interceptors>
