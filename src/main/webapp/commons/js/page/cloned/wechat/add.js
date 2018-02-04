@@ -1,32 +1,32 @@
-app.controller('deviceEdit', function($scope, $state, $stateParams, $http){
+app.controller('wechatAdd', function($scope, $state, $stateParams, $http){
+    //下拉
+    $scope.devices = [];
+
     //定义实体
-    $scope.device = {
-        id             : $stateParams.id,
-        type           : '',
-        phone          : '',
-        imei           : '',
-        organizationId : ''
+    $scope.wechat = {
+        wxno           : '',
+        deviceId       : '',
+        organizationId : $stateParams.organizationId
     };
 
     //定义方法
     $scope.reset = function(){
-        $scope.device.type           = '';
-        $scope.device.phone          = '';
-        $scope.device.imei           = '';
+        $scope.wechat.wxno           = '';
+        $scope.wechat.deviceId       = '';
     };
 
     $scope.submit = function(){
         $http({
-            url     : '/api/1.0/device',
-            method  : 'PUT',
-            data    : JSON.stringify($scope.device),
+            url     : '/api/1.0/wechat',
+            method  : 'POST',
+            data    : JSON.stringify($scope.wechat),
             headers : {
                 'Content-Type': 'application/json'
             }
         }).success(function(res, status, headers, config){
             if(res.success){
                 alert(res.msg);
-                $state.go('device');
+                $state.go('wechat');
             }else{
                 alert(res.msg);
             }
@@ -35,24 +35,31 @@ app.controller('deviceEdit', function($scope, $state, $stateParams, $http){
         });
     };
 
-    $scope.getData = function(){
+    $scope.getDevices = function(){
         $http({
-            url     : '/api/1.0/device/' + $scope.device.id,
+            url     : '/api/1.0/device/find',
             method  : 'GET',
+            params  : {
+                'organizationId' : $scope.wechat.organizationId
+            },
             headers : {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).success(function(res, status, headers, config){
             if(res.success){
-                utils.copyOf(res.result, $scope.device);
+                $scope.devices = res.result;
             }else{
                 alert(res.msg);
+
+                $scope.devices = [];
             }
         }).error(function(response){
             console.error(response);
+
+            $scope.devices = [];
         });
     };
 
     //初始化
-    $scope.getData();
+    $scope.getDevices();
 });

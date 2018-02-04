@@ -78,7 +78,7 @@ public class DeviceDao{
             criteria.sort(Restrictions.asc("createTime"));
 
             if(!StringUtils.isBlank(organizationId)){
-                criteria.and(Restrictions.eq("organization", organizationId));
+                criteria.and(Restrictions.eq("organizationId", organizationId));
             }
             if(!StringUtils.isBlank(type)){
                 criteria.and(Restrictions.like("type", type));
@@ -94,6 +94,34 @@ public class DeviceDao{
             Long count = mapper.countByParams(criteria);
 
             return new Page<Device>(list, pageRequest, count);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 查询
+     */
+    public List<Device> find(String organizationId, String type, String phone, String imei){
+        try{
+            Criteria criteria = new Criteria();
+            criteria.sort(Restrictions.asc("createTime"));
+
+            if(!StringUtils.isBlank(organizationId)){
+                criteria.and(Restrictions.eq("organizationId", organizationId));
+            }
+            if(!StringUtils.isBlank(type)){
+                criteria.and(Restrictions.like("type", type));
+            }
+            if(!StringUtils.isBlank(phone)){
+                criteria.and(Restrictions.like("phone", phone));
+            }
+            if(!StringUtils.isBlank(imei)){
+                criteria.and(Restrictions.like("imei", imei));
+            }
+
+            return mapper.findByParams(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

@@ -176,7 +176,7 @@
     <update id="update">
         UPDATE wechat
          <set>
-             <if test="wxno != null">
+             <if test="wxno != null and wxno != ''">
                  wxno = #{wxno, jdbcType=VARCHAR},
              </if>
              <if test="organizationId != null and organizationId != ''">
@@ -194,6 +194,40 @@
 
     <select id="getByParams" resultMap="wechat">
         SELECT *
+          FROM wechat
+        <if test="params != null">
+            <include refid="WHERE_COLUMN"/>
+        </if>
+    </select>
+
+    <select id="findByParams" resultMap="wechat">
+        SELECT *
+          FROM wechat
+        <if test="params != null">
+            <include refid="WHERE_COLUMN"/>
+
+            <if test="params.groups != null and params.groups.size > 0">
+                GROUP BY
+                <foreach collection="params.groups" item="group" separator=",">
+                    ${group.property}
+                </foreach>
+            </if>
+
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
+
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
+        </if>
+    </select>
+
+    <select id="countByParams" resultType="java.lang.Long">
+        SELECT COUNT(*)
           FROM wechat
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>

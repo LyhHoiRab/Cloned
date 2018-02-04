@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.doraemon.mybatis.Criteria;
 
+import java.util.List;
+
 @Repository
 public interface WechatMapper{
 
@@ -22,4 +24,14 @@ public interface WechatMapper{
      * 根据条件查询
      */
     Wechat getByParams(@Param("params") Criteria criteria);
+
+    /**
+     * 根据条件查询
+     */
+    List<Wechat> findByParams(@Param("params") Criteria criteria);
+
+    /**
+     * 根据条件查询数量
+     */
+    Long countByParams(@Param("params") Criteria criteria);
 }

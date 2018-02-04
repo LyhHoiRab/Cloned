@@ -70,7 +70,7 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
             }]
         }
     }).state('device.list', {
-        url         : '/list',
+        url         : '/list/:organizationId',
         templateUrl : function($stateParams){
             return '/page/cloned/device/list/' + $stateParams.organizationId;
         },
@@ -95,7 +95,83 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
             deps: ['$ocLazyLoad', function($ocLazyLoad){
                 return $ocLazyLoad.load([
                     basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/plugin/json2/json2.js',
                     basePath + '/commons/js/page/cloned/device/add.js'
+                ]);
+            }]
+        }
+    }).state('deviceEdit', {
+        url         : '/deviceEdit/:id',
+        templateUrl : function($stateParams){
+            return '/page/cloned/device/' + $stateParams.id;
+        },
+        controller  : 'deviceEdit',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/utils.js',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/page/cloned/device/edit.js'
+                ]);
+            }]
+        }
+    }).state('wechat', {
+        url         : '/wechat',
+        templateUrl : '/page/cloned/wechat',
+        controller  : 'wechat',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/wechat/index.js'
+                ]);
+            }]
+        }
+    }).state('wechat.list', {
+        url         : '/list/:organizationId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechat/list/' + $stateParams.organizationId;
+        },
+        controller  : 'wechatList',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/wechat/list.js'
+                ]);
+            }]
+        }
+    }).state('wechatAdd', {
+        url         : '/wechatAdd/:organizationId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechat/add/' + $stateParams.organizationId;
+        },
+        controller  : 'wechatAdd',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/page/cloned/wechat/add.js'
+                ]);
+            }]
+        }
+    }).state('wechatEdit', {
+        url         : '/wechatEdit/:id',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechat/' + $stateParams.id;
+        },
+        controller  : 'wechatEdit',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/utils.js',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/page/cloned/wechat/edit.js'
                 ]);
             }]
         }

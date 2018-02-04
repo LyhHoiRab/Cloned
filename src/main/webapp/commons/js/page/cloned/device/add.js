@@ -12,7 +12,6 @@ app.controller('deviceAdd', function($scope, $state, $stateParams, $http){
         $scope.device.type           = '';
         $scope.device.phone          = '';
         $scope.device.imei           = '';
-        $scope.device.organization   = '';
     };
 
     $scope.submit = function(){

@@ -1,9 +1,7 @@
-app.controller('deviceList', function($scope, $http, $state, $stateParams){
+app.controller('wechatList', function($scope, $http, $state, $stateParams){
     //查询列表
     $scope.organizationId = $stateParams.organizationId;
-    $scope.type           = '';
-    $scope.phone          = '';
-    $scope.imei           = '';
+    $scope.wxno           = '';
 
     //列表参数
     $scope.list          = [];
@@ -16,17 +14,15 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
 
     //定义方法
     $scope.edit = function(id){
-        $state.go('deviceEdit', {'id' : id});
+        $state.go('wechatEdit', {'id' : id});
     };
 
     $scope.add = function(){
-        $state.go('deviceAdd', {'organizationId' : $scope.organizationId});
+        $state.go('wechatAdd', {'organizationId' : $scope.organizationId});
     };
 
     $scope.reset = function(){
-        $scope.type  = '';
-        $scope.phone = '';
-        $scope.imei  = '';
+        $scope.wxno  = '';
     };
 
     $scope.search = function(){
@@ -40,15 +36,13 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
 
     $scope.getData = function(){
         $http({
-            url: '/api/1.0/device/page',
+            url: '/api/1.0/wechat/page',
             method: 'GET',
             params: {
                 'pageNum'        : $scope.pagingOptions.currentPage,
                 'pageSize'       : $scope.pagingOptions.pageSize,
                 'organizationId' : $scope.organizationId,
-                'type'           : $scope.type,
-                'phone'          : $scope.phone,
-                'imei'           : $scope.imei
+                'wxno'           : $scope.wxno
             },
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -78,7 +72,7 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
         }
     }, true);
 
-//列表属性
+    //列表属性
     $scope.gridOptions = {
         data                   : 'list',
         enablePaging           : true,
@@ -96,14 +90,8 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
             field   : 'id',
             visible : false
         },{
-            field       : 'type',
-            displayName : '型号'
-        },{
-            field       : 'phone',
-            displayName : '手机号码'
-        },{
-            field       : 'imei',
-            displayName : 'IMEI'
+            field       : 'wxno',
+            displayName : '微信号'
         },{
             field        : 'createTime',
             displayName  : '创建时间',

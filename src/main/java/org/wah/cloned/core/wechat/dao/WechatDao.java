@@ -11,9 +11,12 @@ import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.doraemon.mybatis.Criteria;
 import org.wah.doraemon.mybatis.Restrictions;
 import org.wah.doraemon.security.exception.DataAccessException;
+import org.wah.doraemon.security.response.Page;
+import org.wah.doraemon.security.response.PageRequest;
 import org.wah.doraemon.utils.IDGenerator;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public class WechatDao{
@@ -31,6 +34,9 @@ public class WechatDao{
             Assert.notNull(wechat, "微信信息不能为空");
 
             if(StringUtils.isBlank(wechat.getId())){
+                Assert.hasText(wechat.getWxno(), "微信号不能为空");
+                Assert.hasText(wechat.getOrganizationId(), "企业ID不能为空");
+
                 wechat.setId(IDGenerator.uuid32());
                 wechat.setCreateTime(new Date());
                 mapper.save(wechat);
@@ -55,6 +61,34 @@ public class WechatDao{
             criteria.and(Restrictions.eq("id", id));
 
             return mapper.getByParams(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 分页查询
+     */
+    public Page<Wechat> page(PageRequest pageRequest, String organizationId, String wxno){
+        try{
+            Assert.notNull(pageRequest, "分页信息不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
+            criteria.sort(Restrictions.asc("createTime"));
+
+            if(!StringUtils.isBlank(organizationId)){
+                criteria.and(Restrictions.eq("organizationId", organizationId));
+            }
+            if(!StringUtils.isBlank(wxno)){
+                criteria.and(Restrictions.like("wxno", wxno));
+            }
+
+            List<Wechat> list = mapper.findByParams(criteria);
+            Long count = mapper.countByParams(criteria);
+
+            return new Page<Wechat>(list, pageRequest, count);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);
