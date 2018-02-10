@@ -2,9 +2,7 @@ package org.wah.cloned.core.service.webservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.wah.cloned.core.service.entity.Allocation;
 import org.wah.cloned.core.service.service.AllocationService;
 import org.wah.doraemon.security.response.Response;
@@ -17,6 +15,26 @@ public class AllocationRestController{
 
     @Autowired
     private AllocationService allocationService;
+
+    /**
+     * 更新
+     */
+    @RequestMapping(value = "", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response update(@RequestBody List<Allocation> list){
+        allocationService.update(list);
+
+        return new Response("更新成功", null);
+    }
+
+    /**
+     * 设置默认概率
+     */
+    @RequestMapping(value = "/default/probability/{wechatId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response setDefaultProbability(@PathVariable("wechatId") String wechatId){
+        allocationService.setDefaultProbability(wechatId);
+
+        return new Response("更新成功", null);
+    }
 
     /**
      * 根据微信ID查询

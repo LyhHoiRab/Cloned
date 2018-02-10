@@ -185,7 +185,7 @@
     </insert>
 
     <update id="update">
-        <foreach collection="allocations" separator=";" item="allocation">
+        <foreach collection="list" separator=";" item="allocation">
             UPDATE allocation
              <set>
                  <if test="allocation.probability != null and allocation.probability >= 0">
@@ -205,8 +205,17 @@
         </foreach>
     </update>
 
+    <update id="setDefaultProbability">
+        UPDATE allocation a,
+               service s
+           SET probability = default_probability
+         WHERE a.service_id = s.id
+           AND s.wechat_id = #{wechatId}
+    </update>
+
     <select id="findByParams" resultMap="allocation">
         SELECT a.*,
+               s.id           AS s_id,
                s.name         AS s_name,
                s.wechat_id    AS s_wechat_id,
                s.account_id   AS s_account_id,

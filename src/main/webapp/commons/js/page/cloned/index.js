@@ -220,6 +220,7 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
                     basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
                     basePath + '/commons/js/plugin/angular-grid/theme.css',
                     basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/plugin/json2/json2.js',
                     basePath + '/commons/js/page/cloned/wechat/allocation.js'
                 ]);
             }]

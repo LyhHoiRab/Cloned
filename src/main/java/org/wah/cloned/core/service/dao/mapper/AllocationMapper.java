@@ -18,7 +18,12 @@ public interface AllocationMapper{
     /**
      * 更新
      */
-    void update(List<Allocation> allocations);
+    void update(List<Allocation> list);
+
+    /**
+     * 设置默认概率
+     */
+    void setDefaultProbability(String wechatId);
 
     /**
      * 根据条件查询

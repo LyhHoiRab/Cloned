@@ -35,15 +35,15 @@ app.controller('service', function($scope, $http, $state, $stateParams){
 
     $scope.getData = function(){
         $http({
-            url: '/api/1.0/service/page',
-            method: 'GET',
-            params: {
+            url    : '/api/1.0/service/page',
+            method : 'GET',
+            params : {
                 'pageNum'        : $scope.pagingOptions.currentPage,
                 'pageSize'       : $scope.pagingOptions.pageSize,
                 'wechatId'       : $scope.wechatId,
                 'name'           : $scope.name
             },
-            headers: {
+            headers : {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).success(function(res, status, headers, config){

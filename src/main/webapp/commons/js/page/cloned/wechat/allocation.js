@@ -9,11 +9,48 @@ app.controller('allocation', function($scope, $http, $state, $stateParams){
     $scope.total         = 0;
 
     $scope.setDefault = function(){
-
+        $http({
+            url    : '/api/1.0/allocation/default/probability/' + $scope.wechatId,
+            method : 'PUT'
+        }).success(function(res, status, headers, config){
+            if(res.success){
+                alert(res.msg);
+                location.reload();
+            }else{
+                alert(res.msg);
+            }
+        }).error(function(response){
+            console.error(response);
+        });
     };
 
     $scope.save = function(){
+        if($scope.step === null || $scope.step === undefined || $scope.step < 1){
+            alert("请正确填写步长");
+            return false;
+        }
 
+        angular.forEach($scope.list, function(allocation){
+            allocation.step = $scope.step;
+        });
+
+        $http({
+            url     : '/api/1.0/allocation',
+            method  : 'PUT',
+            data    : JSON.stringify($scope.list),
+            headers : {
+                'Content-Type': 'application/json'
+            }
+        }).success(function(res, status, headers, config){
+            if(res.success){
+                alert(res.msg);
+                location.reload();
+            }else{
+                alert(res.msg);
+            }
+        }).error(function(response){
+            console.error(response);
+        });
     };
 
     $scope.reset = function(){
@@ -30,13 +67,13 @@ app.controller('allocation', function($scope, $http, $state, $stateParams){
 
     $scope.getData = function(){
         $http({
-            url: '/api/1.0/allocation/find',
-            method: 'GET',
-            params: {
+            url     : '/api/1.0/allocation/find',
+            method  : 'GET',
+            params  : {
                 'wechatId'       : $scope.wechatId,
                 'name'           : $scope.name
             },
-            headers: {
+            headers : {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).success(function(res, status, headers, config){
@@ -74,7 +111,6 @@ app.controller('allocation', function($scope, $http, $state, $stateParams){
         selectWithCheckboxOnly : true,
         multiSelect            : false,
         keepLastSelected       : false,
-        //pagingOptions          : $scope.pagingOptions,
         totalServerItems       : 'total',
         i18n                   : 'zh-cn',
         columnDefs: [{
@@ -84,11 +120,13 @@ app.controller('allocation', function($scope, $http, $state, $stateParams){
             field       : 'service.name',
             displayName : '销售名称'
         },{
-            field       : 'probability',
-            displayName : '概率'
+            field                : 'probability',
+            displayName          : '概率',
+            enableCellEdit       : true
         },{
-            field       : 'defaultProbability',
-            displayName : '默认概率',
+            field                : 'defaultProbability',
+            displayName          : '默认概率',
+            enableCellEdit       : true
         },{
             field       : 'step',
             displayName : '步长'

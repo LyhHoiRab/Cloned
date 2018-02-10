@@ -46,13 +46,13 @@ public class AllocationDao{
     /**
      * 更新
      */
-    public void update(List<Allocation> allocations){
+    public void update(List<Allocation> list){
         try{
-            Assert.notEmpty(allocations, "客服分配概率列表不能为空");
+            Assert.notEmpty(list, "客服分配概率列表不能为空");
 
             Date now = new Date();
 
-            for(Allocation allocation : allocations){
+            for(Allocation allocation : list){
                 Assert.notNull(allocation, "客服分配概率不能为空");
                 Assert.hasText(allocation.getId(), "概率ID不能为空");
                 Assert.notNull(allocation.getStep(), "概率步长不能为空");
@@ -62,7 +62,21 @@ public class AllocationDao{
                 allocation.setUpdateTime(now);
             }
 
-            mapper.update(allocations);
+            mapper.update(list);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 设置默认概率
+     */
+    public void setDefaultProbability(String wechatId){
+        try{
+            Assert.hasText(wechatId, "微信ID不能为空");
+
+            mapper.setDefaultProbability(wechatId);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);
