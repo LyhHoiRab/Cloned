@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <title>CLONED | SERVICE</title>
+
+    <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/page/cloned/index.css">
+
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="${basePath}/commons/js/html5shiv.js"></script>
+    <script type="text/javascript" src="${basePath}/commons/js/respond.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <textarea style="resize:none;width:500px;height:500px;" id="chatView"></textarea>
+    <input type="text" id="message">
+    <button type="button" class="btn" id="send">发送</button>
+
+    <script type="text/javascript" src="${basePath}/commons/js/jquery.min.js"></script>
+    <script type="text/javascript" src="${basePath}/commons/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+          var socket = new WebSocket('ws://localhost:8080/socket/1.0/message');
+
+          socket.onopen = function(event){
+              console.log('socket connect...');
+          };
+
+          socket.onmessage = function(event){
+              console.log(event.data);
+              $('#chatView').append(event.data + "\n");
+          };
+
+          socket.onclose = function(){
+              console.log('socket close...');
+          };
+
+          $('#send').click(function(){
+              var message = $('#message').val();
+              if(message !== undefined && message !== null && message !== ''){
+                  socket.send(message);
+                  $('#message').val('');
+              }
+          });
+      });
+    </script>
+  </body>
+</html>

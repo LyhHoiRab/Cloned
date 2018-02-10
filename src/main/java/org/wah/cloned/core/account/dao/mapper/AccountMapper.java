@@ -21,6 +21,11 @@ public interface AccountMapper{
     void update(Account account);
 
     /**
+     * 添加账户-企业机构关联
+     */
+    void saveToOrganization(@Param("accountId") String accountId, @Param("organizationId") String organizationId);
+
+    /**
      * 根据条件查询
      */
     Account getByParams(@Param("params") Criteria criteria);

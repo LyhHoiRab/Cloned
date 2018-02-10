@@ -15,19 +15,28 @@ CREATE TABLE `account` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='账户表';
 
+/** account_organization **/
+CREATE TABLE `account_organization` (
+  `account_id` varchar(32) NOT NULL,
+  `organization_id` varchar(32) NOT NULL,
+  PRIMARY KEY (`account_id`,`organization_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='账户 - 企业机构关联表';
+
 /** user **/
 CREATE TABLE `user` (
   `id` varchar(32) NOT NULL,
   `account_id` varchar(32) NOT NULL,
   `head_img_url` varchar(255) NOT NULL,
   `nickname` varchar(24) NOT NULL,
+  `name` varchar(30) DEFAULT NULL,
   `age` int(1) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `sex` tinyint(1) DEFAULT NULL,
   `autograph` varchar(120) DEFAULT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `account_id_UNIQUE` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户信息表';
 
 /** wechat **/
@@ -70,53 +79,40 @@ CREATE TABLE `organization` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='企业信息表';
 
-/** rongcloud_message **/
-CREATE TABLE `rongcloud_message` (
+/** wechat_friend **/
+CREATE TABLE `wechat_friend` (
   `id` varchar(32) NOT NULL,
-  `from_user_id` varchar(32) NOT NULL,
-  `to_user_id` varchar(32) NOT NULL,
-  `content` json NOT NULL,
-  `object_name` tinyint(1) NOT NULL,
-  `send_time` datetime NOT NULL,
-  `receive_time` datetime NOT NULL,
+  `wechat_id` varchar(32) NOT NULL,
+  `nickname` varchar(50) DEFAULT NULL,
+  `remarkname` varchar(32) NOT NULL,
+  `head_img_url` varchar(255) DEFAULT NULL,
+  `sex` tinyint(1) DEFAULT '0',
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='融云消息记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信好友信息表';
 
-/** rongcloud_user **/
-CREATE TABLE `rongcloud_user` (
+/** service **/
+SELECT * FROM cloned.wechat;CREATE TABLE `service` (
   `id` varchar(32) NOT NULL,
+  `wechat_id` varchar(32) NOT NULL,
+  `account_id` varchar(32) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `user_id` varchar(32) NOT NULL,
-  `portrait_uri` varchar(255) NOT NULL,
-  `token` varchar(256) DEFAULT NULL,
-  `app_key` varchar(45) DEFAULT NULL,
-  `wechat_id` varchar(32) DEFAULT NULL,
-  `role_name` tinyint(1) NOT NULL,
-  `login_time` datetime DEFAULT NULL,
+  `head_img_url` varchar(255) DEFAULT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='融云用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客服信息表';
 
-/** rongcloud_friendship **/
-CREATE TABLE `rongcloud_friendship` (
+/** allocation **/
+CREATE TABLE `allocation` (
   `id` varchar(32) NOT NULL,
-  `master_user_id` varchar(32) NOT NULL,
-  `subor_user_id` varchar(32) NOT NULL,
+  `service_id` varchar(32) NOT NULL,
+  `probability` double(5,2) NOT NULL DEFAULT '0.00',
+  `default_probability` double(5,2) NOT NULL DEFAULT '0.00',
+  `step` double(5,2) NOT NULL DEFAULT '1.00',
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='融云用户关系表';
-
-/** rongcloud_allocation **/
-CREATE TABLE `rongcloud_allocation` (
-  `id` varchar(32) NOT NULL,
-  `rongcloud_user_id` varchar(32) NOT NULL,
-  `probability` double(5,2) NOT NULL,
-  `default_probability` double(5,2) DEFAULT NULL,
-  `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='融云客服分配概率设置表';
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `service_id_UNIQUE` (`service_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客服分配概率信息';

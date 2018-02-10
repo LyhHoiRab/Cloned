@@ -1,0 +1,52 @@
+<ol class="breadcrumb">
+    <li>
+        <span>系统设置</span>
+    </li><!-- item -->
+    <li>
+        <a ui-sref="wechat">微信设置</a>
+    </li><!-- item -->
+    <li>
+        <a ui-sref="service({wechatId:service.wechatId})">客服设置</a>
+    </li><!-- item -->
+    <li>
+        <span ng-show="service.id">
+            修改客服
+        </span>
+        <span ng-show="!service.id">
+            添加客服
+        </span>
+    </li><!-- item -->
+</ol><!-- 面包屑 -->
+
+<div class="table-info">
+    <div class="container-fluid">
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">账户</span>
+                <select class="form-control" ng-change="change(service.accountId)" ng-model="service.accountId" ng-options="user.accountId as user.name for user in users">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">客服名称</span>
+                <input type="text" class="form-control" placeholder="客服名称" ng-model="service.name" readonly="readonly">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="button-group">
+                <button type="button" class="btn" ng-click="submit()">
+                    <i class="fa fa-check"></i>
+                    提交
+                </button>
+                <button type="button" class="btn" ng-click="reset()">
+                    <i class="fa fa-close"></i>
+                    重置
+                </button>
+            </div>
+        </div><!-- item -->
+    </div><!-- container -->
+</div><!-- table info -->

@@ -51,6 +51,21 @@ public class AccountDao{
     }
 
     /**
+     * 添加账户-企业机构关联
+     */
+    public void saveToOrganization(String accountId, String organizationId){
+        try{
+            Assert.hasText(accountId, "账户ID不能为空");
+            Assert.hasText(organizationId, "企业机构ID不能为空");
+
+            mapper.saveToOrganization(accountId, organizationId);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
      * 根据ID查询
      */
     public Account getById(String id){

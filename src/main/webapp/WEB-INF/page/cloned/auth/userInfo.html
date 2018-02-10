@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="Cache-Control" content="no-siteapp">
+
+        <title>CLONED | USER INFO</title>
+        <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/animate.css">
+        <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/page/cloned/common.css">
+        <link rel="stylesheet" type="text/css" href="${basePath}/commons/css/page/cloned/auth/userInfo.css">
+
+        <!--[if lt IE 9]>
+        <script type="text/javascript" src="${basePath}/commons/js/html5shiv.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/respond.js"></script>
+        <![endif]-->
+    </head>
+
+    <body ng-app="app" ng-controller="userInfo">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon">用户昵称</span>
+                <input type="text" class="form-control" placeholder="用户昵称" ng-model="user.nickname">
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon">用户姓名</span>
+                <input type="text" class="form-control" placeholder="用户姓名" ng-model="user.name">
+            </div>
+
+            <div class="row-group">
+                <div class="img-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="{{user.headImgUrl}}" ng-model="user.headImgUrl">
+                        </div><!-- item -->
+
+                        <div class="col-md-6">
+                            <input type="file" nv-file-select uploader="uploader">
+                            <div class="button-group">
+                                <button type="button" class="btn" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                    <i class="fa fa-upload"></i>
+                                    上传
+                                </button>
+                                <button type="button" class="btn" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                                    <i class="fa fa-trash-o"></i>
+                                    移除
+                                </button>
+                            </div><!-- button group -->
+                        </div><!-- item -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <button type="button" class="btn btn-success" ng-click="submit()">提交</button>
+            </div>
+        </div><!-- container -->
+
+        <script type="text/javascript" src="${basePath}/commons/js/jquery.min.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/angular.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/plugin/angular-sanitize/angular-sanitize.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/plugin/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/plugin/angular-uploader/angular-file-upload.min.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/plugin/json2/json2.js"></script>
+        <script type="text/javascript" src="${basePath}/commons/js/page/cloned/auth/userInfo.js"></script>
+    </body>
+</html>

@@ -15,7 +15,8 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>
       classpath:/spring.xml,
-      classpath:/springbean.xml
+      classpath:/springbean.xml,
+      classpath:/springsocket.xml
     </param-value>
   </context-param>
 

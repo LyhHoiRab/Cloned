@@ -26,10 +26,10 @@ public interface OrganizationService{
     /**
      * 根据条件查询
      */
-    List<Organization> find(String token, String name, String companyName);
+    List<Organization> find(String token, String name, String companyName, String accountId);
 
     /**
      * 分页查询
      */
-    Page<Organization> page(PageRequest pageRequest, String token, String name, String companyName);
+    Page<Organization> page(PageRequest pageRequest, String token, String name, String companyName, String accountId);
 }

@@ -214,6 +214,17 @@
           WHERE id = #{id}
     </update>
 
+    <insert id="saveToOrganization">
+        INSERT
+          INTO account_organization (
+               account_id,
+               organization_id
+          ) VALUE (
+               #{accountId,      jdbcType=VARCHAR},
+               #{organizationId, jdbcType=VARCHAR}
+          )
+    </insert>
+
     <select id="getByParams" resultMap="account">
         SELECT *
           FROM account

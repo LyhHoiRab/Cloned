@@ -34,4 +34,14 @@ public interface UserMapper{
      * 根据条件查询数量
      */
     Long countByParams(@Param("params") Criteria criteria);
+
+    /**
+     * 根据微信ID查询为客服的用户信息
+     */
+    List<User> findIsServiceByWechatId(String wechatId);
+
+    /**
+     * 根据微信ID查询不为客服的用户信息
+     */
+    List<User> findIsNotServiceByWechatId(@Param("params") Criteria criteria);
 }

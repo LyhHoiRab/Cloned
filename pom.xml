@@ -26,20 +26,26 @@
         <commons-io.version>2.4</commons-io.version>
         <druid.version>1.0.7</druid.version>
         <doraemon.version>1.0.0</doraemon.version>
+        <google.zxing.version>3.3.1</google.zxing.version>
         <gson.version>2.5</gson.version>
         <httpclient.version>4.3.5</httpclient.version>
         <junit.version>4.11</junit.version>
         <logback.version>1.1.1</logback.version>
+        <lombok.version>1.16.18</lombok.version>
         <mybatis.version>3.2.7</mybatis.version>
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
         <mysql.version>5.1.37</mysql.version>
         <redis.version>2.7.3</redis.version>
         <servlet-api.version>3.0.1</servlet-api.version>
         <spring.version>4.1.5.RELEASE</spring.version>
+        <spring-data-redis.version>1.7.2.RELEASE</spring-data-redis.version>
         <slf4j.version>1.7.6</slf4j.version>
         <tomcat-jdbc.version>7.0.52</tomcat-jdbc.version>
+        <upyun.version>3.13</upyun.version>
+        <vdurmont.version>4.0.0</vdurmont.version>
         <velocity.version>1.7</velocity.version>
         <velocity-tools.version>2.0</velocity-tools.version>
+        <wechat-api.version>1.0.5</wechat-api.version>
     </properties>
 
     <dependencies>
@@ -109,6 +115,19 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- spring socket -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -194,6 +213,13 @@
             <version>${redis.version}</version>
         </dependency>
 
+        <!-- spring redis -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.data</groupId>-->
+            <!--<artifactId>spring-data-redis</artifactId>-->
+            <!--<version>${spring-data-redis.version}</version>-->
+        <!--</dependency>-->
+
         <!-- aop -->
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -247,6 +273,48 @@
             <groupId>org.wah</groupId>
             <artifactId>doraemon</artifactId>
             <version>${doraemon.version}</version>
+        </dependency>
+
+        <!-- upyun -->
+        <dependency>
+            <groupId>com.upyun</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>${upyun.version}</version>
+        </dependency>
+
+        <!-- 微信网页版API https://www.jianshu.com/p/43f54e4b3dc1 -->
+        <dependency>
+            <groupId>io.github.biezhi</groupId>
+            <artifactId>wechat-api</artifactId>
+            <version>${wechat-api.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/wechat-api-1.0.5.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${google.zxing.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>${vdurmont.version}</version>
         </dependency>
     </dependencies>
 

@@ -55,7 +55,7 @@ public class OrganizationDao{
             Assert.hasText(id, "企业机构ID不能为空");
 
             Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("id", id));
+            criteria.and(Restrictions.eq("o.id", id));
 
             return mapper.getByParams(criteria);
         }catch(Exception e){
@@ -67,19 +67,22 @@ public class OrganizationDao{
     /**
      * 根据条件查询
      */
-    public List<Organization> find(String token, String name, String companyName){
+    public List<Organization> find(String token, String name, String companyName, String accountId){
         try{
             Criteria criteria = new Criteria();
-            criteria.sort(Restrictions.asc("createTime"));
+            criteria.sort(Restrictions.asc("o.createTime"));
 
             if(!StringUtils.isBlank(token)){
-                criteria.and(Restrictions.like("token", token));
+                criteria.and(Restrictions.like("o.token", token));
             }
             if(!StringUtils.isBlank(name)){
-                criteria.and(Restrictions.like("name", name));
+                criteria.and(Restrictions.like("o.name", name));
             }
             if(!StringUtils.isBlank(companyName)){
-                criteria.and(Restrictions.like("companyName", companyName));
+                criteria.and(Restrictions.like("o.companyName", companyName));
+            }
+            if(!StringUtils.isBlank(accountId)){
+                criteria.and(Restrictions.eq("ao.accountId", accountId));
             }
 
             return mapper.findByParams(criteria);
@@ -92,22 +95,25 @@ public class OrganizationDao{
     /**
      * 分页查询
      */
-    public Page<Organization> page(PageRequest pageRequest, String token, String name, String companyName){
+    public Page<Organization> page(PageRequest pageRequest, String token, String name, String companyName, String accountId){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
             Criteria criteria = new Criteria();
-            criteria.sort(Restrictions.asc("createTime"));
+            criteria.sort(Restrictions.asc("o.createTime"));
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
 
             if(!StringUtils.isBlank(token)){
-                criteria.and(Restrictions.like("token", token));
+                criteria.and(Restrictions.like("o.token", token));
             }
             if(!StringUtils.isBlank(name)){
-                criteria.and(Restrictions.like("name", name));
+                criteria.and(Restrictions.like("o.name", name));
             }
             if(!StringUtils.isBlank(companyName)){
-                criteria.and(Restrictions.like("companyName", companyName));
+                criteria.and(Restrictions.like("o.companyName", companyName));
+            }
+            if(!StringUtils.isBlank(accountId)){
+                criteria.and(Restrictions.eq("ao.accountId", accountId));
             }
 
             List<Organization> list = mapper.findByParams(criteria);

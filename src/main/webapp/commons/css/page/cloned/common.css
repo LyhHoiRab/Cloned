@@ -72,6 +72,16 @@
     border-left: none;
 }
 
+.search-bar .setting-group {
+    display: inline-table;
+    width: 200px;
+    vertical-align: middle;
+}
+
+.search-bar .setting-group .form-control {
+    height: 32px;
+}
+
 /* table-bar */
 .table-bar {
     width: 100%;

@@ -229,16 +229,20 @@
     </update>
 
     <select id="getByParams" resultMap="organization">
-        SELECT *
-          FROM organization
+        SELECT o.*
+          FROM organization o
+     LEFT JOIN account_organization ao
+            ON ao.organization_id = o.id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>
     </select>
 
     <select id="findByParams" resultMap="organization">
-        SELECT *
-          FROM organization
+        SELECT o.*
+          FROM organization o
+     LEFT JOIN account_organization ao
+            ON ao.organization_id = o.id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
 
@@ -264,7 +268,9 @@
 
     <select id="countByParams" resultType="java.lang.Long">
         SELECT COUNT(*)
-          FROM organization
+          FROM organization o
+     LEFT JOIN account_organization ao
+            ON ao.organization_id = o.id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>

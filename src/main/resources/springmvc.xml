@@ -74,7 +74,13 @@
       <bean class="org.wah.cloned.commons.security.interceptor.LoginInterceptor">
         <property name="excludes">
           <list>
-            <value>/**</value>
+            <value>/page/cloned/login</value>
+            <value>/page/cloned/register</value>
+            <value>/page/cloned/service</value>
+            <value>/api/1.0/organization/find</value>
+            <value>/api/1.0/register</value>
+            <value>/api/1.0/login</value>
+            <value>/socket/1.0/message</value>
           </list>
         </property>
       </bean>

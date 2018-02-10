@@ -20,8 +20,8 @@
     <typeAlias type="org.wah.doraemon.mybatis.handler.SexHandler"                                               alias="sexHandler"/>
     <typeAlias type="org.wah.doraemon.mybatis.handler.UsingStateHandler"                                        alias="usingStateHandler"/>
     <typeAlias type="org.wah.doraemon.mybatis.handler.AccountStateHandler"                                      alias="accountStateHandler"/>
-    <typeAlias type="org.wah.cloned.rongcloud.commons.security.consts.handler.RongCloudMessageContentHandler"   alias="rongCloudMessageContentHandler"/>
-    <typeAlias type="org.wah.cloned.rongcloud.commons.security.consts.handler.RongCloudMessageTypeHandler"      alias="rongCloudMessageTypeHandler"/>
-    <typeAlias type="org.wah.cloned.rongcloud.commons.security.consts.handler.RongCloudRoleNameHandler"         alias="rongCloudRoleNameHandler"/>
+    <!--<typeAlias type="org.wah.cloned.rongcloud.commons.security.consts.handler.RongCloudMessageContentHandler"   alias="rongCloudMessageContentHandler"/>-->
+    <!--<typeAlias type="org.wah.cloned.rongcloud.commons.security.consts.handler.RongCloudMessageTypeHandler"      alias="rongCloudMessageTypeHandler"/>-->
+    <!--<typeAlias type="org.wah.cloned.rongcloud.commons.security.consts.handler.RongCloudRoleNameHandler"         alias="rongCloudRoleNameHandler"/>-->
   </typeAliases>
 </configuration>

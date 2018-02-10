@@ -175,5 +175,54 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
                 ]);
             }]
         }
+    }).state('service', {
+        url         : '/wechat/service/:wechatId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechat/service/' + $stateParams.wechatId;
+        },
+        controller  : 'service',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/wechat/service.js'
+                ]);
+            }]
+        }
+    }).state('serviceAdd', {
+        url         : '/wechat/service/add/:wechatId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechat/service/add/' + $stateParams.wechatId;
+        },
+        controller  : 'serviceAdd',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/utils.js',
+                    basePath + '/commons/js/page/cloned/wechat/serviceAdd.js'
+                ]);
+            }]
+        }
+    }).state('allocation', {
+        url         : '/wechat/allocation/:wechatId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechat/allocation/' + $stateParams.wechatId;
+        },
+        controller  : 'allocation',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/wechat/allocation.js'
+                ]);
+            }]
+        }
     });
 }]);

@@ -1,0 +1,20 @@
+/** userInfo **/
+.input-group {
+    margin: 0 auto;
+    padding: 10px 0;
+    max-width: 600px;
+}
+
+.row-group {
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.row-group input[type=file] {
+    margin-bottom: 5px;
+}
+
+.row-group .img-group img {
+    width: 60px;
+    height: 60px;
+}

@@ -13,6 +13,23 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
     };
 
     //定义方法
+    $scope.login = function(id){
+        $http({
+            url: '/api/1.0/wechat/login/' + id,
+            method: 'POST'
+        }).success(function(res, status, headers, config){
+            if(!res.success){
+                alert(res.msg);
+            }
+        }).error(function(response){
+            console.error(response);
+        });
+    };
+
+    $scope.service = function(id){
+        $state.go('service', {'wechatId' : id});
+    };
+
     $scope.edit = function(id){
         $state.go('wechatEdit', {'id' : id});
     };
@@ -62,7 +79,6 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
 
             $scope.list = [];
             $scope.total = 0;
-
         });
     };
 
@@ -102,7 +118,7 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
             cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
         },{
             displayName  : '操作',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a></span></div>'
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="login(row.getProperty(\'id\'))">[登录]</a><a ng-click="service(row.getProperty(\'id\'))">[客服]</a></span></div>'
         }]
     };
 

@@ -7,5 +7,5 @@ public interface RegisterService{
     /**
      * 注册
      */
-    Account register(Account account);
+    Account register(String username, String password, String organizationId);
 }

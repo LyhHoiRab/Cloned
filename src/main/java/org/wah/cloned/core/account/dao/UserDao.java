@@ -11,6 +11,7 @@ import org.wah.doraemon.entity.User;
 import org.wah.doraemon.mybatis.Criteria;
 import org.wah.doraemon.mybatis.Restrictions;
 import org.wah.doraemon.security.exception.DataAccessException;
+import org.wah.doraemon.utils.EntityUtils;
 import org.wah.doraemon.utils.IDGenerator;
 
 import java.util.Date;
@@ -86,19 +87,37 @@ public class UserDao{
     }
 
     /**
-     * 根据账户登录关键字查询
+     * 根据微信ID查询为客服的用户信息
      */
-    public List<User> getByAccountKeyword(String keyword){
+    public List<User> findIsServiceByWechatId(String wechatId){
         try{
-            Assert.hasText(keyword, "用户账户登录关键字不能为空");
+            Assert.hasText(wechatId, "微信ID不能为空");
+
+            return mapper.findIsServiceByWechatId(wechatId);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 根据微信ID查询不为客服的用户信息
+     */
+    public List<User> findIsNotServiceByWechatId(String wechatId){
+        try{
+            Assert.hasText(wechatId, "微信ID不能为空");
+
+            List<User> isService = mapper.findIsServiceByWechatId(wechatId);
+            List<String> ids = EntityUtils.getIds(isService);
 
             Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("a.isDelete", false));
-            criteria.and(Restrictions.or(Restrictions.like("a.username", keyword),
-                                            Restrictions.like("a.email", keyword),
-                                            Restrictions.like("a.phone", keyword)));
+            criteria.and(Restrictions.eq("w.id", wechatId));
 
-            return mapper.findByParams(criteria);
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.notIn("u.id", ids));
+            }
+
+            return mapper.findIsNotServiceByWechatId(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

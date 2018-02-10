@@ -13,7 +13,7 @@ app.controller('device', function($scope, $http, $state){
             url     : '/api/1.0/organization/find',
             method  : 'GET',
             params  : {
-                'state' : 0
+                'auth' : true
             },
             headers : {
                 'Content-Type': 'application/x-www-form-urlencoded'

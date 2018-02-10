@@ -8,6 +8,7 @@
         <result column="account_id"   property="accountId"  javaType="java.lang.String"/>
         <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
         <result column="nickname"     property="nickname"   javaType="java.lang.String"/>
+        <result column="name"         property="name"       javaType="java.lang.String"/>
         <result column="age"          property="age"        javaType="java.lang.Integer"/>
         <result column="birthday"     property="birthday"   javaType="java.util.Date"/>
         <result column="sex"          property="sex"        typeHandler="sexHandler"/>
@@ -167,6 +168,7 @@
                account_id,
                head_img_url,
                nickname,
+               name,
                age,
                birthday,
                sex,
@@ -177,6 +179,7 @@
                #{accountId,  jdbcType=VARCHAR},
                #{headImgUrl, jdbcType=VARCHAR},
                #{nickname,   jdbcType=VARCHAR},
+               #{name,       jdbcType=VARCHAR},
                #{age,        jdbcType=INTEGER},
                #{birthday,   jdbcType=TIMESTAMP},
                #{sex,        typeHandler=sexHandler},
@@ -196,6 +199,9 @@
              </if>
              <if test="nickname != null and nickname != ''">
                  nickname = #{nickname, jdbcType=VARCHAR},
+             </if>
+             <if test="name != null">
+                 name = #{name, jdbcType=VARCHAR},
              </if>
              <if test="age != null and age >= 0">
                  age = #{age, jdbcType=INTEGER},
@@ -259,6 +265,29 @@
           FROM user u
      LEFT JOIN account a
             ON u.account_id = a.id
+        <if test="params != null">
+            <include refid="WHERE_COLUMN"/>
+        </if>
+    </select>
+
+    <select id="findIsServiceByWechatId" resultMap="user">
+        SELECT u.*
+          FROM user u
+     LEFT JOIN service s
+            ON s.account_id = u.account_id
+         WHERE s.wechat_id = #{wechatId}
+    </select>
+
+    <select id="findIsNotServiceByWechatId" resultMap="user">
+        SELECT u.*
+          FROM user u
+     LEFT JOIN account_organization ao
+            ON u.account_id = ao.account_id
+     LEFT JOIN wechat w
+            ON w.organization_id = ao.organization_id
+     LEFT JOIN service s
+            ON s.account_id = u.account_id
+           AND s.wechat_id = w.id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>

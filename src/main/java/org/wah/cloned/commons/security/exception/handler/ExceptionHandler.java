@@ -1,11 +1,13 @@
 package org.wah.cloned.commons.security.exception.handler;
 
+import org.apache.http.HttpStatus;
+import org.jcp.xml.dsig.internal.dom.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.wah.doraemon.security.exception.ApplicationException;
-import org.wah.doraemon.security.exception.NotLoginStateException;
+import org.wah.cloned.commons.security.consts.RequestParamName;
+import org.wah.doraemon.security.exception.*;
 import org.wah.doraemon.security.response.Response;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +26,8 @@ public class ExceptionHandler{
         try{
             String url = request.getRequestURI().substring(request.getContextPath().length());
 
-            if(url.contains("cloned")){
-                response.sendRedirect("/page/cloned/auth/login");
-            }else if(url.contains("rongcloud")){
-                response.sendRedirect("/page/rongcloud/auth/login");
+            if(url.contains("cloned") || url.equals("/")){
+                response.sendRedirect("/page/cloned/login");
             }
         }catch(Exception e){
             //忽略
@@ -36,16 +36,49 @@ public class ExceptionHandler{
     }
 
     /**
-     * 应用异常
+     * 用户信息未获异常
      */
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = ApplicationException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = UserNotFoundException.class)
+    public void userNotFoundException(HttpServletRequest request, HttpServletResponse response){
+        try{
+            String url = request.getRequestURI().substring(request.getContextPath().length());
+
+            if(url.contains("cloned")){
+                response.sendRedirect("/page/cloned/userInfo");
+            }
+        }catch(Exception e){
+            //忽略
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 账户信息未获异常
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = AccountNotFoundException.class)
     @ResponseBody
-    public Response applicationException(ApplicationException e){
+    public Response accountNotFoundException(AccountNotFoundException e){
         logger.error(e.getMessage(), e);
 
         Response response = new Response();
         response.setSuccess(false);
         response.setMsg(e.getMessage());
+        return response;
+    }
+
+    /**
+     * 应用异常
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = {DataAccessException.class, IllegalArgumentException.class, UtilsException.class})
+    @ResponseBody
+    public Response applicationException(Exception e){
+        logger.error(e.getMessage(), e);
+
+        Response response = new Response();
+        response.setMsg(e.getMessage());
+        response.setSuccess(false);
+        response.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+
         return response;
     }
 }
