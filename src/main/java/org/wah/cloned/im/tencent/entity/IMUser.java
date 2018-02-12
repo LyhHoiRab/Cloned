@@ -20,6 +20,7 @@ public class IMUser extends Entity implements Createable, Updateable{
     private String nickname;
     @SerializedName("FaceUrl")
     private String headImgUrl;
+    @SerializedName("Type")
     private IMType type;
     private Date createTime;
     private Date updateTime;
