@@ -1,8 +1,12 @@
 app.controller('allocation', function($scope, $http, $state, $stateParams){
     //查询列表
-    $scope.wechatId       = $stateParams.wechatId;
-    $scope.name           = '';
-    $scope.step           = 1;
+    $scope.wechatId        = $stateParams.wechatId;
+    $scope.name            = '';
+    $scope.step            = '';
+    $scope.isOfflineAllots = {
+        true  : '可分配',
+        false : '不可分配'
+    };
 
     //列表参数
     $scope.list          = [];
@@ -120,13 +124,18 @@ app.controller('allocation', function($scope, $http, $state, $stateParams){
             field       : 'service.name',
             displayName : '销售名称'
         },{
-            field                : 'probability',
-            displayName          : '概率',
-            enableCellEdit       : true
+            field          : 'probability',
+            displayName    : '概率',
+            enableCellEdit : true
         },{
-            field                : 'defaultProbability',
-            displayName          : '默认概率',
-            enableCellEdit       : true
+            field          : 'defaultProbability',
+            displayName    : '默认概率',
+            enableCellEdit : true
+        },{
+            field                : 'isOfflineAllot',
+            displayName          : '离线可分配',
+            enableCellEdit       : true,
+            cellTemplate         : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{isOfflineAllots[COL_FIELD]}}</span></div>'
         },{
             field       : 'step',
             displayName : '步长'

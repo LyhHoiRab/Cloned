@@ -20,6 +20,8 @@ public class Allocation extends Entity implements Createable, Updateable{
     private Double defaultProbability;
     //步长
     private Double step;
+    //离线分配
+    private Boolean isOfflineAllot;
     private Date createTime;
     private Date updateTime;
 }

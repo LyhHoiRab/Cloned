@@ -110,6 +110,7 @@ CREATE TABLE `allocation` (
   `service_id` varchar(32) NOT NULL,
   `probability` double(5,2) NOT NULL DEFAULT '0.00',
   `default_probability` double(5,2) NOT NULL DEFAULT '0.00',
+  `is_offline_allot` tinyint(1) NOT NULL DEFAULT '1',
   `step` double(5,2) NOT NULL DEFAULT '1.00',
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,

@@ -104,4 +104,23 @@ public class AllocationDao{
             throw new DataAccessException(e.getMessage(), e);
         }
     }
+
+    /**
+     * 根据微信ID查询可分配概率记录
+     */
+    public List<Allocation> findAllotByWechatId(String wechatId){
+        try{
+            Assert.hasText(wechatId, "微信ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("s.wechatId", wechatId));
+            criteria.and(Restrictions.eq("s.isOfflineAllot", true));
+            criteria.sort(Restrictions.desc("s.probability"));
+
+            return mapper.findByParams(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }

@@ -20,4 +20,9 @@ public interface AllocationService{
      * 根据条件查询
      */
     List<Allocation> find(String wechatId, String name);
+
+    /**
+     * 创建或更新客服分配池
+     */
+    void saveOrUpdatePool(String wechatId);
 }

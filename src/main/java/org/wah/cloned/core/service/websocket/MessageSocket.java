@@ -36,6 +36,7 @@ public class MessageSocket extends TextWebSocketHandler{
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception{
 //        String accountId = (String) session.getAttributes().get(SessionParamName.ACCOUNT_ID);
+        session.close();
         CacheParamName.socketSessions.remove("9fe59d3ac70843fbbf7379fb9b07696a");
     }
 }

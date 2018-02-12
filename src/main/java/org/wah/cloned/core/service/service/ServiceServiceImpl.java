@@ -37,6 +37,7 @@ public class ServiceServiceImpl implements ServiceService{
         allocation.setProbability(0D);
         allocation.setDefaultProbability(0D);
         allocation.setStep(1D);
+        allocation.setIsOfflineAllot(true);
         allocationDao.save(allocation);
     }
 

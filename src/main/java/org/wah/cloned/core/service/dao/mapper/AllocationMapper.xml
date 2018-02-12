@@ -8,6 +8,7 @@
         <result column="probability"         property="probability"         javaType="java.lang.Double"/>
         <result column="default_probability" property="defaultProbability"  javaType="java.lang.Double"/>
         <result column="step"                property="step"                javaType="java.lang.Double"/>
+        <result column="is_offline_allot"    property="isOfflineAllot"      javaType="java.lang.Boolean"/>
         <result column="create_time"         property="createTime"          javaType="java.util.Date"/>
         <result column="update_time"         property="updateTime"          javaType="java.util.Date"/>
         <association property="service" resultMap="service" columnPrefix="s_"/>
@@ -196,6 +197,9 @@
                  </if>
                  <if test="allocation.step != null and allocation.step >= 0">
                      step = #{allocation.step, jdbcType=DOUBLE},
+                 </if>
+                 <if test="allocation.isOfflineAllot != null">
+                     is_offline_allot = #{allocation.isOfflineAllot, jdbcType=BOOLEAN},
                  </if>
                  <if test="allocation.updateTime != null">
                      update_time = #{allocation.updateTime, jdbcType=TIMESTAMP},
