@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.wah.cloned.bot.security.exception.WechatException;
 import org.wah.cloned.commons.security.consts.RequestParamName;
 import org.wah.doraemon.security.exception.*;
 import org.wah.doraemon.security.response.Response;
@@ -63,6 +64,22 @@ public class ExceptionHandler{
         Response response = new Response();
         response.setSuccess(false);
         response.setMsg(e.getMessage());
+        return response;
+    }
+
+    /**
+     * 微信机器人异常
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = WechatException.class)
+    @ResponseBody
+    public Response wechatException(WechatException e){
+        logger.error(e.getMessage(), e);
+
+        Response response = new Response();
+        response.setMsg(e.getMessage());
+        response.setSuccess(false);
+        response.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+
         return response;
     }
 

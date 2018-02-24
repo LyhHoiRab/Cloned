@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.util.Map;
 
-public class ApplicationContextUtils implements ApplicationContextAware {
+public class ApplicationContextUtils implements ApplicationContextAware{
 
     private static ApplicationContext context;
 

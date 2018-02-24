@@ -30,13 +30,6 @@
     </constructor-arg>
   </bean>
 
-  <!--<bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">-->
-    <!--<property name="hostName"   value="${redis.host}"/>-->
-    <!--<property name="port"       value="${redis.port}"/>-->
-    <!--<property name="password"   value="${redis.password}"/>-->
-    <!--<property name="poolConfig" ref="jedisPoolConfig"/>-->
-  <!--</bean>-->
-
   <!-- 文件上传 -->
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     <property name="defaultEncoding" value="utf-8"></property>
@@ -46,5 +39,5 @@
     <property name="maxInMemorySize" value="104857600"></property>
   </bean>
 
-  <bean class="org.wah.cloned.commons.security.context.ApplicationContextUtils"/>
+  <!--<bean class="org.wah.cloned.commons.security.context.ApplicationContextUtils"/>-->
 </beans>
