@@ -117,3 +117,40 @@ CREATE TABLE `allocation` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `service_id_UNIQUE` (`service_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客服分配概率信息';
+
+/** tencent_im_applets **/
+CREATE TABLE `tencent_im_applet` (
+  `id` varchar(32) NOT NULL,
+  `organization_id` varchar(32) NOT NULL,
+  `app_id` varchar(45) NOT NULL,
+  `private_key_path` varchar(256) NOT NULL,
+  `public_key_path` varchar(256) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='腾讯云通讯应用信息表';
+
+/** tencent_im_user **/
+CREATE TABLE `tencent_im_user` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `nickname` varchar(45) NOT NULL,
+  `head_img_url` varchar(256) DEFAULT NULL,
+  `sig` varchar(400) NOT NULL,
+  `applet_id` varchar(32) NOT NULL,
+  `app_id` varchar(45) NOT NULL,
+  `type` tinyint(1) DEFAULT NULL,
+  `role` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='腾讯云通讯用户表';
+
+
+
+
+
+
+
+

@@ -7,31 +7,33 @@ import lombok.Getter;
 import org.wah.doraemon.consts.base.EnumType;
 import org.wah.doraemon.security.exception.UnknownEnumTypeException;
 
-/**
- * 开发者无需填写
- * https://cloud.tencent.com/document/product/269/1608
- */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum IMType implements EnumType{
+public enum IMRole implements EnumType{
 
     @SerializedName("0")
-    GENERAL(0, "普通账号"),
+    SERVICE(0, "客服"),
 
     @SerializedName("1")
-    BOT(1, "机器人");
+    CLIENT(1, "客户"),
+
+    @SerializedName("2")
+    WECHAT(2, "微信"),
+
+    @SerializedName("3")
+    ADMIN(3, "管理员");
 
     @Getter
     private int id;
     @Getter
     private String description;
 
-    public static IMType getById(int id){
-        for(IMType type : IMType.values()){
-            if(type.getId() == id){
-                return type;
+    public static IMRole getById(int id){
+        for(IMRole role : IMRole.values()){
+            if(role.getId() == id){
+                return role;
             }
         }
 
-        throw new UnknownEnumTypeException("未知的常量ID[{0}:{1}]", IMType.class, id);
+        throw new UnknownEnumTypeException("未知的常量ID[{0}:{1}]", IMRole.class, id);
     }
 }

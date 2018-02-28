@@ -1,0 +1,54 @@
+<ol class="breadcrumb">
+    <li>
+        <span>系统设置</span>
+    </li><!-- item -->
+    <li>
+        <a ui-sref="applet">IM应用</a>
+    </li><!-- item -->
+    <li>
+    <span ng-show="applet.id">
+        修改IM应用
+    </span>
+    <span ng-show="!applet.id">
+        添加IM应用
+    </span>
+    </li><!-- item -->
+</ol><!-- 面包屑 -->
+
+<div class="table-info">
+    <div class="container-fluid">
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">AppId</span>
+                <input type="text" class="form-control" placeholder="AppId" ng-model="applet.appId">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">密钥路径</span>
+                <input type="text" class="form-control" placeholder="密钥路径" ng-model="applet.privateKeyPath">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">公钥路径</span>
+                <input type="text" class="form-control" placeholder="公钥路径" ng-model="applet.publicKeyPath">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="button-group">
+                <button type="button" class="btn" ng-click="submit()">
+                    <i class="fa fa-check"></i>
+                    提交
+                </button>
+                <button type="button" class="btn" ng-click="reset()">
+                    <i class="fa fa-close"></i>
+                    重置
+                </button>
+            </div>
+        </div><!-- item -->
+    </div><!-- container -->
+</div><!-- table info -->

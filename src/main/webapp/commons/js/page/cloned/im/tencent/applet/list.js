@@ -1,9 +1,7 @@
-app.controller('deviceList', function($scope, $http, $state, $stateParams){
+app.controller('appletList', function($scope, $http, $state, $stateParams){
     //查询列表
     $scope.organizationId = $stateParams.organizationId;
-    $scope.type           = '';
-    $scope.phone          = '';
-    $scope.imei           = '';
+    $scope.appId          = '';
 
     //列表参数
     $scope.list          = [];
@@ -15,18 +13,20 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
     };
 
     //定义方法
+    $scope.admin = function(id){
+        $state.go('admin', {'appletId' : id});
+    };
+
     $scope.edit = function(id){
-        $state.go('deviceEdit', {'id' : id});
+        $state.go('appletEdit', {'id' : id});
     };
 
     $scope.add = function(){
-        $state.go('deviceAdd', {'organizationId' : $scope.organizationId});
+        $state.go('appletAdd', {'organizationId' : $scope.organizationId});
     };
 
     $scope.reset = function(){
-        $scope.type  = '';
-        $scope.phone = '';
-        $scope.imei  = '';
+        $scope.appId          = '';
     };
 
     $scope.search = function(){
@@ -40,15 +40,13 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
 
     $scope.getData = function(){
         $http({
-            url: '/api/1.0/device/page',
+            url: '/api/1.0/im/tencent/applet/page',
             method: 'GET',
             params: {
                 'pageNum'        : $scope.pagingOptions.currentPage,
                 'pageSize'       : $scope.pagingOptions.pageSize,
                 'organizationId' : $scope.organizationId,
-                'type'           : $scope.type,
-                'phone'          : $scope.phone,
-                'imei'           : $scope.imei
+                'appId'          : $scope.appId
             },
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -96,14 +94,14 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
             field   : 'id',
             visible : false
         },{
-            field       : 'type',
-            displayName : '型号'
+            field       : 'appId',
+            displayName : 'AppId'
         },{
-            field       : 'phone',
-            displayName : '手机号码'
+            field       : 'privateKeyPath',
+            displayName : '密钥路径'
         },{
-            field       : 'imei',
-            displayName : 'IMEI'
+            field       : 'publicKeyPath',
+            displayName : '公钥路径'
         },{
             field        : 'createTime',
             displayName  : '创建时间',
@@ -114,7 +112,7 @@ app.controller('deviceList', function($scope, $http, $state, $stateParams){
             cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
         },{
             displayName  : '操作',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a></span></div>'
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="admin(row.getProperty(\'id\'))">[添加管理员]</a></span></div>'
         }]
     };
 

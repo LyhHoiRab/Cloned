@@ -1,0 +1,56 @@
+<ol class="breadcrumb">
+    <li>
+        <span>系统设置</span>
+    </li><!-- item -->
+    <li>
+        <span>IM应用</span>
+    </li><!-- item -->
+</ol><!-- 面包屑 -->
+
+<div class="search-bar">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">管理员</span>
+                    <input type="text" class="form-control" placeholder="管理员" ng-model="identifier">
+                </div>
+            </div><!-- item -->
+
+            <div class="col-xs-12 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">AppId</span>
+                    <input type="text" class="form-control" placeholder="AppId" ng-model="appId">
+                </div>
+            </div><!-- item -->
+        </div>
+    </div><!-- container -->
+
+    <div class="container-fluid">
+        <button type="button" class="btn" ng-click="search()">
+            <i class="fa fa-search"></i>
+            搜索
+        </button><!-- item -->
+
+        <button type="button" class="btn" ng-click="reset()">
+            <i class="fa fa-retweet"></i>
+            重置
+        </button><!-- item -->
+
+        <button type="button" class="btn" ng-click="refresh()">
+            <i class="fa fa-refresh"></i>
+            刷新
+        </button><!-- item -->
+
+        <button type="button" class="btn" ng-click="add()">
+            <i class="fa fa-plus"></i>
+            添加
+        </button><!-- item -->
+    </div><!-- container -->
+</div><!-- search bar -->
+
+<div class="table-bar">
+    <div clas="container">
+        <div class="gridStyle" ng-grid="gridOptions"></div><!-- table -->
+    </div><!-- container -->
+</div><!-- table bar -->

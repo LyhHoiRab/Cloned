@@ -225,5 +225,94 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
                 ]);
             }]
         }
+    }).state('im', {
+        url         : '/wechat/im/:wechatId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechat/im/' + $stateParams.wechatId;
+        },
+        controller  : 'im',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/utils.js',
+                    basePath + '/commons/js/page/cloned/wechat/im.js'
+                ]);
+            }]
+        }
+    }).state('applet', {
+        url         : '/applet',
+        templateUrl : '/page/cloned/im/tencent/applet',
+        controller  : 'applet',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/im/tencent/applet/index.js'
+                ]);
+            }]
+        }
+    }).state('applet.list', {
+        url         : '/list/:organizationId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/im/tencent/applet/list/' + $stateParams.organizationId;
+        },
+        controller  : 'appletList',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/im/tencent/applet/list.js'
+                ]);
+            }]
+        }
+    }).state('appletAdd', {
+        url         : '/appletAdd/:organizationId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/im/tencent/applet/add/' + $stateParams.organizationId;
+        },
+        controller  : 'appletAdd',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/page/cloned/im/tencent/applet/add.js'
+                ]);
+            }]
+        }
+    }).state('appletEdit', {
+        url         : '/appletEdit/:id',
+        templateUrl : function($stateParams){
+            return '/page/cloned/im/tencent/applet/' + $stateParams.id;
+        },
+        controller  : 'appletEdit',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/utils.js',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/page/cloned/im/tencent/applet/edit.js'
+                ]);
+            }]
+        }
+    }).state('admin', {
+        url         : '/admin/:appletId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/im/tencent/applet/admin/' + $stateParams.appletId;
+        },
+        controller  : 'admin',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/im/tencent/applet/admin.js'
+                ]);
+            }]
+        }
     });
 }]);

@@ -30,6 +30,10 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
         $state.go('service', {'wechatId' : id});
     };
 
+    $scope.im = function(id){
+        $state.go('im', {'wechatId' : id});
+    };
+
     $scope.edit = function(id){
         $state.go('wechatEdit', {'id' : id});
     };
@@ -118,7 +122,7 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
             cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
         },{
             displayName  : '操作',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="login(row.getProperty(\'id\'))">[登录]</a><a ng-click="service(row.getProperty(\'id\'))">[客服]</a></span></div>'
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="login(row.getProperty(\'id\'))">[登录]</a><a ng-click="service(row.getProperty(\'id\'))">[客服]</a><a ng-click="im(row.getProperty(\'id\'))">[绑定IM]</a></span></div>'
         }]
     };
 

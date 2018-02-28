@@ -45,4 +45,9 @@ public class WechatController{
     public ModelAndView allocation(ModelMap content){
         return new ModelAndView("cloned/wechat/allocation", content);
     }
+
+    @RequestMapping(value = "/im/{wechatId}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView im(ModelMap content){
+        return new ModelAndView("cloned/wechat/im", content);
+    }
 }
