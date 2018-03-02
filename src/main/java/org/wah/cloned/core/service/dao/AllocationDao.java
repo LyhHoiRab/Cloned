@@ -114,8 +114,8 @@ public class AllocationDao{
 
             Criteria criteria = new Criteria();
             criteria.and(Restrictions.eq("s.wechatId", wechatId));
-            criteria.and(Restrictions.eq("s.isOfflineAllot", true));
-            criteria.sort(Restrictions.desc("s.probability"));
+            criteria.and(Restrictions.eq("a.isOfflineAllot", true));
+            criteria.sort(Restrictions.desc("a.probability"));
 
             return mapper.findByParams(criteria);
         }catch(Exception e){

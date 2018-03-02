@@ -25,9 +25,4 @@ public interface WechatService{
      * 分页查询
      */
     Page<Wechat> page(PageRequest pageRequest, String organizationId, String wxno);
-
-    /**
-     * 微信登录机器人
-     */
-    void login(String wechatId);
 }

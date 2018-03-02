@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.wah.cloned.core.wechat.dao.WechatBotDao;
 import org.wah.cloned.core.wechat.dao.WechatDao;
 import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.doraemon.security.exception.ResourceNotFoundException;
@@ -17,9 +16,6 @@ public class WechatServiceImpl implements WechatService{
 
     @Autowired
     private WechatDao wechatDao;
-
-    @Autowired
-    private WechatBotDao wechatBotDao;
 
     /**
      * 保存
@@ -64,20 +60,5 @@ public class WechatServiceImpl implements WechatService{
         Assert.notNull(pageRequest, "分页信息不能为空");
 
         return wechatDao.page(pageRequest, organizationId, wxno);
-    }
-
-    /**
-     * 微信登录机器人
-     */
-    @Override
-    public void login(String wechatId){
-        Assert.hasText(wechatId, "微信ID不能为空");
-
-        Wechat wechat = wechatDao.getById(wechatId);
-        if(wechat == null){
-            throw new ResourceNotFoundException("微信[{0}]不存在", wechatId);
-        }
-
-        wechatBotDao.save(wechatId);
     }
 }

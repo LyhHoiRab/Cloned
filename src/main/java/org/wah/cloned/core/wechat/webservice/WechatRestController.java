@@ -56,14 +56,4 @@ public class WechatRestController{
 
         return new Response<Page<Wechat>>("查询成功", page);
     }
-
-    /**
-     * 微信网页登录
-     */
-    @RequestMapping(value = "/login/{wechatId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response login(@PathVariable("wechatId") String wechatId){
-        wechatService.login(wechatId);
-
-        return new Response("登录成功", null);
-    }
 }

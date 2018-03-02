@@ -8,6 +8,8 @@ import org.wah.cloned.commons.security.consts.CacheParamName;
 import org.wah.cloned.core.service.dao.AllocationDao;
 import org.wah.cloned.core.service.dao.ServiceDao;
 import org.wah.cloned.core.service.entity.Allocation;
+import org.wah.doraemon.utils.RedisUtils;
+import redis.clients.jedis.ShardedJedisPool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class AllocationServiceImpl implements AllocationService{
     private AllocationDao allocationDao;
 
     @Autowired
-    private ServiceDao serviceDao;
+    private ShardedJedisPool shardedJedisPool;
 
     /**
      * 更新
@@ -63,14 +65,12 @@ public class AllocationServiceImpl implements AllocationService{
 
         List<Allocation> allocations = allocationDao.findAllotByWechatId(wechatId);
         //分配池
-        Map<String, List<String>> pool = CacheParamName.allocations;
-        List<String> list = pool.get(wechatId);
+        List<String> pool = RedisUtils.lall(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, String.class);
         //清空
-        if(list == null){
-            list = new ArrayList<String>();
-            pool.put(wechatId, list);
+        if(pool == null){
+            pool = new ArrayList<String>();
         }else{
-            list.clear();
+            pool.clear();
         }
         //客服概率
         Map<String, Integer> services = new HashMap<String, Integer>();
@@ -87,12 +87,15 @@ public class AllocationServiceImpl implements AllocationService{
             for(Allocation allocation : allocations){
                 Integer service = services.get(allocation.getService().getId());
                 if(service > 0){
-                    list.add(allocation.getService().getId());
+                    pool.add(allocation.getService().getId());
                     services.put(allocation.getService().getId(), service - 1);
 
                     isContinue = false;
                 }
             }
         }
+
+        //缓存
+        RedisUtils.lpush(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, pool);
     }
 }
