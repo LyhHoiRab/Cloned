@@ -93,16 +93,18 @@ CREATE TABLE `wechat_friend` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信好友信息表';
 
 /** service **/
-SELECT * FROM cloned.wechat;CREATE TABLE `service` (
+SELECT * FROM cloned.wechat_friend;CREATE TABLE `wechat_friend` (
   `id` varchar(32) NOT NULL,
   `wechat_id` varchar(32) NOT NULL,
-  `account_id` varchar(32) NOT NULL,
-  `name` varchar(30) NOT NULL,
+  `service_id` varchar(32) DEFAULT NULL,
+  `nickname` varchar(50) DEFAULT NULL,
+  `remarkname` varchar(32) NOT NULL,
   `head_img_url` varchar(255) DEFAULT NULL,
+  `sex` tinyint(1) DEFAULT '0',
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客服信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信好友信息表';
 
 /** allocation **/
 CREATE TABLE `allocation` (

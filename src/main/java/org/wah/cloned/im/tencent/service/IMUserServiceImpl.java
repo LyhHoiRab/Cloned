@@ -57,6 +57,16 @@ public class IMUserServiceImpl implements IMUserService{
     }
 
     /**
+     * 根据名称查询
+     */
+    @Override
+    public IMUser getByName(String name){
+        Assert.hasText(name, "腾讯云通讯用户名称不能为空");
+
+        return imUserDao.getByName(name);
+    }
+
+    /**
      * 根据应用ID查询管理员
      */
     @Override

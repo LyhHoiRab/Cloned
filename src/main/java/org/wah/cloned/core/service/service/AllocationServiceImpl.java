@@ -1,5 +1,6 @@
 package org.wah.cloned.core.service.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,5 +98,50 @@ public class AllocationServiceImpl implements AllocationService{
 
         //缓存
         RedisUtils.lpush(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, pool);
+    }
+
+    /**
+     * 在分配池中查询客服
+     */
+    @Override
+    public String getServiceByPool(String wechatId){
+        //查询
+        String serviceId = RedisUtils.lpop(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, String.class);
+
+        if(StringUtils.isBlank(serviceId)){
+            List<Allocation> allocations = allocationDao.findAllotByWechatId(wechatId);
+            //分配池
+            List<String> pool = new ArrayList<String>();
+
+            //客服概率
+            Map<String, Integer> services = new HashMap<String, Integer>();
+            for(Allocation allocation : allocations){
+                int service = new Double(allocation.getProbability() / allocation.getStep()).intValue();
+                services.put(allocation.getService().getId(), service);
+            }
+            //flag
+            boolean isContinue = false;
+            //填充分配池
+            while(!isContinue){
+                isContinue = true;
+
+                for(Allocation allocation : allocations){
+                    Integer service = services.get(allocation.getService().getId());
+                    if(service > 0){
+                        pool.add(allocation.getService().getId());
+                        services.put(allocation.getService().getId(), service - 1);
+
+                        isContinue = false;
+                    }
+                }
+            }
+
+            //缓存
+            RedisUtils.lpush(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, pool);
+            //查询
+            serviceId = RedisUtils.lpop(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, String.class);
+        }
+
+        return serviceId;
     }
 }

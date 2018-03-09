@@ -39,5 +39,13 @@
     <property name="maxInMemorySize" value="104857600"></property>
   </bean>
 
+  <!-- 线程池管理 -->
+  <bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+    <property name="corePoolSize"     value="10"/>
+    <property name="keepAliveSeconds" value="300"/>
+    <property name="maxPoolSize"      value="50"/>
+    <property name="queueCapacity"    value="60"/>
+  </bean>
+
   <!--<bean class="org.wah.cloned.commons.security.context.ApplicationContextUtils"/>-->
 </beans>

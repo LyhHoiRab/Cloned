@@ -119,6 +119,23 @@ public class IMUserDao{
     }
 
     /**
+     * 根据名称查询
+     */
+    public IMUser getByName(String name){
+        try{
+            Assert.hasText(name, "腾讯云通讯用户名称不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("name", name));
+
+            return mapper.getByParams(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
      * 根据应用ID查询管理员
      */
     public IMUser getAdminByAppletId(String appletId){

@@ -1,13 +1,11 @@
 package org.wah.cloned.commons.security.exception.handler;
 
+import io.github.biezhi.wechat.exception.WeChatException;
 import org.apache.http.HttpStatus;
-import org.jcp.xml.dsig.internal.dom.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.wah.cloned.bot.security.exception.WechatException;
-import org.wah.cloned.commons.security.consts.RequestParamName;
 import org.wah.doraemon.security.exception.*;
 import org.wah.doraemon.security.response.Response;
 
@@ -70,9 +68,9 @@ public class ExceptionHandler{
     /**
      * 微信机器人异常
      */
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = WechatException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = WeChatException.class)
     @ResponseBody
-    public Response wechatException(WechatException e){
+    public Response wechatException(WeChatException e){
         logger.error(e.getMessage(), e);
 
         Response response = new Response();

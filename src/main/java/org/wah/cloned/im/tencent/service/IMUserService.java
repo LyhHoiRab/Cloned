@@ -15,6 +15,11 @@ public interface IMUserService{
     IMUser getById(String id);
 
     /**
+     * 根据名称查询
+     */
+    IMUser getByName(String name);
+
+    /**
      * 根据应用ID查询管理员
      */
     IMUser getAdminByAppletId(String appletId);

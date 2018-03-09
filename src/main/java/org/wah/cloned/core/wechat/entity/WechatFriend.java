@@ -17,6 +17,8 @@ public class WechatFriend extends Entity implements Createable, Updateable{
     private String remarkname;
     //头像
     private String headImgUrl;
+    //分配的客服
+    private String serviceId;
     //性别
     private Sex sex;
     private Date createTime;
@@ -64,6 +66,14 @@ public class WechatFriend extends Entity implements Createable, Updateable{
 
     public void setSex(Sex sex){
         this.sex = sex;
+    }
+
+    public String getServiceId(){
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId){
+        this.serviceId = serviceId;
     }
 
     @Override

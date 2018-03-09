@@ -38,4 +38,12 @@ public class AllocationServiceTest{
             System.out.println(id);
         }
     }
+
+    @Test
+    public void getServiceByPool(){
+        String wechatId = "bc4d7d2a5fb54f678b3e7f0201f36e30";
+
+        String serviceId = allocationService.getServiceByPool(wechatId);
+        System.out.println(serviceId);
+    }
 }

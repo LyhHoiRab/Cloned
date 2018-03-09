@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 import org.wah.cloned.core.wechat.dao.WechatFriendDao;
 import org.wah.cloned.core.wechat.entity.WechatFriend;
 import org.wah.doraemon.consts.Sex;
+import org.wah.doraemon.utils.IDGenerator;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,17 +21,12 @@ public class WechatFriendServiceImpl implements WechatFriendService{
      */
     @Override
     @Transactional(readOnly = false)
-    public WechatFriend save(String wechatId, String nickname, Sex sex){
-        Assert.hasText(wechatId, "微信ID不能为空");
-        Assert.hasText(nickname, "微信好友昵称不能为空");
+    public void save(WechatFriend friend){
+        Assert.hasText(friend.getWechatId(), "微信ID不能为空");
+        Assert.hasText(friend.getNickname(), "微信好友昵称不能为空");
 
-        WechatFriend friend = new WechatFriend();
-        friend.setWechatId(wechatId);
-        friend.setNickname(nickname);
-        friend.setSex(sex);
+        friend.setRemarkname(IDGenerator.uuid16());
         wechatFriendDao.saveOrUpdate(friend);
-
-        return friend;
     }
 
     /**

@@ -8,7 +8,7 @@ public interface WechatFriendService{
     /**
      * 保存
      */
-    WechatFriend save(String wechatId, String nickname, Sex sex);
+    void save(WechatFriend friend);
 
     /**
      * 根据微信ID和备注名查询

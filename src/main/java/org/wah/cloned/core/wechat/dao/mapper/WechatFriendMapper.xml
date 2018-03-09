@@ -10,6 +10,7 @@
         <result column="remarkname"   property="remarkname" javaType="java.lang.String"/>
         <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
         <result column="sex"          property="sex"        typeHandler="sexHandler"/>
+        <result column="service_id"   property="serviceId"  javaType="java.lang.String"/>
         <result column="create_time"  property="createTime" javaType="java.util.Date"/>
         <result column="update_time"  property="updateTime" javaType="java.util.Date"/>
     </resultMap>
@@ -163,6 +164,7 @@
           INTO wechat_friend (
                id,
                wechat_id,
+               service_id,
                nickname,
                remarkname,
                head_img_url,
@@ -171,6 +173,7 @@
           ) VALUE (
                #{id,          jdbcType=VARCHAR},
                #{wechatId,    jdbcType=VARCHAR},
+               #{serviceId,   jdbcType=VARCHAR},
                #{nickname,    jdbcType=VARCHAR},
                #{remarkname,  jdbcType=VARCHAR},
                #{headImgUrl,  jdbcType=VARCHAR},
@@ -196,6 +199,9 @@
              </if>
              <if test="sex != null">
                  sex = #{sex, typeHandler=sexHandler},
+             </if>
+             <if test="serviceId != null">
+                 service_id = #{serviceId, jdbcType=VARCHAR},
              </if>
              <if test="updateTime != null">
                  update_time = #{updateTime, jdbcType=TIMESTAMP},

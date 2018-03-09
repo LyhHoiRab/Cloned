@@ -25,4 +25,9 @@ public interface AllocationService{
      * 创建或更新客服分配池
      */
     void saveOrUpdatePool(String wechatId);
+
+    /**
+     * 在分配池中查询客服
+     */
+    String getServiceByPool(String wechatId);
 }
