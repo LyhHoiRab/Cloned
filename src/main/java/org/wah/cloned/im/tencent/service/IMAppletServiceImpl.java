@@ -133,6 +133,7 @@ public class IMAppletServiceImpl implements IMAppletService{
         userNames.add(wechatUser.getName());
 
         //创建客服对应的IM用户
+        List<IMUser> friends = new ArrayList<IMUser>();
         for(org.wah.cloned.core.service.entity.Service service : services){
             IMUser serviceUser = new IMUser();
             serviceUser.setName(service.getId());
@@ -144,10 +145,15 @@ public class IMAppletServiceImpl implements IMAppletService{
             serviceUser.setSig(SignCheckerUtils.get(applet.getAppId(), service.getId(), applet.getPrivateKeyPath()));
             users.add(serviceUser);
             userNames.add(serviceUser.getName());
+
+            //添加到好友列表
+            friends.add(serviceUser);
         }
         //保存IM用户
         imUserDao.saveBatch(users);
         //注册到腾讯云
         IMUtils.multiOpenLogin(admin.getSig(), admin.getAppId(), admin.getName(), userNames);
+        //创建关系链
+        IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), wechatUser, friends);
     }
 }

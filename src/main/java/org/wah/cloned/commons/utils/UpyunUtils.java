@@ -1,12 +1,15 @@
 package org.wah.cloned.commons.utils;
 
 import main.java.com.UpYun;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.wah.doraemon.consts.base.EnumType;
 import org.wah.doraemon.security.exception.UnknownEnumTypeException;
 import org.wah.doraemon.security.exception.UtilsException;
 
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Map;
 
 public class UpyunUtils{
@@ -36,6 +39,38 @@ public class UpyunUtils{
         return client.writeFile(uploadPath, file.getBytes());
     }
 
+    public static boolean upload(Upyun upyun, String uploadPath, Integer timeOut, InputStream stream){
+        if(upyun == null){
+            throw new UtilsException("upyun参数不能为空");
+        }
+        if(StringUtils.isBlank(uploadPath)){
+            throw new UtilsException("上传路径不能为空");
+        }
+        if(stream == null){
+            throw new UtilsException("输入流不能为空");
+        }
+
+        UpYun client = new UpYun(upyun.getBucket(), upyun.getOperator(), upyun.getPassword());
+        client.setDebug(false);
+        client.setTimeout(timeOut == null ? DEFAULT_TIME_OUT : timeOut);
+
+        try{
+            byte[] data = IOUtils.toByteArray(stream);
+
+            return client.writeFile(uploadPath, data);
+        }catch(Exception e){
+            throw new UtilsException(e.getMessage(), e);
+        }finally{
+            try{
+                if(stream != null){
+                    stream.close();
+                }
+            }catch(Exception e){
+                //忽略
+            }
+        }
+    }
+
     public static boolean upload(String bucket, String operator, String password, String uploadPath, Integer timeOut, CommonsMultipartFile file){
         if(StringUtils.isBlank(bucket)){
             throw new UtilsException("上传空间名不能为空");
@@ -55,9 +90,47 @@ public class UpyunUtils{
 
         UpYun client = new UpYun(bucket, operator, password);
         client.setDebug(false);
-        client.setTimeout(600);
+        client.setTimeout(timeOut);
 
         return client.writeFile(uploadPath, file.getBytes());
+    }
+
+    public static boolean upload(String bucket, String operator, String password, String uploadPath, Integer timeOut, InputStream stream){
+        if(StringUtils.isBlank(bucket)){
+            throw new UtilsException("上传空间名不能为空");
+        }
+        if(StringUtils.isBlank(operator)){
+            throw new UtilsException("upyun登录名不能为空");
+        }
+        if(StringUtils.isBlank(password)){
+            throw new UtilsException("upyun登录密码不能为空");
+        }
+        if(StringUtils.isBlank(uploadPath)){
+            throw new UtilsException("上传路径不能为空");
+        }
+        if(stream == null){
+            throw new UtilsException("输入流不能为空");
+        }
+
+        UpYun client = new UpYun(bucket, operator, password);
+        client.setDebug(false);
+        client.setTimeout(timeOut);
+
+        try{
+            byte[] data = IOUtils.toByteArray(stream);
+
+            return client.writeFile(uploadPath, data);
+        }catch(Exception e){
+            throw new UtilsException(e.getMessage(), e);
+        }finally{
+            try{
+                if(stream != null){
+                    stream.close();
+                }
+            }catch(Exception e){
+                //忽略
+            }
+        }
     }
 
     public static boolean delete(Upyun upyun, String uploadPath, Integer timeOut){
@@ -135,10 +208,11 @@ public class UpyunUtils{
 
     public enum Upyun implements EnumType{
 
-        NINE_LAB(0, "九研", "ninelab", "unesmall", "unesmall123456", "http://ninelab.b0.upaiyun.com"),
-        MIKU_MINE(1, "米酷", "mikumine", "unesmall", "unesmall123456", "http://mikumine.b0.upaiyun.com"),
-        UNES_MALL(2, "优理氏", "unesmall", "unesmall", "unesmall123456", "http://unesmall.b0.upaiyun.com"),
-        KULIAO(3, "酷撩", "kuliao", "unesmall", "unesmall123456", "http://kuliao.b0.upaiyun.com");
+        NINE_LAB( 0, "九研",   "ninelab",  "unesmall", "unesmall123456",  "http://ninelab.b0.upaiyun.com"),
+        MIKU_MINE(1, "米酷",   "mikumine", "unesmall", "unesmall123456",  "http://mikumine.b0.upaiyun.com"),
+        UNES_MALL(2, "优理氏", "unesmall", "unesmall", "unesmall123456",  "http://unesmall.b0.upaiyun.com"),
+        KULIAO(   3, "酷撩",   "kuliao",   "unesmall", "unesmall123456",  "http://kuliao.b0.upaiyun.com"),
+        CLONED(   4, "分流",   "cloned",   "unesmall", "unesmall123456",  "http://cloned.test.upcdn.net");
 
         private int id;
         private String description;

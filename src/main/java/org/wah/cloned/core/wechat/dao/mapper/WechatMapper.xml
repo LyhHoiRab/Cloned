@@ -8,6 +8,7 @@
         <result column="wxno"            property="wxno"           javaType="java.lang.String"/>
         <result column="organization_id" property="organizationId" javaType="java.lang.String"/>
         <result column="device_id"       property="deviceId"       javaType="java.lang.String"/>
+        <result column="status"          property="status"         typeHandler="wechatStatusHandler"/>
         <result column="create_time"     property="createTime"     javaType="java.util.Date"/>
         <result column="update_time"     property="updateTime"     javaType="java.util.Date"/>
     </resultMap>
@@ -163,12 +164,14 @@
                wxno,
                organization_id,
                device_id,
+               status,
                create_time
           ) VALUE (
                #{id,             jdbcType=VARCHAR},
                #{wxno,           jdbcType=VARCHAR},
                #{organizationId, jdbcType=VARCHAR},
                #{deviceId,       jdbcType=VARCHAR},
+               #{status,         typeHandler=wechatStatusHandler},
                #{createTime,     jdbcType=TIMESTAMP}
           )
     </insert>
@@ -184,6 +187,9 @@
              </if>
              <if test="deviceId != null and deviceId != ''">
                  device_id = #{deviceId, jdbcType=VARCHAR},
+             </if>
+             <if test="status != null">
+                 status = #{status, typeHandler=wechatStatusHandler},
              </if>
              <if test="updateTime != null">
                  update_time = #{updateTime, jdbcType=TIMESTAMP},

@@ -14,7 +14,6 @@ import io.github.biezhi.wechat.api.request.FileRequest;
 import io.github.biezhi.wechat.api.request.JsonRequest;
 import io.github.biezhi.wechat.api.request.StringRequest;
 import io.github.biezhi.wechat.api.response.*;
-import io.github.biezhi.wechat.utils.DateUtils;
 import io.github.biezhi.wechat.utils.QRCodeUtils;
 import io.github.biezhi.wechat.utils.StringUtils;
 import io.github.biezhi.wechat.utils.WeChatUtils;
@@ -23,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.wah.cloned.bot.entity.ChatLoop;
 import org.wah.cloned.bot.entity.Download;
 import org.wah.cloned.bot.entity.WechatBot;
+import org.wah.cloned.commons.utils.UpyunUtils;
+import org.wah.doraemon.utils.DateUtils;
+import org.wah.doraemon.utils.IDGenerator;
 
 import java.io.File;
 import java.io.InputStream;
@@ -104,7 +106,7 @@ public class WechatApi{
 
             if(this.uuid == null){
                 while(getUUID() == null){
-                    DateUtils.sleep(100);
+                    io.github.biezhi.wechat.utils.DateUtils.sleep(100);
                 }
 
                 this.getQrImage(this.uuid, bot.getConfig().showTerminal());
@@ -127,7 +129,7 @@ public class WechatApi{
                     break;
                 }
 
-                DateUtils.sleep(500);
+                io.github.biezhi.wechat.utils.DateUtils.sleep(500);
             }
 
             if(isLoggedIn != null && isLoggedIn){
@@ -145,7 +147,7 @@ public class WechatApi{
         //加载好友列表
         this.loadContact(0);
         //加载群聊信息，群成员
-        this.loadGroupList();
+//        this.loadGroupList();
 
         this.startRevive();
         this.logging = false;
@@ -198,7 +200,7 @@ public class WechatApi{
 
         InputStream inputStream = fileResponse.getInputStream();
         File qrCode = WeChatUtils.saveFile(inputStream, imgDir, "qrcode.png");
-        DateUtils.sleep(200);
+        io.github.biezhi.wechat.utils.DateUtils.sleep(200);
 
         try{
             QRCodeUtils.showQrCode(qrCode, terminalShow);
@@ -506,10 +508,6 @@ public class WechatApi{
         this.client.cookies().clear();
         String file = bot.getConfig().assetsDir() + "/login.json";
         new File(file).delete();
-
-        if(thread.isAlive()){
-            thread.stop();
-        }
     }
 
     /**
@@ -576,7 +574,7 @@ public class WechatApi{
                 this.groupUserNames.add(message.getFromUserName());
             }
 
-            if (message.getToUserName().contains(GROUP_IDENTIFY) && !groupUserNames.contains(message.getToUserName())){
+            if(message.getToUserName().contains(GROUP_IDENTIFY) && !groupUserNames.contains(message.getToUserName())){
                 this.groupUserNames.add(message.getToUserName());
             }
 
@@ -684,26 +682,22 @@ public class WechatApi{
         return accountMap.get(id);
     }
 
-    /**
-     * 下载图片到本地
-     *
-     * @param msgId 图片消息id
-     * @return 返回图片本地路径
-     */
-    private String downloadImg(String msgId){
-        return this.downloadFile(new Download(ApiURL.IMAGE, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId).saveByDay().suffix("jpg"));
-    }
-
-    public String downloadFile(Download download){
+    public String downloadFile(Download download, String path){
         String url = String.format(download.getApiURL().getUrl(), download.getParams());
 
         FileResponse response = this.client.download(new FileRequest(url));
         InputStream  inputStream = response.getInputStream();
 
-        String id  = download.getFileName();
+//        String id  = download.getFileName();
 //        String dir = download.getDir(bot);
-        String dir = "C:\\Users\\xiuxiu\\Desktop\\wechatTest";
-        return WeChatUtils.saveFileByDay(inputStream, dir, id, download.isSaveByDay()).getPath();
+//        String dir = "C:\\Users\\xiuxiu\\Desktop\\wechatTest";
+//        return WeChatUtils.saveFileByDay(inputStream, dir, id, download.isSaveByDay()).getPath();
+
+        if(UpyunUtils.upload(UpyunUtils.Upyun.CLONED, path, null, inputStream)){
+            return UpyunUtils.Upyun.CLONED.getUrl() + path;
+        }
+
+        return null;
     }
 
     /**
@@ -713,7 +707,10 @@ public class WechatApi{
      * @return 返回音频本地路径
      */
     public String downloadVoice(String msgId){
-        return this.downloadFile(new Download(ApiURL.VOICE, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId).saveByDay().suffix(".mp3"));
+        String fileName = IDGenerator.uuid32();
+        String path = String.format("/voice/%s/%s%s", DateUtils.format(new Date(), "yyyyHHdd"), fileName, ApiURL.VOICE.getSuffix());
+
+        return this.downloadFile(new Download(ApiURL.VOICE, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId), path);
     }
 
     /**
@@ -723,7 +720,23 @@ public class WechatApi{
      * @return 返回视频本地路径
      */
     public String downloadVideo(String msgId){
-        return this.downloadFile(new Download(ApiURL.VIDEO, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId).saveByDay());
+        String fileName = IDGenerator.uuid32();
+        String path = String.format("/video/%s/%s%s", DateUtils.format(new Date(), "yyyyHHdd"), fileName, ApiURL.VIDEO.getSuffix());
+
+        return this.downloadFile(new Download(ApiURL.VIDEO, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId), path);
+    }
+
+    /**
+     * 下载图片到本地
+     *
+     * @param msgId 图片消息id
+     * @return 返回图片本地路径
+     */
+    public String downloadImg(String msgId){
+        String fileName = IDGenerator.uuid32();
+        String path = String.format("/image/%s/%s%s", DateUtils.format(new Date(), "yyyyHHdd"), fileName, ApiURL.IMAGE.getSuffix());
+
+        return this.downloadFile(new Download(ApiURL.IMAGE, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId), path);
     }
 
     private String searchContent(String key, String content){
@@ -774,7 +787,7 @@ public class WechatApi{
      * 备注好友
      */
     public void remark(String username, String remark){
-        JsonResponse response = client.send(new JsonRequest("https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxoplog").post().jsonBody()
+        JsonResponse response = client.send(new JsonRequest(String.format("%s/webwxoplog", bot.getSession().getUrl())).post().jsonBody()
                 .add("BaseRequest", bot.getSession().getBaseRequest())
                 .add("UserName", username)
                 .add("CmdId", 2)

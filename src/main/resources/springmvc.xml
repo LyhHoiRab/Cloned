@@ -82,6 +82,7 @@
             <value>/api/1.0/login</value>
             <value>/socket/1.0/message</value>
             <value>/page/cloned/im/*/service</value>
+            <value>/api/1.0/im/user/wechat</value>
           </list>
         </property>
       </bean>

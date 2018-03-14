@@ -1,5 +1,6 @@
 package org.wah.cloned.core.wechat.entity;
 
+import org.wah.cloned.core.wechat.consts.WechatStatus;
 import org.wah.doraemon.entity.base.Createable;
 import org.wah.doraemon.entity.base.Entity;
 import org.wah.doraemon.entity.base.Updateable;
@@ -11,6 +12,7 @@ public class Wechat extends Entity implements Createable, Updateable{
     private String wxno;
     private String organizationId;
     private String deviceId;
+    private WechatStatus status;
     private Date createTime;
     private Date updateTime;
 
@@ -40,6 +42,14 @@ public class Wechat extends Entity implements Createable, Updateable{
 
     public void setDeviceId(String deviceId){
         this.deviceId = deviceId;
+    }
+
+    public WechatStatus getStatus(){
+        return status;
+    }
+
+    public void setStatus(WechatStatus status){
+        this.status = status;
     }
 
     @Override

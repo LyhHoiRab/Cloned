@@ -75,4 +75,14 @@ public class IMUserServiceImpl implements IMUserService{
 
         return imUserDao.getAdminByAppletId(appletId);
     }
+
+    /**
+     * 根据微信号查询微信IM账号
+     */
+    @Override
+    public IMUser getWechatByWxno(String wxno){
+        Assert.hasText(wxno, "微信号不能为空");
+
+        return imUserDao.getWechatByWxno(wxno);
+    }
 }

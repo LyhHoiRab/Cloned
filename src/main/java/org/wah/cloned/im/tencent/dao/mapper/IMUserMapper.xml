@@ -291,4 +291,13 @@
             <include refid="WHERE_COLUMN"/>
         </if>
     </select>
+
+    <select id="getWechatByWxno" resultMap="user">
+        SELECT t.*
+          FROM tencent_im_user t
+     LEFT JOIN wechat w
+            ON w.id = t.name
+         WHERE w.wxno = #{wxno}
+           AND t.role = #{role, typeHandler=imRoleHandler}
+    </select>
 </mapper>

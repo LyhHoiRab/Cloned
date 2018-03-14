@@ -75,6 +75,10 @@ public class ServiceServiceImpl implements ServiceService{
             IMUser admin = imUserDao.getAdminByAppletId(applet.getId());
             //注册到腾讯服务器
             IMUtils.openLogin(admin.getSig(), admin.getAppId(), admin.getName(), user);
+            //微信号
+            IMUser wechat = imUserDao.getByName(service.getWechatId());
+            //创建关系链
+            IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), wechat, user);
         }
     }
 

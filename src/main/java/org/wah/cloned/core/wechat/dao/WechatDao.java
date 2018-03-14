@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import org.wah.cloned.core.wechat.consts.WechatStatus;
 import org.wah.cloned.core.wechat.dao.mapper.WechatMapper;
 import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.doraemon.mybatis.Criteria;
@@ -38,6 +39,7 @@ public class WechatDao{
                 Assert.hasText(wechat.getOrganizationId(), "企业ID不能为空");
 
                 wechat.setId(IDGenerator.uuid32());
+                wechat.setStatus(WechatStatus.OFFLINE);
                 wechat.setCreateTime(new Date());
                 mapper.save(wechat);
             }else{

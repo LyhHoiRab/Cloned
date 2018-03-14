@@ -23,5 +23,6 @@
     <typeAlias type="org.wah.cloned.im.tencent.consts.handler.IMRoleHandler"                                    alias="imRoleHandler"/>
     <typeAlias type="org.wah.cloned.im.tencent.consts.handler.IMTypeHandler"                                    alias="imTypeHandler"/>
     <typeAlias type="org.wah.cloned.im.tencent.consts.handler.IMMessageTypeHandler"                             alias="imMessageTypeHandler"/>
+    <typeAlias type="org.wah.cloned.core.wechat.consts.handler.WechatStatusHandler"                             alias="wechatStatusHandler"/>
   </typeAliases>
 </configuration>

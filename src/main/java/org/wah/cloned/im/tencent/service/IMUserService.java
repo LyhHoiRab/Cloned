@@ -23,4 +23,9 @@ public interface IMUserService{
      * 根据应用ID查询管理员
      */
     IMUser getAdminByAppletId(String appletId);
+
+    /**
+     * 根据微信号查询微信IM账号
+     */
+    IMUser getWechatByWxno(String wxno);
 }

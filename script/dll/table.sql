@@ -45,6 +45,7 @@ CREATE TABLE `wechat` (
   `wxno` varchar(45) NOT NULL,
   `organization_id` varchar(32) NOT NULL,
   `device_id` varchar(32) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

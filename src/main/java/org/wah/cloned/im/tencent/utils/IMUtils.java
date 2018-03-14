@@ -13,10 +13,7 @@ import org.wah.doraemon.utils.ObjectUtils;
 
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 腾讯云通讯API工具
@@ -36,6 +33,8 @@ public class IMUtils{
     private static final String SEND_MSG = "https://console.tim.qq.com/v4/openim/sendmsg?usersig={0}&identifier={1}&sdkappid={2}&contenttype=json";
     //30天运营数据
     private static final String APP_INFO = "https://console.tim.qq.com/v4/openconfigsvr/getappinfo?usersig={0}&identifier={1}&sdkappid={2}&contenttype=json";
+    //批量添加好友
+    private static final String FRIEND_ADD = "https://console.tim.qq.com/v4/sns/friend_add?usersig={0}&identifier={1}&sdkappid={2}&contenttype=json";
 
     public static void openLogin(String sig, String sdkAppid, String identifier, IMUser user){
         if(StringUtils.isBlank(sig)){
@@ -159,5 +158,72 @@ public class IMUtils{
         }
 
         return response;
+    }
+
+    public static void friendAdd(String sig, String sdkAppid, String identifier, IMUser master, IMUser friend){
+        if(StringUtils.isBlank(sig)){
+            throw new UtilsException("认证签名不能为空");
+        }
+        if(StringUtils.isBlank(sdkAppid)){
+            throw new UtilsException("腾讯云通讯应用AppId不能为空");
+        }
+        if(StringUtils.isBlank(identifier)){
+            throw new UtilsException("腾讯云通讯应用管理员不能为空");
+        }
+        if(master == null || StringUtils.isBlank(master.getName())){
+            throw new UtilsException("腾讯云通讯用户不能为空");
+        }
+        if(friend == null || StringUtils.isBlank(friend.getName())){
+            throw new UtilsException("腾讯云通讯好友列表不能为空");
+        }
+
+        friendAdd(sig, sdkAppid, identifier, master, Arrays.asList(friend));
+    }
+
+    public static void friendAdd(String sig, String sdkAppid, String identifier, IMUser master, List<IMUser> friends){
+        if(StringUtils.isBlank(sig)){
+            throw new UtilsException("认证签名不能为空");
+        }
+        if(StringUtils.isBlank(sdkAppid)){
+            throw new UtilsException("腾讯云通讯应用AppId不能为空");
+        }
+        if(StringUtils.isBlank(identifier)){
+            throw new UtilsException("腾讯云通讯应用管理员不能为空");
+        }
+        if(master == null || StringUtils.isBlank(master.getName())){
+            throw new UtilsException("腾讯云通讯用户不能为空");
+        }
+        if(friends == null || friends.isEmpty()){
+            throw new UtilsException("腾讯云通讯好友列表不能为空");
+        }
+
+        String url = MessageFormat.format(FRIEND_ADD, sig, identifier, sdkAppid);
+        //参数
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("From_Account", master.getName());
+        params.put("AddType", "Add_Type_Both");
+        params.put("ForceAddFlags", 1);
+        //好友列表
+        List<Map<String, String>> friendsList = new ArrayList<Map<String, String>>();
+        for(IMUser friend : friends){
+            if(friend == null || StringUtils.isBlank(friend.getName())){
+                throw new UtilsException("腾讯云通讯用户不能为空");
+            }
+
+            Map<String, String> item = new HashMap<String, String>();
+            item.put("To_Account", friend.getName());
+            item.put("AddSource", "AddSource_Type_CLONED");
+            friendsList.add(item);
+        }
+        params.put("AddFriendItem", friendsList);
+
+        CloseableHttpClient client = HttpClientUtils.createHttpsClient();
+        String result = HttpClientUtils.post(client, url, (Object) params, CHARSET);
+
+        IMResponse response = ObjectUtils.deserialize(result, IMResponse.class);
+
+        if(response.getStatus().equalsIgnoreCase(FAIL)){
+            throw new UtilsException(response.getErrorInfo());
+        }
     }
 }

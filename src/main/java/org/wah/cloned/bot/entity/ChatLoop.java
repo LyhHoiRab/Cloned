@@ -5,6 +5,10 @@ import io.github.biezhi.wechat.api.response.WebSyncResponse;
 import io.github.biezhi.wechat.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.wah.cloned.bot.service.WechatApi;
+import org.wah.cloned.commons.security.context.ApplicationContextUtils;
+import org.wah.cloned.core.wechat.consts.WechatStatus;
+import org.wah.cloned.core.wechat.dao.WechatDao;
+import org.wah.cloned.core.wechat.entity.Wechat;
 
 import static io.github.biezhi.wechat.api.enums.RetCode.*;
 
@@ -24,22 +28,30 @@ public class ChatLoop implements Runnable{
     public void run(){
         while(bot.isRunning()){
             try{
+                WechatDao wechatDao = (WechatDao) ApplicationContextUtils.getByClass(WechatDao.class);
+                Wechat wechat = wechatDao.getById(bot.getWechatId());
+
                 SyncCheckRet syncCheckRet = api.syncCheck();
 
                 if(syncCheckRet.getRetCode() == UNKNOWN){
                     continue;
 
                 }else if(syncCheckRet.getRetCode() == MOBILE_LOGIN_OUT){
-                    log.info("微信登出");
                     api.logout();
+                    wechat.setStatus(WechatStatus.OFFLINE);
+                    wechatDao.saveOrUpdate(wechat);
                     break;
 
                 }else if(syncCheckRet.getRetCode() == LOGIN_OTHERWISE){
-                    log.info("别处登录");
                     api.logout();
+                    wechat.setStatus(WechatStatus.OFFLINE);
+                    wechatDao.saveOrUpdate(wechat);
                     break;
 
                 }else if(syncCheckRet.getRetCode() == NORMAL){
+                    //更新状态
+                    wechat.setStatus(WechatStatus.ONLINE);
+                    wechatDao.saveOrUpdate(wechat);
                     //更新最后一次正常检查时间
                     bot.updateLastCheck();
                     WebSyncResponse webSyncResponse = api.webSync();
@@ -52,6 +64,7 @@ public class ChatLoop implements Runnable{
                             bot.addMessages(api.handleMsg(webSyncResponse.getAddMessageList()));
                             break;
                         case 6:
+                            api.loadContact(0);
                             break;
                         default:
                             break;
@@ -64,10 +77,10 @@ public class ChatLoop implements Runnable{
             }catch(Exception e){
                 retryCount += 1;
 
-                if(bot.getReceiveRetryCount() < retryCount){
+                if (bot.getReceiveRetryCount() < retryCount){
                     bot.setRunning(false);
                 }else{
-                    DateUtils.sleep(10000);
+                    DateUtils.sleep(5000);
                 }
             }
         }

@@ -1,10 +1,12 @@
 package org.wah.cloned.core.organization.entity;
 
+import org.wah.doraemon.entity.Account;
 import org.wah.doraemon.entity.base.Createable;
 import org.wah.doraemon.entity.base.Entity;
 import org.wah.doraemon.entity.base.Updateable;
 
 import java.util.Date;
+import java.util.List;
 
 public class Organization extends Entity implements Createable, Updateable{
 
@@ -26,6 +28,8 @@ public class Organization extends Entity implements Createable, Updateable{
     private String companyWebsite;
     private Date createTime;
     private Date updateTime;
+    //企业员工
+    private List<Account> accounts;
 
     public Organization(){
 
@@ -101,6 +105,14 @@ public class Organization extends Entity implements Createable, Updateable{
 
     public void setCompanyWebsite(String companyWebsite){
         this.companyWebsite = companyWebsite;
+    }
+
+    public List<Account> getAccounts(){
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts){
+        this.accounts = accounts;
     }
 
     @Override

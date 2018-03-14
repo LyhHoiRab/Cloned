@@ -1,5 +1,6 @@
 package org.wah.cloned.core.wechat.service;
 
+import org.wah.cloned.bot.entity.WechatBot;
 import org.wah.cloned.core.wechat.entity.WechatFriend;
 import org.wah.doraemon.consts.Sex;
 
@@ -14,4 +15,9 @@ public interface WechatFriendService{
      * 根据微信ID和备注名查询
      */
     WechatFriend getByWechatIdAndRemarkname(String wechatId, String remarkname);
+
+    /**
+     * 分配客服
+     */
+    WechatFriend allot(WechatBot bot, String fromUserName);
 }

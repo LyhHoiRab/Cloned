@@ -16,6 +16,14 @@
         <result column="company_website" property="companyWebsite"  javaType="java.lang.String"/>
         <result column="create_time"     property="createTime"      javaType="java.util.Date"/>
         <result column="update_time"     property="updateTime"      javaType="java.util.Date"/>
+        <collection property="accounts" resultMap="account" columnPrefix="a_"/>
+    </resultMap>
+
+    <resultMap id="account" type="org.wah.doraemon.entity.Account">
+        <id     column="id"          property="id"         javaType="java.lang.String"/>
+        <result column="username"    property="username"   javaType="java.lang.String"/>
+        <result column="email"       property="email"      javaType="java.lang.String"/>
+        <result column="phone"       property="phone"      javaType="java.lang.String"/>
     </resultMap>
 
     <sql id="WHERE_COLUMN">
@@ -229,20 +237,32 @@
     </update>
 
     <select id="getByParams" resultMap="organization">
-        SELECT o.*
+        SELECT o.*,
+               a.id       AS a_id,
+               a.username AS a_username,
+               a.email    AS a_email,
+               a.phone    AS a_phone
           FROM organization o
      LEFT JOIN account_organization ao
             ON ao.organization_id = o.id
+     LEFT JOIN account a
+            ON a.id = ao.account_id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>
     </select>
 
     <select id="findByParams" resultMap="organization">
-        SELECT o.*
+        SELECT o.*,
+               a.id       AS a_id,
+               a.username AS a_username,
+               a.email    AS a_email,
+               a.phone    AS a_phone
           FROM organization o
      LEFT JOIN account_organization ao
             ON ao.organization_id = o.id
+     LEFT JOIN account a
+            ON a.id = ao.account_id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
 
@@ -271,8 +291,11 @@
           FROM organization o
      LEFT JOIN account_organization ao
             ON ao.organization_id = o.id
+     LEFT JOIN account a
+            ON a.id = ao.account_id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>
+      ORDER BY o.id
     </select>
 </mapper>

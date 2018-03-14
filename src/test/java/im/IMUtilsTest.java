@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.wah.cloned.bot.entity.WechatBot;
 import org.wah.cloned.bot.service.WechatApi;
+import org.wah.cloned.commons.utils.CacheUtils;
 import org.wah.cloned.core.service.service.AllocationService;
 import org.wah.cloned.core.wechat.entity.WechatFriend;
 import org.wah.cloned.core.wechat.service.WechatFriendService;
@@ -50,19 +51,24 @@ public class IMUtilsTest {
         final String wechatId = "bc4d7d2a5fb54f678b3e7f0201f36e30";
 
         //创建机器人
-        final WechatBot bot = new WechatBot(Config.me().autoLogin(false).showTerminal(false).autoAddFriend(false));
-        WechatApi api = new WechatApi(bot);
-        bot.setWechatApi(api);
-        bot.setWechatId(wechatId);
+        final WechatBot boter = new WechatBot(Config.me().autoLogin(false).showTerminal(false).autoAddFriend(false));
+        WechatApi api = new WechatApi(boter);
+        boter.setWechatApi(api);
+        boter.setWechatId(wechatId);
         //登录
         api.login();
+
+        CacheUtils.putBot(boter);
 
         TestRunnable runner = new TestRunnable(){
             @Override
             public void runTest() throws Throwable{
                 while(true){
-                    if(bot.hasMessage()){
-                        WeChatMessage message = bot.nextMessage();
+//                    if(bot.hasMessage()){
+                    if(CacheUtils.hasMessage()){
+//                        WeChatMessage message = bot.nextMessage();
+                        WeChatMessage message = CacheUtils.nextMessage();
+                        WechatBot bot = CacheUtils.getBot(message.getWechatId());
                         //查询消息好友ID
                         Account account = bot.getWechatApi().getAccountById(message.getFromUserName());
 
@@ -71,7 +77,6 @@ public class IMUtilsTest {
                             String serviceId = allocationService.getServiceByPool(bot.getWechatId());
 
                             //创建好友
-                            System.out.println(account.getNickName());
                             WechatFriend friend = new WechatFriend();
                             friend.setNickname(account.getNickName());
                             friend.setSex(Sex.getById(account.getSex()));
@@ -80,12 +85,23 @@ public class IMUtilsTest {
                             wechatFriendService.save(friend);
 
                             //备注好友
-//                            bot.getWechatApi().remark(message.getFromUserName(), friend.getRemarkname());
+                            bot.getWechatApi().remark(message.getFromUserName(), friend.getRemarkname());
                             account.setRemarkName(friend.getRemarkname());
                         }
-
                         //查询好友
                         WechatFriend friend = wechatFriendService.getByWechatIdAndRemarkname(bot.getWechatId(), account.getRemarkName());
+                        if(friend == null){
+                            //分配客服
+                            String serviceId = allocationService.getServiceByPool(bot.getWechatId());
+                            //创建好友
+                            friend = new WechatFriend();
+                            friend.setNickname(account.getNickName());
+                            friend.setSex(Sex.getById(account.getSex()));
+                            friend.setWechatId(bot.getWechatId());
+                            friend.setServiceId(serviceId);
+                            wechatFriendService.save(friend);
+                        }
+
                         //客服
                         IMUser service = imUserService.getByName(friend.getServiceId());
                         //微信
@@ -128,7 +144,6 @@ public class IMUtilsTest {
                 }
             }
         };
-
 
         TestRunnable[] trs = new TestRunnable[]{runner};
         MultiThreadedTestRunner mttr = new MultiThreadedTestRunner(trs);

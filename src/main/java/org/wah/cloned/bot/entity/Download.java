@@ -15,6 +15,7 @@ public class Download{
     public Download(ApiURL apiURL, String... params){
         this.apiURL = apiURL;
         this.params = params;
+        this.suffix = apiURL.getSuffix();
     }
 
     public Download msgId(String msgId){

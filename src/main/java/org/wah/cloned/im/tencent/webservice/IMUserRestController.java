@@ -20,7 +20,7 @@ public class IMUserRestController{
     /**
      * 保存管理员
      */
-    @RequestMapping(value = "/admin", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = "/admin", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<IMUser> saveAdmin(String identifier, String appletId){
         IMUser user = imUserService.saveAdmin(identifier, appletId);
 
@@ -30,7 +30,7 @@ public class IMUserRestController{
     /**
      * 根据ID查询
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<IMUser> getById(@PathVariable("id") String id){
         IMUser user = imUserService.getById(id);
 
@@ -40,9 +40,19 @@ public class IMUserRestController{
     /**
      * 根据应用ID查询管理员
      */
-    @RequestMapping(value = "/admin/{appletId}")
+    @RequestMapping(value = "/admin/{appletId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<IMUser> getAdminByAppletId(@PathVariable("appletId") String appletId){
         IMUser user = imUserService.getAdminByAppletId(appletId);
+
+        return new Response<IMUser>("查询成功", user);
+    }
+
+    /**
+     * 根据微信号查询微信IM账号
+     */
+    @RequestMapping(value = "/wechat", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<IMUser> getWechatByWxno(String wxno){
+        IMUser user = imUserService.getWechatByWxno(wxno);
 
         return new Response<IMUser>("查询成功", user);
     }

@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import org.wah.cloned.bot.service.WechatApi;
+import org.wah.cloned.commons.utils.CacheUtils;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -75,14 +76,11 @@ public class WechatBot{
     @Getter
     private final Map<MsgType, List<Invoke>> mapping = new HashMap<MsgType, List<Invoke>>(8);
 
-    @Getter
-    private volatile BlockingQueue<WeChatMessage> messages = new LinkedBlockingQueue<>();
-
     public WechatBot(Builder builder){
         this.config = builder.config;
         this.botClient = builder.botClient;
         this.session = new LoginSession();
-        init();
+//        init();
     }
 
     public WechatBot(Config config){
@@ -168,28 +166,29 @@ public class WechatBot{
     }
 
     public void addMessages(List<WeChatMessage> messages){
+//        try{
+//            if(null == messages || messages.size() == 0){
+//                return;
+//            }
+//            for(WeChatMessage message : messages){
+//                this.getMessages().put(message);
+//            }
+//        }catch(InterruptedException e){
+//            log.error("向队列添加 Message 出错", e);
+//        }
+
         try{
             if(null == messages || messages.size() == 0){
                 return;
             }
+
             for(WeChatMessage message : messages){
-                this.getMessages().put(message);
+                message.setWechatId(this.getWechatId());
             }
-        }catch(InterruptedException e){
+
+            CacheUtils.addMessages(messages);
+        }catch(Exception e){
             log.error("向队列添加 Message 出错", e);
-        }
-    }
-
-    public boolean hasMessage(){
-        return this.getMessages().size() > 0;
-    }
-
-    public WeChatMessage nextMessage(){
-        try{
-            return this.getMessages().take();
-        }catch(InterruptedException e) {
-            log.error("从队列获取 Message 出错", e);
-            return null;
         }
     }
 
@@ -215,50 +214,4 @@ public class WechatBot{
         this.getWechatApi().verify(message.getRaw().getRecommend());
     }
 
-    /**
-     * 私聊消息
-     */
-    @Bind(msgType = MsgType.TEXT, accountType = AccountType.TYPE_FRIEND)
-    public void text(WeChatMessage message){
-        System.out.println("好友消息 ============================>");
-        System.out.println("好友名称 ============================>");
-        System.out.println(message.getFromUserName());
-        System.out.println(message.getFromNickName());
-        System.out.println(message.getFromRemarkName());
-        System.out.println("好友消息 ============================>");
-        System.out.println(message.getText());
-    }
-
-    @Bind(msgType = MsgType.EMOTICONS, accountType = AccountType.TYPE_FRIEND)
-    public void emoticons(WeChatMessage message){
-        System.out.println("表情消息消息 ============================>");
-        System.out.println("好友名称 ============================>");
-        System.out.println(message.getFromUserName());
-        System.out.println(message.getFromNickName());
-        System.out.println(message.getFromRemarkName());
-        System.out.println("好友消息 ============================>");
-        System.out.println(message.getText());
-    }
-
-    @Bind(msgType = MsgType.IMAGE, accountType = AccountType.TYPE_FRIEND)
-    public void image(WeChatMessage message){
-        System.out.println("图片消息消息 ============================>");
-        System.out.println("好友名称 ============================>");
-        System.out.println(message.getFromUserName());
-        System.out.println(message.getFromNickName());
-        System.out.println(message.getFromRemarkName());
-        System.out.println("好友消息 ============================>");
-        System.out.println(message.getText());
-    }
-
-    @Bind(msgType = MsgType.VOICE, accountType = AccountType.TYPE_FRIEND)
-    public void voice(WeChatMessage message){
-        System.out.println("语音消息消息 ============================>");
-        System.out.println("好友名称 ============================>");
-        System.out.println(message.getFromUserName());
-        System.out.println(message.getFromNickName());
-        System.out.println(message.getFromRemarkName());
-        System.out.println("好友消息 ============================>");
-        System.out.println(message.getVoicePath());
-    }
 }

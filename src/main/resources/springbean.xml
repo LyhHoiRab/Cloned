@@ -47,5 +47,7 @@
     <property name="queueCapacity"    value="60"/>
   </bean>
 
-  <!--<bean class="org.wah.cloned.commons.security.context.ApplicationContextUtils"/>-->
+  <bean class="org.wah.cloned.commons.security.context.ApplicationContextUtils"/>
+
+  <bean class="org.wah.cloned.im.tencent.utils.WeChatMessageListener"/>
 </beans>

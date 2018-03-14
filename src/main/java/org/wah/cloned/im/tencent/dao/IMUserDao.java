@@ -223,4 +223,18 @@ public class IMUserDao{
             throw new DataAccessException(e.getMessage(), e);
         }
     }
+
+    /**
+     * 根据微信号查询微信IM账号
+     */
+    public IMUser getWechatByWxno(String wxno){
+        try{
+            Assert.hasText(wxno, "微信号不能为空");
+
+            return mapper.getWechatByWxno(wxno, IMRole.WECHAT);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }
