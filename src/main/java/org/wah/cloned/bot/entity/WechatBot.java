@@ -17,7 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import org.wah.cloned.bot.service.WechatApi;
+import org.wah.cloned.commons.security.consts.CacheParamName;
+import org.wah.cloned.commons.security.context.ApplicationContextUtils;
 import org.wah.cloned.commons.utils.CacheUtils;
+import org.wah.doraemon.utils.RedisUtils;
+import redis.clients.jedis.ShardedJedisPool;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -165,7 +169,7 @@ public class WechatBot{
         }
     }
 
-    public void addMessages(List<WeChatMessage> messages){
+    public void addMessages(List<WeChatMessage> list){
 //        try{
 //            if(null == messages || messages.size() == 0){
 //                return;
@@ -177,18 +181,9 @@ public class WechatBot{
 //            log.error("向队列添加 Message 出错", e);
 //        }
 
-        try{
-            if(null == messages || messages.size() == 0){
-                return;
-            }
-
-            for(WeChatMessage message : messages){
-                message.setWechatId(this.getWechatId());
-            }
-
-            CacheUtils.addMessages(messages);
-        }catch(Exception e){
-            log.error("向队列添加 Message 出错", e);
+        if(list != null && !list.isEmpty()){
+            ShardedJedisPool pool = (ShardedJedisPool) ApplicationContextUtils.getById("shardedJedisPool");
+            RedisUtils.rpush(pool.getResource(), CacheParamName.WECHAT_MESSAGE_LIST, list);
         }
     }
 
@@ -213,5 +208,4 @@ public class WechatBot{
     public void addFriend(WeChatMessage message){
         this.getWechatApi().verify(message.getRaw().getRecommend());
     }
-
 }

@@ -237,4 +237,16 @@ public class IMUserDao{
             throw new DataAccessException(e.getMessage(), e);
         }
     }
+
+    /**
+     * 根据账号ID和微信号查询IM账号
+     */
+    public IMUser getServiceByAccountIdAndWxno(String accountId, String wxno){
+        try{
+            return mapper.getServiceByAccountIdAndWxno(accountId, wxno, IMRole.SERVICE);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }

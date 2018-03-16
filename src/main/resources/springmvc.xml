@@ -83,6 +83,9 @@
             <value>/socket/1.0/message</value>
             <value>/page/cloned/im/*/service</value>
             <value>/api/1.0/im/user/wechat</value>
+            <value>/api/1.0/im/user/service</value>
+            <value>/api/1.0/im/user/login/wechat</value>
+            <value>/api/1.0/wechat/app/alive</value>
           </list>
         </property>
       </bean>

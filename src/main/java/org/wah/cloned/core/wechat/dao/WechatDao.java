@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import org.wah.cloned.core.wechat.consts.AppStatus;
 import org.wah.cloned.core.wechat.consts.WechatStatus;
 import org.wah.cloned.core.wechat.dao.mapper.WechatMapper;
 import org.wah.cloned.core.wechat.entity.Wechat;
@@ -70,6 +71,23 @@ public class WechatDao{
     }
 
     /**
+     * 根据微信号查询
+     */
+    public Wechat getByWxno(String wxno){
+        try{
+            Assert.hasText(wxno, "微信号不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("wxno", wxno));
+
+            return mapper.getByParams(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
      * 分页查询
      */
     public Page<Wechat> page(PageRequest pageRequest, String organizationId, String wxno){
@@ -91,6 +109,19 @@ public class WechatDao{
             Long count = mapper.countByParams(criteria);
 
             return new Page<Wechat>(list, pageRequest, count);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 检查过时App
+     */
+    public void updateAppStatusByTimeout(){
+        try{
+
+            mapper.updateAppStatusByTimeout(AppStatus.ONLINE, AppStatus.UNUSUAL, 60L);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

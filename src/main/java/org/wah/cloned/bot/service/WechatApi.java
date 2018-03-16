@@ -558,8 +558,6 @@ public class WechatApi{
     }
 
     private WeChatMessage processMsg(Message message){
-        Integer type = message.getType();
-        String name = this.getUserRemarkName(message.getFromUserName());
         String msgId = message.getId();
         String content = message.getContent();
 
@@ -592,7 +590,9 @@ public class WechatApi{
                                                                                         .mineUserName(bot.getSession().getUserName())
                                                                                         .mineNickName(bot.getSession().getNickName())
                                                                                         .msgType(message.msgType())
-                                                                                        .text(content);
+                                                                                        .text(content)
+                                                                                        .wechatId(bot.getWechatId())
+                                                                                        .isSelf(message.getFromUserName().equals(bot.getSession().getUserName()));
 
         Account fromAccount = this.getAccountById(message.getFromUserName());
 

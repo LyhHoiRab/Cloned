@@ -1,19 +1,19 @@
 app.controller('wechatEdit', function($scope, $state, $stateParams, $http){
     //下拉
-    $scope.devices = [];
+    //$scope.devices = [];
 
     //定义实体
     $scope.wechat = {
         id             : $stateParams.id,
         wxno           : '',
-        deviceId       : '',
+        //deviceId       : '',
         organizationId : ''
     };
 
     //定义方法
     $scope.reset = function(){
         $scope.wechat.wxno           = '';
-        $scope.wechat.deviceId       = '';
+        //$scope.wechat.deviceId       = '';
     };
 
     $scope.submit = function(){
@@ -54,36 +54,36 @@ app.controller('wechatEdit', function($scope, $state, $stateParams, $http){
         });
     };
 
-    $scope.getDevices = function(){
-        $http({
-            url     : '/api/1.0/device/find',
-            method  : 'GET',
-            params  : {
-                'organizationId' : $scope.wechat.organizationId
-            },
-            headers : {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).success(function(res, status, headers, config){
-            if(res.success){
-                $scope.devices = res.result;
-            }else{
-                alert(res.msg);
+    //$scope.getDevices = function(){
+    //    $http({
+    //        url     : '/api/1.0/device/find',
+    //        method  : 'GET',
+    //        params  : {
+    //            'organizationId' : $scope.wechat.organizationId
+    //        },
+    //        headers : {
+    //            'Content-Type': 'application/x-www-form-urlencoded'
+    //        }
+    //    }).success(function(res, status, headers, config){
+    //        if(res.success){
+    //            $scope.devices = res.result;
+    //        }else{
+    //            alert(res.msg);
+    //
+    //            $scope.devices = [];
+    //        }
+    //    }).error(function(response){
+    //        console.error(response);
+    //
+    //        $scope.devices = [];
+    //    });
+    //};
 
-                $scope.devices = [];
-            }
-        }).error(function(response){
-            console.error(response);
-
-            $scope.devices = [];
-        });
-    };
-
-    $scope.$watch('wechat', function(newVal, oldVal){
-        if(newVal !== oldVal && newVal.organizationId !== oldVal.organizationId){
-            $scope.getDevices();
-        }
-    }, true);
+    //$scope.$watch('wechat', function(newVal, oldVal){
+    //    if(newVal !== oldVal && newVal.organizationId !== oldVal.organizationId){
+    //        $scope.getDevices();
+    //    }
+    //}, true);
 
     //初始化
     $scope.getData();

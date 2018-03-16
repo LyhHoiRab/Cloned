@@ -1,6 +1,7 @@
 app.controller('wechatList', function($scope, $http, $state, $stateParams){
     //下拉
-    $scope.status = {};
+    $scope.status    = {};
+    $scope.appStatis = {};
     //查询列表
     $scope.organizationId = $stateParams.organizationId;
     $scope.wxno           = '';
@@ -111,6 +112,21 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
         });
     };
 
+    $scope.getAppStatus = function(){
+        $http({
+            url    : '/api/1.0/consts/appStatus',
+            method : 'GET'
+        }).success(function(res, status, headers, config){
+            if(res.success){
+                $scope.appStatus = res.result;
+            }else{
+                alert(res.msg);
+            }
+        }).error(function(response){
+            console.error(response);
+        });
+    };
+
     $scope.$watch('pagingOptions', function(newVal, oldVal){
         if(newVal !== oldVal && (newVal.currentPage !== oldVal.currentPage || newVal.pageSize !== oldVal.pageSize)){
             $scope.getData();
@@ -142,6 +158,20 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
             displayName : '状态',
             cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{status[COL_FIELD]}}</span></div>'
         },{
+            field       : 'phone',
+            displayName : '手机号码'
+        },{
+            field       : 'imei',
+            displayName : 'IMEI'
+        },{
+            field       : 'appStatus',
+            displayName : 'App状态',
+            cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{appStatus[COL_FIELD]}}</span></div>'
+        },{
+            field        : 'lastCheckTime',
+            displayName  : '最近一次检测时间',
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
+        },{
             field        : 'createTime',
             displayName  : '创建时间',
             cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
@@ -158,4 +188,5 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
     //初始化数据
     $scope.getData();
     $scope.getStatus();
+    $scope.getAppStatus();
 });

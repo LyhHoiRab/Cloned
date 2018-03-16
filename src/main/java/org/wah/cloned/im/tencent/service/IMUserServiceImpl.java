@@ -4,12 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.wah.cloned.core.account.dao.AccountDao;
+import org.wah.cloned.core.wechat.consts.AppStatus;
+import org.wah.cloned.core.wechat.dao.WechatDao;
+import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.cloned.im.tencent.consts.IMRole;
 import org.wah.cloned.im.tencent.dao.IMAppletDao;
 import org.wah.cloned.im.tencent.dao.IMUserDao;
 import org.wah.cloned.im.tencent.entity.IMApplet;
 import org.wah.cloned.im.tencent.entity.IMUser;
 import org.wah.cloned.im.tencent.utils.SignCheckerUtils;
+import org.wah.doraemon.entity.Account;
+import org.wah.doraemon.security.exception.AccountNotFoundException;
+
+import java.util.Date;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,6 +28,12 @@ public class IMUserServiceImpl implements IMUserService{
 
     @Autowired
     private IMAppletDao imAppletDao;
+
+    @Autowired
+    private AccountDao accountDao;
+
+    @Autowired
+    private WechatDao wechatDao;
 
     /**
      * 添加管理员
@@ -82,6 +96,43 @@ public class IMUserServiceImpl implements IMUserService{
     @Override
     public IMUser getWechatByWxno(String wxno){
         Assert.hasText(wxno, "微信号不能为空");
+
+        return imUserDao.getWechatByWxno(wxno);
+    }
+
+    /**
+     * 根据账号密码和微信号查询IM账号
+     */
+    @Override
+    public IMUser getServiceByAccountAndWxno(String username, String password, String wxno){
+        Assert.hasText(username, "登录名不能为空");
+        Assert.hasText(password, "密码不能为空");
+        Assert.hasText(wxno, "微信号不能为空");
+
+        Account account = accountDao.getByUsernameAndPassword(username, password);
+
+        if(account == null){
+            throw new AccountNotFoundException("账户[{0}]密码不正确", username);
+        }
+
+        return imUserDao.getServiceByAccountIdAndWxno(account.getId(), wxno);
+    }
+
+    /**
+     * 微信号登录
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public IMUser loginByWechat(String wxno, String phone, String imei){
+        Assert.hasText(wxno, "微信号不能为空");
+        //查询微信
+        Wechat wechat = wechatDao.getByWxno(wxno);
+        //更新App状态
+        wechat.setAppStatus(AppStatus.ONLINE);
+        wechat.setPhone(phone);
+        wechat.setImei(imei);
+        wechat.setLastCheckTime(new Date());
+        wechatDao.saveOrUpdate(wechat);
 
         return imUserDao.getWechatByWxno(wxno);
     }

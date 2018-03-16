@@ -23,4 +23,11 @@ public class ConstsRestController{
 
         return new Response<Map<Object, Object>>("查询成功", result);
     }
+
+    @RequestMapping(value = "/appStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<Map<Object, Object>> appStatus(){
+        Map<Object, Object> result = constsService.appStatus();
+
+        return new Response<Map<Object, Object>>("查询成功", result);
+    }
 }

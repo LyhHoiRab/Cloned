@@ -63,7 +63,7 @@ public class WechatFriendServiceImpl implements WechatFriendService{
             WechatFriend friend = new WechatFriend();
             friend.setNickname(account.getNickName());
             friend.setSex(Sex.getById(account.getSex()));
-            friend.setHeadImgUrl(account.getHeadImgUrl());
+            friend.setHeadImgUrl(bot.getSession().getUrl() + account.getHeadImgUrl());
             friend.setWechatId(bot.getWechatId());
             friend.setServiceId(serviceId);
             wechatFriendDao.saveOrUpdate(friend);
@@ -80,7 +80,7 @@ public class WechatFriendServiceImpl implements WechatFriendService{
             friend = new WechatFriend();
             friend.setNickname(account.getNickName());
             friend.setSex(Sex.getById(account.getSex()));
-            friend.setHeadImgUrl(account.getHeadImgUrl());
+            friend.setHeadImgUrl(bot.getSession().getUrl() + account.getHeadImgUrl());
             friend.setWechatId(bot.getWechatId());
             friend.setServiceId(serviceId);
             wechatFriendDao.saveOrUpdate(friend);

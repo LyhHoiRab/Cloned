@@ -77,7 +77,7 @@ public class ChatLoop implements Runnable{
             }catch(Exception e){
                 retryCount += 1;
 
-                if (bot.getReceiveRetryCount() < retryCount){
+                if(bot.getReceiveRetryCount() < retryCount){
                     bot.setRunning(false);
                 }else{
                     DateUtils.sleep(5000);

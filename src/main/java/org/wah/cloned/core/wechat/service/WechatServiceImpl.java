@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import org.wah.cloned.bot.entity.WechatBot;
 import org.wah.cloned.bot.service.WechatApi;
 import org.wah.cloned.commons.utils.CacheUtils;
+import org.wah.cloned.core.wechat.consts.AppStatus;
 import org.wah.cloned.core.wechat.consts.WechatStatus;
 import org.wah.cloned.core.wechat.dao.WechatDao;
 import org.wah.cloned.core.wechat.entity.Wechat;
@@ -65,5 +66,30 @@ public class WechatServiceImpl implements WechatService{
         Assert.notNull(pageRequest, "分页信息不能为空");
 
         return wechatDao.page(pageRequest, organizationId, wxno);
+    }
+
+    /**
+     * 更新App状态
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void updateAppStatusByWxno(String wxno, AppStatus status){
+        Assert.hasText(wxno, "微信号不能为空");
+        Assert.notNull(status, "App状态不能为空");
+
+        //查询微信
+        Wechat wechat = wechatDao.getByWxno(wxno);
+        //更新状态
+        wechat.setAppStatus(status);
+        wechatDao.saveOrUpdate(wechat);
+    }
+
+    /**
+     * 检查过时App
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void updateAppStatusByTimeout(){
+        wechatDao.updateAppStatusByTimeout();
     }
 }

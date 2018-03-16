@@ -40,14 +40,52 @@
   </bean>
 
   <!-- 线程池管理 -->
-  <bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+  <bean id="taskExecutor"  class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
     <property name="corePoolSize"     value="10"/>
     <property name="keepAliveSeconds" value="300"/>
     <property name="maxPoolSize"      value="50"/>
     <property name="queueCapacity"    value="60"/>
   </bean>
 
+  <!-- ApplicationContext上下文工具 -->
   <bean class="org.wah.cloned.commons.security.context.ApplicationContextUtils"/>
 
-  <bean class="org.wah.cloned.im.tencent.utils.WeChatMessageListener"/>
+  <!-- 定时器 -->
+  <bean id="startQuartz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+    <property name="triggers">
+      <list>
+        <ref bean="wechatMessageTrigger"/>
+        <ref bean="updateAppStatusByTimeoutTrigger"/>
+      </list>
+    </property>
+  </bean>
+
+  <!-- 定时任务 -->
+  <!-- 微信消息处理任务 -->
+  <bean id="wechatMessageDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject">
+      <ref bean="wechatMessageTask"/>
+    </property>
+    <property name="targetMethod" value="execute"/>
+    <property name="concurrent" value="false"/>
+  </bean>
+
+  <bean id="wechatMessageTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobDetail" ref="wechatMessageDetail"/>
+    <property name="cronExpression" value="0/1 * * * * ?"/>
+  </bean>
+
+  <!-- App保活任务 -->
+  <bean id="updateAppStatusByTimeoutDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject">
+      <ref bean="updateAppStatusByTimeoutTask"/>
+    </property>
+    <property name="targetMethod" value="execute"/>
+    <property name="concurrent" value="false"/>
+  </bean>
+
+  <bean id="updateAppStatusByTimeoutTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobDetail" ref="updateAppStatusByTimeoutDetail"/>
+    <property name="cronExpression" value="0 */1 * * * ?"/>
+  </bean>
 </beans>

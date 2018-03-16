@@ -3,6 +3,7 @@ package org.wah.cloned.core.wechat.webservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.wah.cloned.core.wechat.consts.AppStatus;
 import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.cloned.core.wechat.service.WechatService;
 import org.wah.doraemon.security.response.Page;
@@ -55,5 +56,15 @@ public class WechatRestController{
         Page<Wechat> page = wechatService.page(pageRequest, organizationId, wxno);
 
         return new Response<Page<Wechat>>("查询成功", page);
+    }
+
+    /**
+     * App保活
+     */
+    @RequestMapping(value = "/app/alive", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response appAlive(String wxno){
+        wechatService.updateAppStatusByWxno(wxno, AppStatus.ONLINE);
+
+        return new Response("保活成功", null);
     }
 }

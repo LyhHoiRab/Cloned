@@ -1,72 +1,65 @@
 package utils;
 
 import io.github.biezhi.wechat.api.model.WeChatMessage;
-import org.wah.cloned.commons.utils.CacheUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.wah.cloned.commons.security.consts.CacheParamName;
+import org.wah.cloned.commons.security.context.ApplicationContextUtils;
+import org.wah.doraemon.utils.RedisUtils;
+import redis.clients.jedis.ShardedJedisPool;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:spring.xml", "classpath:springbean.xml"})
+@ActiveProfiles(value = "test")
 public class CacheUtilsTest{
 
-    public static void main(String[] args){
-        Thread add_1 = new Thread(new Add("1"));
-        Thread add_2 = new Thread(new Add("2"));
-        Thread next_1 = new Thread(new Next("1"));
-        Thread next_2 = new Thread(new Next("2"));
+    @Autowired
+    private ShardedJedisPool shardedJedisPool;
 
-        add_1.start();
-        add_2.start();
-        next_1.start();
-//        next_2.start();
+    @Test
+    public void cache(){
+        WeChatMessage message_1 = new WeChatMessage();
+        message_1.setWechatId("1");
+
+        WeChatMessage message_2 = new WeChatMessage();
+        message_2.setWechatId("2");
+
+        WeChatMessage message_3 = new WeChatMessage();
+        message_3.setWechatId("3");
+
+        List<WeChatMessage> list = new ArrayList<WeChatMessage>();
+        list.add(message_1);
+        list.add(message_2);
+        list.add(message_3);
+
+        RedisUtils.rpush(shardedJedisPool.getResource(), CacheParamName.WECHAT_MESSAGE_LIST, list);
     }
 
-    public static class Add implements Runnable{
+    @Test
+    public void cacheByContext(){
+        ShardedJedisPool pool = (ShardedJedisPool) ApplicationContextUtils.getById("shardedJedisPool");
 
-        public String index;
+        WeChatMessage message_1 = new WeChatMessage();
+        message_1.setWechatId("1");
 
-        public Add(String index){
-            this.index = index;
-        }
+        WeChatMessage message_2 = new WeChatMessage();
+        message_2.setWechatId("2");
 
-        @Override
-        public void run(){
-//            System.out.println("Add_" + index + ":");
+        WeChatMessage message_3 = new WeChatMessage();
+        message_3.setWechatId("3");
 
-            for(int i = 0 ; i < 10; i++){
-                WeChatMessage message = new WeChatMessage();
-                message.setWechatId(index + "_" + i);
-                CacheUtils.addMessages(Arrays.asList(message));
-                System.out.println("Add_" + index + "======================>" + message.getWechatId());
-            }
-        }
-    }
+        List<WeChatMessage> list = new ArrayList<WeChatMessage>();
+        list.add(message_1);
+        list.add(message_2);
+        list.add(message_3);
 
-    public static class Next implements Runnable{
-
-        public String index;
-
-        public Next(String index){
-            this.index = index;
-        }
-
-        @Override
-        public void run(){
-            int i = 0;
-            boolean flag = true;
-
-            while(flag){
-//                System.out.println("Next_" + index + ":");
-
-                if(CacheUtils.hasMessage()){
-                    WeChatMessage message = CacheUtils.nextMessage();
-                    System.out.println("Next_" + index + "======================>" + message.getWechatId());
-
-                    i += 1;
-
-                    if(i == 20){
-                        flag = false;
-                    }
-                }
-            }
-        }
+        RedisUtils.rpush(pool.getResource(), CacheParamName.WECHAT_MESSAGE_LIST + ":1", list);
     }
 }

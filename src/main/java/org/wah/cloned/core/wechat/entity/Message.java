@@ -11,11 +11,14 @@ import java.util.Date;
 @Data
 public class Message extends Entity implements Createable, Updateable{
 
+    private String wechatId;
     private String remarkname;
+    private String serviceId;
     private String nickname;
     private String headImgUrl;
     private String text;
     private MessageType type;
+    private Boolean sendByService;
     private Date createTime;
     private Date updateTime;
 }

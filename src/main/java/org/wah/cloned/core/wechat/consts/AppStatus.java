@@ -8,12 +8,12 @@ import org.wah.doraemon.consts.base.EnumType;
 import org.wah.doraemon.security.exception.UnknownEnumTypeException;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum WechatStatus implements EnumType{
+public enum AppStatus implements EnumType{
 
-    @SerializedName(value = "0")
+    @SerializedName("0")
     OFFLINE(0, "离线"),
 
-    @SerializedName(value = "1")
+    @SerializedName("1")
     ONLINE(1, "在线"),
 
     @SerializedName("2")
@@ -24,13 +24,13 @@ public enum WechatStatus implements EnumType{
     @Getter
     private String description;
 
-    public static WechatStatus getById(int id){
-        for(WechatStatus status : WechatStatus.values()){
+    public static AppStatus getById(int id){
+        for(AppStatus status : AppStatus.values()){
             if(status.getId() == id){
                 return status;
             }
         }
 
-        throw new UnknownEnumTypeException("未知的常量ID[{0}:{1}]", WechatStatus.class, id);
+        throw new UnknownEnumTypeException("未知的常量ID[{0}:{1}]", AppStatus.class, id);
     }
 }

@@ -2,6 +2,7 @@ package org.wah.cloned.core.wechat.dao.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.wah.cloned.core.wechat.consts.AppStatus;
 import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.doraemon.mybatis.Criteria;
 
@@ -34,4 +35,9 @@ public interface WechatMapper{
      * 根据条件查询数量
      */
     Long countByParams(@Param("params") Criteria criteria);
+
+    /**
+     * 检查过时App
+     */
+    void updateAppStatusByTimeout(@Param("checkStatus") AppStatus checkStatus, @Param("timeoutStatus") AppStatus timeoutStatus, @Param("timeout") Long timeout);
 }

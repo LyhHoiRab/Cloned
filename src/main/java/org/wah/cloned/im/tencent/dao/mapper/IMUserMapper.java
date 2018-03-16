@@ -47,7 +47,12 @@ public interface IMUserMapper{
     Long countByParams(@Param("params") Criteria criteria);
 
     /**
-     * 根据微信号查询微信IM账号
+     * 根据微信号查询微信查询
      */
     IMUser getWechatByWxno(@Param("wxno") String wxno, @Param("role") IMRole role);
+
+    /**
+     * 根据账户ID和微信号查询
+     */
+    IMUser getServiceByAccountIdAndWxno(@Param("accountId") String accountId, @Param("wxno") String wxno, @Param("role") IMRole role);
 }

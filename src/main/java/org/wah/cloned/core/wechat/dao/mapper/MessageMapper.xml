@@ -2,18 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.wah.cloned.core.wechat.dao.mapper.WechatMapper">
-    <resultMap id="wechat" type="org.wah.cloned.core.wechat.entity.Wechat">
-        <id     column="id"              property="id"             javaType="java.lang.String"/>
-        <result column="wxno"            property="wxno"           javaType="java.lang.String"/>
-        <result column="organization_id" property="organizationId" javaType="java.lang.String"/>
-        <result column="status"          property="status"         typeHandler="wechatStatusHandler"/>
-        <result column="phone"           property="phone"          javaType="java.lang.String"/>
-        <result column="imei"            property="imei"           javaType="java.lang.String"/>
-        <result column="app_status"      property="appStatus"      typeHandler="appStatusHandler"/>
-        <result column="last_check_time" property="lastCheckTime"  javaType="java.util.Date"/>
-        <result column="create_time"     property="createTime"     javaType="java.util.Date"/>
-        <result column="update_time"     property="updateTime"     javaType="java.util.Date"/>
+<mapper namespace="org.wah.cloned.core.wechat.dao.mapper.MessageMapper">
+    <resultMap id="message" type="org.wah.cloned.core.wechat.entity.Message">
+        <id     column="id"              property="id"              javaType="java.lang.String"/>
+        <result column="wechat_id"       property="wechatId"        javaType="java.lang.String"/>
+        <result column="remarkname"      property="remarkname"      javaType="java.lang.String"/>
+        <result column="service_id"      property="serviceId"       javaType="java.lang.String"/>
+        <result column="text"            property="text"            javaType="java.lang.String"/>
+        <result column="type"            property="type"            typeHandler="messageTypeHandler"/>
+        <result column="send_by_service" property="sendByService"   javaType="java.lang.Boolean"/>
+        <result column="create_time"     property="createTime"      javaType="java.util.Date"/>
+        <result column="update_time"     property="updateTime"      javaType="java.util.Date"/>
     </resultMap>
 
     <sql id="WHERE_COLUMN">
@@ -162,50 +161,44 @@
 
     <insert id="save">
         INSERT
-          INTO wechat (
+          INTO message (
                id,
-               wxno,
-               organization_id,
-               status,
-               phone,
-               imei,
-               app_status,
+               wechat_id,
+               remarkname,
+               service_id,
+               text,
+               type,
+               send_by_service,
                create_time
           ) VALUE (
-               #{id,             jdbcType=VARCHAR},
-               #{wxno,           jdbcType=VARCHAR},
-               #{organizationId, jdbcType=VARCHAR},
-               #{status,         typeHandler=wechatStatusHandler},
-               #{phone,          jdbcType=VARCHAR},
-               #{imei,           jdbcType=VARCHAR},
-               #{appStatus,      typeHandler=appStatusHandler},
-               #{createTime,     jdbcType=TIMESTAMP}
+               #{id,            jdbcType=VARCHAR},
+               #{wechatId,      jdbcType=VARCHAR},
+               #{remarkname,    jdbcType=VARCHAR},
+               #{serviceId,     jdbcType=VARCHAR},
+               #{text,          jdbcType=VARCHAR},
+               #{type,          typeHandler=messageTypeHandler},
+               #{sendByService, jdbcType=BOOLEAN},
+               #{createTime,    jdbcType=TIMESTAMP}
           )
     </insert>
 
     <update id="update">
-        UPDATE wechat
+        UPDATE message
          <set>
-             <if test="wxno != null and wxno != ''">
-                 wxno = #{wxno, jdbcType=VARCHAR},
+             <if test="wechatId != null and wechatId != ''">
+                 wechat_id = #{wechatId, jdbcType=VARCHAR},
              </if>
-             <if test="organizationId != null and organizationId != ''">
-                 organization_id = #{organizationId, jdbcType=VARCHAR},
+             <if test="remarkname != null and remarkname != ''">
+                 remarkname = #{remarkname, jdbcType=VARCHAR},
              </if>
-             <if test="status != null">
-                 status = #{status, typeHandler=wechatStatusHandler},
+             <if test="text != null">
+                 text = #{text, jdbcType=VARCHAR},
              </if>
-             <if test="phone != null">
-                 phone = #{phone, jdbcType=VARCHAR},
+             <if test="type != null">
+                 type = #{type, typeHandler=messageTypeHandler},
              </if>
-             <if test="imei != null">
-                 imei = #{imei, jdbcType=VARCHAR},
-             </if>
-             <if test="appStatus != null">
-                 app_status = #{appStatus, typeHandler=appStatusHandler},
-             </if>
-             <if test="lastCheckTime != null">
-                 last_check_time = #{lastCheckTime, jdbcType=TIMESTAMP},
+             <if test="sendByService != null">
+                 send_by_service = #{sendByService, jdbcType=BOOLEAN},
              </if>
              <if test="updateTime != null">
                  update_time = #{updateTime, jdbcType=TIMESTAMP},
@@ -214,25 +207,17 @@
           WHERE id = #{id}
     </update>
 
-    <update id="updateAppStatusByTimeout">
-        UPDATE wechat
-           SET app_status = #{timeoutStatus, typeHandler=appStatusHandler},
-               update_time = NOW()
-         WHERE app_status = #{checkStatus, typeHandler=appStatusHandler}
-           AND TIMESTAMPDIFF(SECOND, last_check_time, NOW()) >= #{timeout}
-    </update>
-
-    <select id="getByParams" resultMap="wechat">
+    <select id="getByParams" resultMap="message">
         SELECT *
-          FROM wechat
+          FROM message
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>
     </select>
 
-    <select id="findByParams" resultMap="wechat">
+    <select id="findByParams" resultMap="message">
         SELECT *
-          FROM wechat
+          FROM message
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
 
@@ -258,7 +243,7 @@
 
     <select id="countByParams" resultType="java.lang.Long">
         SELECT COUNT(*)
-          FROM wechat
+          FROM message
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>
