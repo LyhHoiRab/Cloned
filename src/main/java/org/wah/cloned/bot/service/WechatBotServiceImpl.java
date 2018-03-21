@@ -139,8 +139,8 @@ public class WechatBotServiceImpl implements WechatBotService{
             List<IMMessage> messages = new ArrayList<IMMessage>();
 
             IMMessageBody body = new IMMessageBody();
-            body.setFromAccount(wechat.getName());
-            body.setToAccount(service.getName());
+            body.setFromAccount(service.getName());
+            body.setToAccount(wechat.getName());
             body.setMessages(messages);
 
             Map<String, String> content = new HashMap<String, String>();
@@ -149,11 +149,7 @@ public class WechatBotServiceImpl implements WechatBotService{
             imMessage.setType(IMMessageType.TEXT);
             imMessage.setContent(content);
             messages.add(imMessage);
-            //转发给销售
-            IMUtils.sendMsg(admin.getSig(), admin.getAppId(), admin.getName(), body);
-            //转发给微信
-            body.setFromAccount(service.getName());
-            body.setToAccount(wechat.getName());
+
             IMUtils.sendMsg(admin.getSig(), admin.getAppId(), admin.getName(), body);
         }
         //保存消息
@@ -227,7 +223,7 @@ public class WechatBotServiceImpl implements WechatBotService{
         target.setHeadImgUrl(friend.getHeadImgUrl());
         target.setNickname(friend.getNickname());
         target.setRemarkname(friend.getRemarkname());
-        target.setText(message.getText());
+        target.setText(message.getImagePath());
         target.setType(MessageType.EMOTICONS);
         target.setSendByService(message.getIsSelf());
         target.setCreateTime(new Date());
@@ -277,7 +273,7 @@ public class WechatBotServiceImpl implements WechatBotService{
         target.setHeadImgUrl(friend.getHeadImgUrl());
         target.setNickname(friend.getNickname());
         target.setRemarkname(friend.getRemarkname());
-        target.setText(message.getText());
+        target.setText(message.getImagePath());
         target.setType(MessageType.IMAGE);
         target.setSendByService(message.getIsSelf());
         target.setCreateTime(new Date());
@@ -327,7 +323,7 @@ public class WechatBotServiceImpl implements WechatBotService{
         target.setHeadImgUrl(friend.getHeadImgUrl());
         target.setNickname(friend.getNickname());
         target.setRemarkname(friend.getRemarkname());
-        target.setText(message.getText());
+        target.setText(message.getVoicePath());
         target.setType(MessageType.VOICE);
         target.setSendByService(message.getIsSelf());
         target.setCreateTime(new Date());
@@ -377,7 +373,7 @@ public class WechatBotServiceImpl implements WechatBotService{
         target.setHeadImgUrl(friend.getHeadImgUrl());
         target.setNickname(friend.getNickname());
         target.setRemarkname(friend.getRemarkname());
-        target.setText(message.getText());
+        target.setText(message.getVideoPath());
         target.setType(MessageType.VIDEO);
         target.setSendByService(message.getIsSelf());
         target.setCreateTime(new Date());
@@ -412,7 +408,6 @@ public class WechatBotServiceImpl implements WechatBotService{
         messageDao.saveOrUpdate(target);
     }
 
-
     /**
      * 好友验证
      */
@@ -422,5 +417,38 @@ public class WechatBotServiceImpl implements WechatBotService{
         Assert.notNull(message, "微信信息不能为空");
 
         bot.getWechatApi().verify(message.getRaw().getRecommend());
+    }
+
+    /**
+     * 好友验证通过消息通知
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void friendAdded(WechatFriend friend){
+        Assert.notNull(friend, "微信好友信息不能为空");
+
+        if(!StringUtils.isBlank(friend.getServiceId())){
+            //客服
+            IMUser service = imUserDao.getByName(friend.getServiceId());
+            //微信
+            IMUser wechat = imUserDao.getByName(friend.getWechatId());
+            //管理员
+            IMUser admin = imUserDao.getAdminByAppletId(service.getAppletId());
+            //消息组
+            List<IMMessage> messages = new ArrayList<IMMessage>();
+            IMMessageBody body = new IMMessageBody();
+            body.setFromAccount(wechat.getName());
+            body.setToAccount(service.getName());
+            body.setMessages(messages);
+
+            Map<String, String> content = new HashMap<String, String>();
+            content.put("Text", friend.getNickname() + "已加您为好友。");
+            IMMessage imMessage = new IMMessage();
+            imMessage.setType(IMMessageType.TEXT);
+            imMessage.setContent(content);
+            messages.add(imMessage);
+
+            IMUtils.sendMsg(admin.getSig(), admin.getAppId(), admin.getName(), body);
+        }
     }
 }

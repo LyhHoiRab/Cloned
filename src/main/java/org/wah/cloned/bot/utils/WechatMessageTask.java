@@ -1,4 +1,4 @@
-package org.wah.cloned.im.tencent.utils;
+package org.wah.cloned.bot.utils;
 
 import io.github.biezhi.wechat.api.model.WeChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;

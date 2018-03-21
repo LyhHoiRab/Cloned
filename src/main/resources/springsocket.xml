@@ -6,8 +6,15 @@
                            http://www.springframework.org/schema/websocket
                            http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
-    <bean id="messageSocket" class="org.wah.cloned.core.service.websocket.MessageSocket"/>
+    <bean id="webchatBotSocket" class="org.wah.cloned.bot.websocket.WechatBotSocket"/>
+    <websocket:handlers>
+        <websocket:mapping path="/socket/1.0/bot" handler="webchatBotSocket"/>
+        <websocket:handshake-interceptors>
+            <bean class="org.wah.cloned.core.service.utils.MessageHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
 
+    <bean id="messageSocket"    class="org.wah.cloned.core.service.websocket.MessageSocket"/>
     <websocket:handlers>
         <websocket:mapping path="/socket/1.0/message" handler="messageSocket"/>
         <websocket:handshake-interceptors>

@@ -97,6 +97,7 @@ public class AllocationServiceImpl implements AllocationService{
         }
 
         //缓存
+        RedisUtils.delete(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId);
         RedisUtils.rpush(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, pool);
     }
 
@@ -137,7 +138,7 @@ public class AllocationServiceImpl implements AllocationService{
             }
 
             //缓存
-            RedisUtils.lpush(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, pool);
+            RedisUtils.rpush(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, pool);
             //查询
             serviceId = RedisUtils.lpop(shardedJedisPool.getResource(), CacheParamName.SERVICE_ALLOCATION + wechatId, String.class);
         }

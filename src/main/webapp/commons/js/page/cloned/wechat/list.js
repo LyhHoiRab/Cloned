@@ -17,24 +17,38 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
 
     //定义方法
     $scope.login = function(id){
-        $http({
-            url     : '/api/1.0/wechatBot/login',
-            method  : 'POST',
-            params  : {
-                'id' : id
-            },
-            headers : {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).success(function(res, status, headers, config){
-            if(res.success){
+        //$http({
+        //    url     : '/api/1.0/wechatBot/login',
+        //    method  : 'POST',
+        //    params  : {
+        //        'id' : id
+        //    },
+        //    headers : {
+        //        'Content-Type': 'application/x-www-form-urlencoded'
+        //    }
+        //}).success(function(res, status, headers, config){
+        //    if(res.success){
+        //
+        //    }else{
+        //        alert(res.msg);
+        //    }
+        //}).error(function(response){
+        //    console.error(response);
+        //});
 
-            }else{
-                alert(res.msg);
-            }
-        }).error(function(response){
-            console.error(response);
-        });
+        //var socket = new WebSocket("ws://localhost:8080/socket/1.0/bot?wechatId=" + id);
+        //var socket = new WebSocket("ws://120.24.102.187:8066/socket/1.0/bot?wechatId=" + id);
+        var socket = new WebSocket('ws://' + location.host + '/socket/1.0/bot?wechatId=' + id);
+        socket.onopen = function(event){
+
+        };
+        socket.onmessage = function(event){
+            console.log(event.data);
+            window.open(event.data);
+        };
+        socket.onclose = function(event){
+            console.log(id + " is closed");
+        };
     };
 
     $scope.service = function(id){
@@ -170,14 +184,6 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
         },{
             field        : 'lastCheckTime',
             displayName  : '最近一次检测时间',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
-        },{
-            field        : 'createTime',
-            displayName  : '创建时间',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
-        },{
-            field        : 'updateTime',
-            displayName  : '更新时间',
             cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
         },{
             displayName  : '操作',

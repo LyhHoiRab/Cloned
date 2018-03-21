@@ -50,4 +50,9 @@ public interface WechatBotService{
      * 好友验证
      */
     void verify(WechatBot bot, WeChatMessage message);
+
+    /**
+     * 好友验证通过消息通知
+     */
+    void friendAdded(WechatFriend friend);
 }

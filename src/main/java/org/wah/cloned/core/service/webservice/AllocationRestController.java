@@ -37,6 +37,16 @@ public class AllocationRestController{
     }
 
     /**
+     * 更新概率
+     */
+    @RequestMapping(value = "/update/{wechatId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response updateByNow(@PathVariable("wechatId") String wechatId){
+        allocationService.saveOrUpdatePool(wechatId);
+
+        return new Response("更新成功", null);
+    }
+
+    /**
      * 根据微信ID查询
      */
     @RequestMapping(value = "/find", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -80,7 +80,7 @@
             <value>/api/1.0/organization/find</value>
             <value>/api/1.0/register</value>
             <value>/api/1.0/login</value>
-            <value>/socket/1.0/message</value>
+            <value>/socket/1.0/bot</value>
             <value>/page/cloned/im/*/service</value>
             <value>/api/1.0/im/user/wechat</value>
             <value>/api/1.0/im/user/service</value>

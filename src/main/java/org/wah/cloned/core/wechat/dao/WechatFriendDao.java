@@ -38,7 +38,6 @@ public class WechatFriendDao{
                 Assert.hasText(friend.getNickname(), "微信好友昵称不能为空");
 
                 friend.setId(IDGenerator.uuid32());
-                friend.setRemarkname(IDGenerator.uuidTo36Ary(friend.getId()));
                 friend.setCreateTime(new Date());
                 mapper.save(friend);
             }else{

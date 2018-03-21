@@ -19,9 +19,12 @@ import io.github.biezhi.wechat.utils.StringUtils;
 import io.github.biezhi.wechat.utils.WeChatUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 import org.wah.cloned.bot.entity.ChatLoop;
 import org.wah.cloned.bot.entity.Download;
 import org.wah.cloned.bot.entity.WechatBot;
+import org.wah.cloned.commons.utils.CacheUtils;
 import org.wah.cloned.commons.utils.UpyunUtils;
 import org.wah.doraemon.utils.DateUtils;
 import org.wah.doraemon.utils.IDGenerator;
@@ -118,6 +121,8 @@ public class WechatApi{
 
                 if(StateCode.SUCCESS.equals(status)){
                     isLoggedIn = true;
+                    //关闭socket
+                    CacheUtils.deleteSession(bot.getWechatId());
                 }else if("201".equals(status)){
                     if(isLoggedIn != null){
                         log.info("请在手机上确认登录");
@@ -125,7 +130,7 @@ public class WechatApi{
                     }
                 }else if("408".equals(status)){
                     break;
-                }else if(StateCode.FAIL.equals(status)){
+                }else{
                     break;
                 }
 
@@ -199,11 +204,23 @@ public class WechatApi{
         FileResponse fileResponse = this.client.download(new FileRequest(String.format("%s/qrcode/%s", Constant.BASE_URL, uid)));
 
         InputStream inputStream = fileResponse.getInputStream();
-        File qrCode = WeChatUtils.saveFile(inputStream, imgDir, "qrcode.png");
+
+        String qrPath = "";
+
+        String fileName = bot.getWechatId() + "/" + IDGenerator.uuid32();
+        String path = String.format("/qr/%s/%s%s", DateUtils.format(new Date(), "yyyyMMdd"), fileName, ".png");
+
+        if(UpyunUtils.upload(UpyunUtils.Upyun.CLONED, path, null, inputStream)){
+            qrPath = UpyunUtils.Upyun.CLONED.getUrl() + path;
+        }
+
+//        File qrCode = WeChatUtils.saveFile(inputStream, imgDir, "qrcode.png");
         io.github.biezhi.wechat.utils.DateUtils.sleep(200);
 
         try{
-            QRCodeUtils.showQrCode(qrCode, terminalShow);
+//            QRCodeUtils.showQrCode(qrCode, terminalShow);
+            WebSocketSession session = CacheUtils.getSession(bot.getWechatId());
+            session.sendMessage(new TextMessage(qrPath));
         }catch(Exception e){
             this.getQrImage(uid, terminalShow);
         }
@@ -708,7 +725,7 @@ public class WechatApi{
      */
     public String downloadVoice(String msgId){
         String fileName = IDGenerator.uuid32();
-        String path = String.format("/voice/%s/%s%s", DateUtils.format(new Date(), "yyyyHHdd"), fileName, ApiURL.VOICE.getSuffix());
+        String path = String.format("/voice/%s/%s%s", DateUtils.format(new Date(), "yyyyMMdd"), fileName, ApiURL.VOICE.getSuffix());
 
         return this.downloadFile(new Download(ApiURL.VOICE, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId), path);
     }
@@ -721,7 +738,7 @@ public class WechatApi{
      */
     public String downloadVideo(String msgId){
         String fileName = IDGenerator.uuid32();
-        String path = String.format("/video/%s/%s%s", DateUtils.format(new Date(), "yyyyHHdd"), fileName, ApiURL.VIDEO.getSuffix());
+        String path = String.format("/video/%s/%s%s", DateUtils.format(new Date(), "yyyyMMdd"), fileName, ApiURL.VIDEO.getSuffix());
 
         return this.downloadFile(new Download(ApiURL.VIDEO, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId), path);
     }
@@ -734,9 +751,19 @@ public class WechatApi{
      */
     public String downloadImg(String msgId){
         String fileName = IDGenerator.uuid32();
-        String path = String.format("/image/%s/%s%s", DateUtils.format(new Date(), "yyyyHHdd"), fileName, ApiURL.IMAGE.getSuffix());
+        String path = String.format("/image/%s/%s%s", DateUtils.format(new Date(), "yyyyMMdd"), fileName, ApiURL.IMAGE.getSuffix());
 
         return this.downloadFile(new Download(ApiURL.IMAGE, bot.getSession().getUrl(), msgId, bot.getSession().getSKey()).msgId(msgId), path);
+    }
+
+    /**
+     * 下载头像
+     */
+    public String downHeadImg(String userName){
+        String fileName = IDGenerator.uuid32();
+        String path = String.format("/head/%s%s", fileName, ApiURL.HEAD_IMG.getSuffix());
+
+        return this.downloadFile(new Download(ApiURL.HEAD_IMG, bot.getSession().getUrl(), userName, bot.getSession().getSKey()).msgId(userName), path);
     }
 
     private String searchContent(String key, String content){
@@ -761,7 +788,7 @@ public class WechatApi{
     /**
      * 好友验证
      */
-    public boolean verify(Recommend recommend) {
+    public boolean verify(Recommend recommend){
         String url = String.format("%s/webwxverifyuser?r=%s&lang=zh_CN&pass_ticket=%s", bot.getSession().getUrl(), System.currentTimeMillis() / 1000, bot.getSession().getPassTicket());
 
         List<Map<String, Object>> verifyUserList = new ArrayList<>();

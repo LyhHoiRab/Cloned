@@ -68,6 +68,8 @@
 
   <logger name="org.springframework" level="${system.logging.level}"/>
 
+  <logger name="org.quartz.core" level="${system.logging.level}"/>
+
   <root level="${system.logging.level}">
     <appender-ref ref="${system.logging.appender}"/>
   </root>

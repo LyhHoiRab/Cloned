@@ -17,6 +17,9 @@ public class MessageHandshakeInterceptor extends HttpSessionHandshakeInterceptor
         HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
 
         Enumeration<String> names = servletRequest.getParameterNames();
+
+//        Enumeration<String> names = servletRequest.getAttributeNames();
+
         while(names.hasMoreElements()){
             String name = names.nextElement();
             attributes.put(name, servletRequest.getParameter(name));

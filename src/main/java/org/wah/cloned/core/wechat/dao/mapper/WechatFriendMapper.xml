@@ -168,6 +168,7 @@
                nickname,
                remarkname,
                sex,
+               head_img_url,
                create_time
           ) VALUE (
                #{id,          jdbcType=VARCHAR},
@@ -176,6 +177,7 @@
                #{nickname,    jdbcType=VARCHAR},
                #{remarkname,  jdbcType=VARCHAR},
                #{sex,         typeHandler=sexHandler},
+               #{headImgUrl,  jdbcType=VARCHAR},
                #{createTime,  jdbcType=TIMESTAMP}
           )
     </insert>
@@ -192,9 +194,9 @@
              <if test="remarkname != null and remarkname != ''">
                  remarkname = #{remarkname, jdbcType=VARCHAR},
              </if>
-             <!--<if test="headImgUrl != null">-->
-                 <!--head_img_url = #{headImgUrl, jdbcType=VARCHAR},-->
-             <!--</if>-->
+             <if test="headImgUrl != null">
+                 head_img_url = #{headImgUrl, jdbcType=VARCHAR},
+             </if>
              <if test="sex != null">
                  sex = #{sex, typeHandler=sexHandler},
              </if>

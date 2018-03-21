@@ -28,6 +28,22 @@ app.controller('allocation', function($scope, $http, $state, $stateParams){
         });
     };
 
+    $scope.updateByNow = function(){
+        $http({
+            url    : '/api/1.0/allocation/update/' + $scope.wechatId,
+            method : 'POST'
+        }).success(function(res, status, headers, config){
+            if(res.success){
+                alert(res.msg);
+                location.reload();
+            }else{
+                alert(res.msg);
+            }
+        }).error(function(response){
+            console.error(response);
+        });
+    };
+
     $scope.save = function(){
         if($scope.step === null || $scope.step === undefined || $scope.step < 1){
             alert("请正确填写步长");
