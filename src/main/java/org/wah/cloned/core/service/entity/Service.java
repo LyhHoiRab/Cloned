@@ -1,21 +1,25 @@
 package org.wah.cloned.core.service.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.wah.doraemon.entity.base.Createable;
 import org.wah.doraemon.entity.base.Entity;
 import org.wah.doraemon.entity.base.Updateable;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Service extends Entity implements Createable, Updateable{
 
+    //账号
+    private String username;
+    //密码
+    private String password;
     //微信ID
     private String wechatId;
-    //账户ID
-    private String accountId;
     //客服名称
     private String name;
     //头像

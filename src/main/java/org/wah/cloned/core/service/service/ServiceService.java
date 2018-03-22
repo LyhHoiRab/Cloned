@@ -24,22 +24,12 @@ public interface ServiceService{
     Service getById(String id);
 
     /**
-     * 根据微信ID和账户ID查询
-     */
-    Service getByWechatIdAndAccountId(String wechatId, String accountId);
-
-    /**
      * 根据微信ID查询
      */
     List<Service> findByWechatId(String wechatId);
 
     /**
-     * 根据账户ID查询
-     */
-    List<Service> findByAccountId(String accountId);
-
-    /**
      * 分页查询
      */
-    Page<Service> page(PageRequest pageRequest, String wechatId, String accountId, String name);
+    Page<Service> page(PageRequest pageRequest, String organizationId, String wxno, String wechatId, String name);
 }

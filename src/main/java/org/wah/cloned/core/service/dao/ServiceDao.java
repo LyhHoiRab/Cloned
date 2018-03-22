@@ -35,7 +35,6 @@ public class ServiceDao{
 
             if(StringUtils.isBlank(service.getId())){
                 Assert.hasText(service.getWechatId(), "客服关联微信ID不能为空");
-                Assert.hasText(service.getAccountId(), "客服关联账户ID不能为空");
                 Assert.hasText(service.getName(), "客服名称不能为空");
 
                 service.setId(IDGenerator.uuid32());
@@ -69,23 +68,6 @@ public class ServiceDao{
     }
 
     /**
-     * 根据账户ID查询
-     */
-    public List<Service> findByAccountId(String accountId){
-        try{
-            Assert.hasText(accountId, "账户ID不能为空");
-
-            Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("accountId", accountId));
-
-            return mapper.findByParams(criteria);
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    /**
      * 根据微信ID查询
      */
     public List<Service> findByWechatId(String wechatId){
@@ -93,28 +75,9 @@ public class ServiceDao{
             Assert.hasText(wechatId, "微信ID不能为空");
 
             Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("wechatId", wechatId));
+            criteria.and(Restrictions.eq("w.wechatId", wechatId));
 
             return mapper.findByParams(criteria);
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * 根据微信ID和账户ID查询
-     */
-    public Service getByWechatIdAndAccountId(String wechatId, String accountId){
-        try{
-            Assert.hasText(wechatId, "微信ID不能为空");
-            Assert.hasText(accountId, "账户ID不能为空");
-
-            Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("wechatId", wechatId));
-            criteria.and(Restrictions.eq("accountId", accountId));
-
-            return mapper.getByParams(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);
@@ -124,22 +87,25 @@ public class ServiceDao{
     /**
      * 分页查询
      */
-    public Page<Service> page(PageRequest pageRequest, String wechatId, String accountId, String name){
+    public Page<Service> page(PageRequest pageRequest, String organizationId, String wxno, String wechatId, String name){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
             Criteria criteria = new Criteria();
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
-            criteria.sort(Restrictions.asc("createTime"));
+            criteria.sort(Restrictions.asc("s.createTime"));
 
-            if(!StringUtils.isBlank(wechatId)){
-                criteria.and(Restrictions.eq("wechatId", wechatId));
-            }
-            if(!StringUtils.isBlank(accountId)){
-                criteria.and(Restrictions.eq("accountId", accountId));
-            }
             if(!StringUtils.isBlank(name)){
-                criteria.and(Restrictions.like("name", name));
+                criteria.and(Restrictions.like("s.name", name));
+            }
+            if(!StringUtils.isBlank(organizationId)){
+                criteria.and(Restrictions.eq("w.organizationId", organizationId));
+            }
+            if(!StringUtils.isBlank(wxno)){
+                criteria.and(Restrictions.like("w.wxno", wxno));
+            }
+            if(!StringUtils.isBlank(wechatId)){
+                criteria.and(Restrictions.eq("w.wechatId", wechatId));
             }
 
             List<Service> list = mapper.findByParams(criteria);
@@ -151,6 +117,4 @@ public class ServiceDao{
             throw new DataAccessException(e.getMessage(), e);
         }
     }
-
-    
 }

@@ -13,12 +13,4 @@
             <bean class="org.wah.cloned.core.service.utils.MessageHandshakeInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
-
-    <bean id="messageSocket"    class="org.wah.cloned.core.service.websocket.MessageSocket"/>
-    <websocket:handlers>
-        <websocket:mapping path="/socket/1.0/message" handler="messageSocket"/>
-        <websocket:handshake-interceptors>
-            <bean class="org.wah.cloned.core.service.utils.MessageHandshakeInterceptor"/>
-        </websocket:handshake-interceptors>
-    </websocket:handlers>
 </beans>

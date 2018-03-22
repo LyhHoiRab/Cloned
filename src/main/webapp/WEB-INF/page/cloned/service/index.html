@@ -1,0 +1,7 @@
+<div class="tab-view">
+    <tabset>
+        <tab ng-repeat="organization in organizations" heading="{{organization.name}}" ng-click="toggle(organization.id)"></tab><!-- item -->
+    </tabset><!-- tabset -->
+
+    <div ui-view></div><!-- ui view -->
+</div><!-- view -->

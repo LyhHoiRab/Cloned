@@ -105,17 +105,6 @@ public class ServiceServiceImpl implements ServiceService{
     }
 
     /**
-     * 根据微信ID和账户ID查询
-     */
-    @Override
-    public org.wah.cloned.core.service.entity.Service getByWechatIdAndAccountId(String wechatId, String accountId){
-        Assert.hasText(wechatId, "客服关联微信ID不能为空");
-        Assert.hasText(accountId, "客服关联账户ID不能为空");
-
-        return serviceDao.getByWechatIdAndAccountId(wechatId, accountId);
-    }
-
-    /**
      * 根据微信ID查询
      */
     @Override
@@ -126,22 +115,12 @@ public class ServiceServiceImpl implements ServiceService{
     }
 
     /**
-     * 根据账户ID查询
-     */
-    @Override
-    public List<org.wah.cloned.core.service.entity.Service> findByAccountId(String accountId){
-        Assert.hasText(accountId, "客服关联账户ID不能为空");
-
-        return serviceDao.findByAccountId(accountId);
-    }
-
-    /**
      * 分页查询
      */
     @Override
-    public Page<org.wah.cloned.core.service.entity.Service> page(PageRequest pageRequest, String wechatId, String accountId, String name){
+    public Page<org.wah.cloned.core.service.entity.Service> page(PageRequest pageRequest, String organizationId, String wxno, String wechatId, String name){
         Assert.notNull(pageRequest, "分页信息不能为空");
 
-        return serviceDao.page(pageRequest, wechatId, accountId, name);
+        return serviceDao.page(pageRequest, organizationId, wxno, wechatId, name);
     }
 }

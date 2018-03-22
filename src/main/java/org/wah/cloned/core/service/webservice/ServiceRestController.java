@@ -50,9 +50,9 @@ public class ServiceRestController{
      * 分页查询
      */
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<Page<Service>> page(Long pageNum, Long pageSize, String wechatId, String accountId, String name){
+    public Response<Page<Service>> page(Long pageNum, Long pageSize, String organizationId, String wxno, String wechatId, String name){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Service> page = serviceService.page(pageRequest, wechatId, accountId, name);
+        Page<Service> page = serviceService.page(pageRequest, organizationId, wxno, wechatId, name);
 
         return new Response<Page<Service>>("查询成功", page);
     }

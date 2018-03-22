@@ -8,7 +8,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.wah.cloned.bot.service.WechatBotService;
 import org.wah.cloned.commons.utils.CacheUtils;
 
-public class WechatBotSocket extends TextWebSocketHandler {
+public class WechatBotSocket extends TextWebSocketHandler{
 
     @Autowired
     private WechatBotService wechatBotService;

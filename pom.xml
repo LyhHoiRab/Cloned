@@ -375,7 +375,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/java</directory>
+                <directory>/src/main/java</directory>
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.properties</include>
@@ -386,18 +386,16 @@
             </resource>
 
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>/src/main/resources</directory>
                 <includes>
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
                     <include>**/*.pem</include>
-                    <include>**/*.dll</include>
-                    <include>**/*.so</include>
                 </includes>
             </resource>
 
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>/src/main/resources</directory>
                 <includes>
                     <include>**/*.properties</include>
                     <include>**/logback.xml</include>
@@ -421,9 +419,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.4</version>
+
                 <configuration>
-                    <warName>${project.name}</warName>
-                    <packagingIncludes>WEB-INF/lib/*.jar</packagingIncludes>
                     <webResources>
                         <resource>
                             <directory>src/main/webapp</directory>
@@ -432,11 +429,19 @@
                             </includes>
                             <filtering>true</filtering>
                         </resource>
+
                         <target>WEB-INF</target>
                     </webResources>
+
                     <resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>
+
                     <warSourceDirectory>src/main/webapp</warSourceDirectory>
+
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+
+                    <warName>${project.name}</warName>
+
+                    <includeEmptyDirectories>true</includeEmptyDirectories>
                 </configuration>
             </plugin>
         </plugins>

@@ -175,39 +175,6 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
                 ]);
             }]
         }
-    }).state('service', {
-        url         : '/wechat/service/:wechatId',
-        templateUrl : function($stateParams){
-            return '/page/cloned/wechat/service/' + $stateParams.wechatId;
-        },
-        controller  : 'service',
-        resolve     : {
-            deps: ['$ocLazyLoad', function($ocLazyLoad){
-                return $ocLazyLoad.load([
-                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
-                    basePath + '/commons/js/plugin/angular-grid/theme.css',
-                    basePath + '/commons/css/page/cloned/common.css',
-                    basePath + '/commons/js/page/cloned/wechat/service.js'
-                ]);
-            }]
-        }
-    }).state('serviceAdd', {
-        url         : '/wechat/service/add/:wechatId',
-        templateUrl : function($stateParams){
-            return '/page/cloned/wechat/service/add/' + $stateParams.wechatId;
-        },
-        controller  : 'serviceAdd',
-        resolve     : {
-            deps: ['$ocLazyLoad', function($ocLazyLoad){
-                return $ocLazyLoad.load([
-                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
-                    basePath + '/commons/js/plugin/angular-grid/theme.css',
-                    basePath + '/commons/css/page/cloned/common.css',
-                    basePath + '/commons/js/utils.js',
-                    basePath + '/commons/js/page/cloned/wechat/serviceAdd.js'
-                ]);
-            }]
-        }
     }).state('allocation', {
         url         : '/wechat/allocation/:wechatId',
         templateUrl : function($stateParams){
@@ -311,6 +278,34 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
                 return $ocLazyLoad.load([
                     basePath + '/commons/css/page/cloned/common.css',
                     basePath + '/commons/js/page/cloned/im/tencent/applet/admin.js'
+                ]);
+            }]
+        }
+    }).state('service', {
+        url         : '/service',
+        templateUrl : '/page/cloned/service',
+        controller  : 'service',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/service/index.js'
+                ]);
+            }]
+        }
+    }).state('service.list', {
+        url         : '/list/:organizationId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/service/list/' + $stateParams.organizationId;
+        },
+        controller  : 'serviceList',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/service/list.js'
                 ]);
             }]
         }
