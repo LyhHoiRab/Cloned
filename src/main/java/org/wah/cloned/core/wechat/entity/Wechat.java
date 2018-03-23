@@ -1,6 +1,5 @@
 package org.wah.cloned.core.wechat.entity;
 
-import org.wah.cloned.core.service.entity.Service;
 import org.wah.cloned.core.wechat.consts.AppStatus;
 import org.wah.cloned.core.wechat.consts.WechatStatus;
 import org.wah.doraemon.entity.base.Createable;
@@ -8,7 +7,6 @@ import org.wah.doraemon.entity.base.Entity;
 import org.wah.doraemon.entity.base.Updateable;
 
 import java.util.Date;
-import java.util.List;
 
 public class Wechat extends Entity implements Createable, Updateable{
 

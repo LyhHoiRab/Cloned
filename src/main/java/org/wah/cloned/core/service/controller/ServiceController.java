@@ -20,4 +20,14 @@ public class ServiceController{
     public ModelAndView list(ModelMap content){
         return new ModelAndView("cloned/service/list", content);
     }
+
+    @RequestMapping(value = "/add/{organizationId}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView add(ModelMap content){
+        return new ModelAndView("cloned/service/edit", content);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView edit(ModelMap content){
+        return new ModelAndView("cloned/service/edit", content);
+    }
 }

@@ -101,24 +101,6 @@ public class IMUserServiceImpl implements IMUserService{
     }
 
     /**
-     * 根据账号密码和微信号查询IM账号
-     */
-    @Override
-    public IMUser getServiceByAccountAndWxno(String username, String password, String wxno){
-        Assert.hasText(username, "登录名不能为空");
-        Assert.hasText(password, "密码不能为空");
-        Assert.hasText(wxno, "微信号不能为空");
-
-        Account account = accountDao.getByUsernameAndPassword(username, password);
-
-        if(account == null){
-            throw new AccountNotFoundException("账户[{0}]密码不正确", username);
-        }
-
-        return imUserDao.getServiceByAccountIdAndWxno(account.getId(), wxno);
-    }
-
-    /**
      * 微信号登录
      */
     @Override

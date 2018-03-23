@@ -17,27 +17,7 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
 
     //定义方法
     $scope.login = function(id){
-        //$http({
-        //    url     : '/api/1.0/wechatBot/login',
-        //    method  : 'POST',
-        //    params  : {
-        //        'id' : id
-        //    },
-        //    headers : {
-        //        'Content-Type': 'application/x-www-form-urlencoded'
-        //    }
-        //}).success(function(res, status, headers, config){
-        //    if(res.success){
-        //
-        //    }else{
-        //        alert(res.msg);
-        //    }
-        //}).error(function(response){
-        //    console.error(response);
-        //});
 
-        //var socket = new WebSocket("ws://localhost:8080/socket/1.0/bot?wechatId=" + id);
-        //var socket = new WebSocket("ws://120.24.102.187:8066/socket/1.0/bot?wechatId=" + id);
         var socket = new WebSocket('ws://' + location.host + '/socket/1.0/bot?wechatId=' + id);
         socket.onopen = function(event){
 
@@ -51,8 +31,8 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
         };
     };
 
-    $scope.service = function(id){
-        $state.go('service', {'wechatId' : id});
+    $scope.allocation = function(id){
+        $state.go('allocation', {'wechatId' : id});
     };
 
     $scope.im = function(id){
@@ -187,7 +167,7 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
             cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
         },{
             displayName  : '操作',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="login(row.getProperty(\'id\'))">[登录]</a><a ng-click="service(row.getProperty(\'id\'))">[客服]</a><a ng-click="im(row.getProperty(\'id\'))">[绑定IM]</a></span></div>'
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="login(row.getProperty(\'id\'))">[登录]</a><a ng-click="allocation(row.getProperty(\'id\'))">[客服]</a><a ng-click="im(row.getProperty(\'id\'))">[绑定IM]</a></span></div>'
         }]
     };
 

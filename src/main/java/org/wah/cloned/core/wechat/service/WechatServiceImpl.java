@@ -1,20 +1,16 @@
 package org.wah.cloned.core.wechat.service;
 
-import io.github.biezhi.wechat.api.constant.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.wah.cloned.bot.entity.WechatBot;
-import org.wah.cloned.bot.service.WechatApi;
-import org.wah.cloned.commons.utils.CacheUtils;
 import org.wah.cloned.core.wechat.consts.AppStatus;
-import org.wah.cloned.core.wechat.consts.WechatStatus;
 import org.wah.cloned.core.wechat.dao.WechatDao;
 import org.wah.cloned.core.wechat.entity.Wechat;
-import org.wah.doraemon.security.exception.ResourceNotFoundException;
 import org.wah.doraemon.security.response.Page;
 import org.wah.doraemon.security.response.PageRequest;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -56,6 +52,14 @@ public class WechatServiceImpl implements WechatService{
         Assert.hasText(id, "微信ID不能为空");
 
         return wechatDao.getById(id);
+    }
+
+    /**
+     * 查询
+     */
+    @Override
+    public List<Wechat> find(String organizationId, String wxno){
+        return wechatDao.find(organizationId, wxno);
     }
 
     /**

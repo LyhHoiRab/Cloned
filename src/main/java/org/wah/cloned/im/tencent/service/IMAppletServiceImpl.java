@@ -35,9 +35,6 @@ public class IMAppletServiceImpl implements IMAppletService{
     @Autowired
     private WechatDao wechatDao;
 
-    @Autowired
-    private ServiceDao serviceDao;
-
     /**
      * 保存
      */
@@ -108,18 +105,6 @@ public class IMAppletServiceImpl implements IMAppletService{
         IMUser admin = imUserDao.getAdminByAppletId(appletId);
         //微信
         Wechat wechat = wechatDao.getById(wechatId);
-        //客服
-        List<org.wah.cloned.core.service.entity.Service> services = serviceDao.findByWechatId(wechatId);
-        //IDs
-        List<String> ids = EntityUtils.getIds(services);
-        ids.add(wechatId);
-
-        //删除微信和客服
-        imUserDao.deleteByIds(ids);
-
-        //绑定的IM用户组
-        List<IMUser> users = new ArrayList<IMUser>();
-        List<String> userNames = new ArrayList<String>();
 
         //创建微信对应的IM用户
         IMUser wechatUser = new IMUser();
@@ -129,31 +114,13 @@ public class IMAppletServiceImpl implements IMAppletService{
         wechatUser.setAppId(applet.getAppId());
         wechatUser.setRole(IMRole.WECHAT);
         wechatUser.setSig(SignCheckerUtils.get(applet.getAppId(), wechat.getId(), applet.getPrivateKeyPath()));
-        users.add(wechatUser);
-        userNames.add(wechatUser.getName());
+        imUserDao.saveOrUpdate(wechatUser);
 
-        //创建客服对应的IM用户
-        List<IMUser> friends = new ArrayList<IMUser>();
-        for(org.wah.cloned.core.service.entity.Service service : services){
-            IMUser serviceUser = new IMUser();
-            serviceUser.setName(service.getId());
-            serviceUser.setNickname(service.getName());
-            serviceUser.setHeadImgUrl(service.getHeadImgUrl());
-            serviceUser.setAppletId(appletId);
-            serviceUser.setAppId(applet.getAppId());
-            serviceUser.setRole(IMRole.SERVICE);
-            serviceUser.setSig(SignCheckerUtils.get(applet.getAppId(), service.getId(), applet.getPrivateKeyPath()));
-            users.add(serviceUser);
-            userNames.add(serviceUser.getName());
-
-            //添加到好友列表
-            friends.add(serviceUser);
-        }
-        //保存IM用户
-        imUserDao.saveBatch(users);
         //注册到腾讯云
-        IMUtils.multiOpenLogin(admin.getSig(), admin.getAppId(), admin.getName(), userNames);
-        //创建关系链
-        IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), wechatUser, friends);
+        IMUtils.openLogin(admin.getSig(), admin.getAppId(), admin.getName(), wechatUser);
+        //客服IM
+        List<IMUser> services = imUserDao.findServiceByAppletId(applet.getId());
+        //创建关系
+        IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), wechatUser, services);
     }
 }

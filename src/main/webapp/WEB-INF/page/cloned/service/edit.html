@@ -3,10 +3,7 @@
         <span>系统设置</span>
     </li><!-- item -->
     <li>
-        <a ui-sref="wechat">微信设置</a>
-    </li><!-- item -->
-    <li>
-        <a ui-sref="service({wechatId:service.wechatId})">客服设置</a>
+        <a ui-sref="service">客服管理</a>
     </li><!-- item -->
     <li>
         <span ng-show="service.id">
@@ -22,8 +19,8 @@
     <div class="container-fluid">
         <div class="row-group">
             <div class="input-group">
-                <span class="input-group-addon">账户</span>
-                <select class="form-control" ng-change="change(service.accountId)" ng-model="service.accountId" ng-options="user.accountId as user.name for user in users">
+                <span class="input-group-addon">微信</span>
+                <select class="form-control" ng-model="service.wechatId" ng-options="wechat.id as wechat.wxno for wechat in wechats">
                     <option value="">请选择</option>
                 </select>
             </div>
@@ -32,9 +29,23 @@
         <div class="row-group">
             <div class="input-group">
                 <span class="input-group-addon">客服名称</span>
-                <input type="text" class="form-control" placeholder="客服名称" ng-model="service.name" readonly="readonly">
+                <input type="text" class="form-control" placeholder="微信号" ng-model="service.name">
             </div>
-        </div><!-- item -->
+        </div>
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">客服登录名称</span>
+                <input type="text" class="form-control" placeholder="客服登录名称" ng-model="service.username">
+            </div>
+        </div>
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">客服登录密码</span>
+                <input type="password" class="form-control" placeholder="客服登录密码" ng-model="service.password">
+            </div>
+        </div>
 
         <div class="row-group">
             <div class="button-group">

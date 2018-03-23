@@ -30,11 +30,6 @@ public interface IMUserService{
     IMUser getWechatByWxno(String wxno);
 
     /**
-     * 根据账号密码和微信号查询IM账号
-     */
-    IMUser getServiceByAccountAndWxno(String username, String password, String wxno);
-
-    /**
      * 微信号登录
      */
     IMUser loginByWechat(String wxno, String phone, String imei);

@@ -239,11 +239,35 @@ public class IMUserDao{
     }
 
     /**
-     * 根据账号ID和微信号查询IM账号
+     * 根据应用ID查询微信
      */
-    public IMUser getServiceByAccountIdAndWxno(String accountId, String wxno){
+    public List<IMUser> findWechatByAppletId(String appletId){
         try{
-            return mapper.getServiceByAccountIdAndWxno(accountId, wxno, IMRole.SERVICE);
+            Assert.hasText(appletId, "腾讯云通讯应用ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("appletId", appletId));
+            criteria.and(Restrictions.eq("role", IMRole.WECHAT.getId()));
+
+            return mapper.findByParams(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 根据应用ID查询客服
+     */
+    public List<IMUser> findServiceByAppletId(String appletId){
+        try{
+            Assert.hasText(appletId, "腾讯云通讯应用ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("appletId", appletId));
+            criteria.and(Restrictions.eq("role", IMRole.SERVICE.getId()));
+
+            return mapper.findByParams(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

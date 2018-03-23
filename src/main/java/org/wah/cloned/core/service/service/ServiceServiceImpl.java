@@ -45,41 +45,42 @@ public class ServiceServiceImpl implements ServiceService{
     @Transactional(readOnly = false)
     public void save(org.wah.cloned.core.service.entity.Service service){
         Assert.notNull(service, "客服信息不能为空");
+
         //保存客服
         serviceDao.saveOrUpdate(service);
         //保存概率
         Allocation allocation = new Allocation();
         allocation.setService(service);
-        allocation.setProbability(0D);
-        allocation.setDefaultProbability(0D);
+        allocation.setProbability(10D);
+        allocation.setDefaultProbability(10D);
         allocation.setStep(1D);
         allocation.setIsOfflineAllot(true);
         allocationDao.save(allocation);
+
         //查询应用
         IMApplet applet = imAppletDao.getByWechatId(service.getWechatId());
-        if(applet != null){
-            //生成签名
-            String sig = SignCheckerUtils.get(applet.getAppId(), service.getId(), applet.getPrivateKeyPath());
-            //注册腾讯云
-            IMUser user = new IMUser();
-            user.setName(service.getId());
-            user.setNickname(service.getName());
-            user.setHeadImgUrl(service.getHeadImgUrl());
-            user.setSig(sig);
-            user.setAppletId(applet.getId());
-            user.setAppId(applet.getAppId());
-            user.setRole(IMRole.SERVICE);
-            imUserDao.saveOrUpdate(user);
 
-            //管理员
-            IMUser admin = imUserDao.getAdminByAppletId(applet.getId());
-            //注册到腾讯服务器
-            IMUtils.openLogin(admin.getSig(), admin.getAppId(), admin.getName(), user);
-            //微信号
-            IMUser wechat = imUserDao.getByName(service.getWechatId());
-            //创建关系链
-            IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), wechat, user);
-        }
+        //生成签名
+        String sig = SignCheckerUtils.get(applet.getAppId(), service.getId(), applet.getPrivateKeyPath());
+        //注册腾讯云
+        IMUser user = new IMUser();
+        user.setName(service.getId());
+        user.setNickname(service.getName());
+        user.setHeadImgUrl(service.getHeadImgUrl());
+        user.setSig(sig);
+        user.setAppletId(applet.getId());
+        user.setAppId(applet.getAppId());
+        user.setRole(IMRole.SERVICE);
+        imUserDao.saveOrUpdate(user);
+
+        //管理员
+        IMUser admin = imUserDao.getAdminByAppletId(applet.getId());
+        //注册到腾讯服务器
+        IMUtils.openLogin(admin.getSig(), admin.getAppId(), admin.getName(), user);
+        //微信
+        List<IMUser> wechats = imUserDao.findWechatByAppletId(applet.getId());
+        //创建关系链
+        IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), user, wechats);
     }
 
     /**

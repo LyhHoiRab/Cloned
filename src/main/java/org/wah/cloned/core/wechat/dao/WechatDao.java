@@ -41,6 +41,7 @@ public class WechatDao{
 
                 wechat.setId(IDGenerator.uuid32());
                 wechat.setStatus(WechatStatus.OFFLINE);
+                wechat.setAppStatus(AppStatus.OFFLINE);
                 wechat.setCreateTime(new Date());
                 mapper.save(wechat);
             }else{
@@ -81,6 +82,28 @@ public class WechatDao{
             criteria.and(Restrictions.eq("wxno", wxno));
 
             return mapper.getByParams(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 查询
+     */
+    public List<Wechat> find(String organizationId, String wxno){
+        try{
+            Criteria criteria = new Criteria();
+            criteria.sort(Restrictions.asc("createTime"));
+
+            if(!StringUtils.isBlank(organizationId)){
+                criteria.and(Restrictions.eq("organizationId", organizationId));
+            }
+            if(!StringUtils.isBlank(wxno)){
+                criteria.and(Restrictions.like("wxno", wxno));
+            }
+
+            return mapper.findByParams(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

@@ -300,16 +300,4 @@
          WHERE w.wxno = #{wxno}
            AND t.role = #{role, typeHandler=imRoleHandler}
     </select>
-
-    <select id="getServiceByAccountIdAndWxno" resultMap="user">
-        SELECT t.*
-          FROM tencent_im_user t
-     LEFT JOIN service s
-            ON s.id = t.name
-     LEFT JOIN wechat w
-            ON s.wechat_id = w.id
-         WHERE s.account_id = #{accountId}
-           AND w.wxno = #{wxno}
-           AND t.role = #{role, typeHandler=imRoleHandler}
-    </select>
 </mapper>

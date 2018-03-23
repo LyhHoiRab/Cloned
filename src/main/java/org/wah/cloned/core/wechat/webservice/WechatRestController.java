@@ -10,6 +10,8 @@ import org.wah.doraemon.security.response.Page;
 import org.wah.doraemon.security.response.PageRequest;
 import org.wah.doraemon.security.response.Response;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/1.0/wechat")
 public class WechatRestController{
@@ -45,6 +47,16 @@ public class WechatRestController{
         Wechat wechat = wechatService.getById(id);
 
         return new Response<Wechat>("查询成功", wechat);
+    }
+
+    /**
+     * 查询
+     */
+    @RequestMapping(value = "/find", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<List<Wechat>> find(String organizationId, String wxno){
+        List<Wechat> list = wechatService.find(organizationId, wxno);
+
+        return new Response<List<Wechat>>("查询成功", list);
     }
 
     /**

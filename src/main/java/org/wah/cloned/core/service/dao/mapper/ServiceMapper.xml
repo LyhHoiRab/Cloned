@@ -185,7 +185,7 @@
              <if test="password != null and password != ''">
                  password = #{password, jdbcType=VARCHAR},
              </if>
-             <if test="wechatId != null and wechat != ''">
+             <if test="wechatId != null and wechatId != ''">
                  wechat_id = #{wechatId, jdbcType=VARCHAR},
              </if>
              <if test="name != null and name != ''">

@@ -31,16 +31,6 @@ public class WechatController{
         return new ModelAndView("cloned/wechat/edit", content);
     }
 
-    @RequestMapping(value = "/service/{wechatId}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView service(ModelMap content){
-        return new ModelAndView("cloned/wechat/service", content);
-    }
-
-    @RequestMapping(value = "/service/add/{wechatId}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView serviceAdd(ModelMap content){
-        return new ModelAndView("cloned/wechat/serviceEdit", content);
-    }
-
     @RequestMapping(value = "/allocation/{wechatId}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView allocation(ModelMap content){
         return new ModelAndView("cloned/wechat/allocation", content);

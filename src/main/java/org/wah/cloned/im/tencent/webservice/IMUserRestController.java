@@ -61,18 +61,6 @@ public class IMUserRestController{
     }
 
     /**
-     * 根据账号密码和微信号查询IM账号
-     */
-    @RequestMapping(value = "/service", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<IMUser> getServiceByAccountAndWxno(HttpServletResponse response, String username, String password, String wxno){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
-        IMUser user = imUserService.getServiceByAccountAndWxno(username, password, wxno);
-
-        return new Response<IMUser>("查询成功", user);
-    }
-
-    /**
      * 微信号登录
      */
     @RequestMapping(value = "/login/wechat", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -96,4 +96,17 @@ public class ExceptionHandler{
 
         return response;
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public Response exception(Exception e){
+        logger.error(e.getMessage(), e);
+
+        Response response = new Response();
+        response.setMsg(e.getMessage());
+        response.setSuccess(false);
+        response.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+
+        return response;
+    }
 }

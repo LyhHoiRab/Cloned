@@ -309,5 +309,38 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
                 ]);
             }]
         }
+    }).state('serviceAdd', {
+        url         : '/serviceAdd/:organizationId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/service/add/' + $stateParams.organizationId;
+        },
+        controller  : 'serviceAdd',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/plugin/md5/md5.js',
+                    basePath + '/commons/js/page/cloned/service/add.js'
+                ]);
+            }]
+        }
+    }).state('serviceEdit', {
+        url         : '/serviceEdit/:id',
+        templateUrl : function($stateParams){
+            return '/page/cloned/service/' + $stateParams.id;
+        },
+        controller  : 'serviceEdit',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/utils.js',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/plugin/md5/md5.js',
+                    basePath + '/commons/js/page/cloned/service/edit.js'
+                ]);
+            }]
+        }
     });
 }]);

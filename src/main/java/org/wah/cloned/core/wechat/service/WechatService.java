@@ -5,6 +5,8 @@ import org.wah.cloned.core.wechat.entity.Wechat;
 import org.wah.doraemon.security.response.Page;
 import org.wah.doraemon.security.response.PageRequest;
 
+import java.util.List;
+
 public interface WechatService{
 
     /**
@@ -21,6 +23,11 @@ public interface WechatService{
      * 根据ID查询
      */
     Wechat getById(String id);
+
+    /**
+     * 查询
+     */
+    List<Wechat> find(String organizationId, String wxno);
 
     /**
      * 分页查询

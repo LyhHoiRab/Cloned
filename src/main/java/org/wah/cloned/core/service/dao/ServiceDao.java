@@ -36,6 +36,8 @@ public class ServiceDao{
             if(StringUtils.isBlank(service.getId())){
                 Assert.hasText(service.getWechatId(), "客服关联微信ID不能为空");
                 Assert.hasText(service.getName(), "客服名称不能为空");
+                Assert.hasText(service.getUsername(), "客服登录名称不能为空");
+                Assert.hasText(service.getPassword(), "客服登录密码不能为空");
 
                 service.setId(IDGenerator.uuid32());
                 service.setCreateTime(new Date());
