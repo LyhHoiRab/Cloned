@@ -1,5 +1,7 @@
 package org.wah.cloned.core.wechat.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.wah.doraemon.consts.Sex;
 import org.wah.doraemon.entity.base.Createable;
 import org.wah.doraemon.entity.base.Entity;
@@ -7,12 +9,18 @@ import org.wah.doraemon.entity.base.Updateable;
 
 import java.util.Date;
 
+@Getter
+@Setter
 public class WechatFriend extends Entity implements Createable, Updateable{
 
     //微信ID
     private String wechatId;
+    //微信信息
+    private Wechat wechat;
     //昵称
     private String nickname;
+    //微信号
+    private String wxno;
     //备注名称
     private String remarkname;
     //头像
@@ -26,73 +34,5 @@ public class WechatFriend extends Entity implements Createable, Updateable{
 
     public WechatFriend(){
 
-    }
-
-    public String getWechatId(){
-        return wechatId;
-    }
-
-    public void setWechatId(String wechatId){
-        this.wechatId = wechatId;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
-    public void setNickname(String nickname){
-        this.nickname = nickname;
-    }
-
-    public String getRemarkname(){
-        return remarkname;
-    }
-
-    public void setRemarkname(String remarkname){
-        this.remarkname = remarkname;
-    }
-
-    public String getHeadImgUrl(){
-        return headImgUrl;
-    }
-
-    public void setHeadImgUrl(String headImgUrl){
-        this.headImgUrl = headImgUrl;
-    }
-
-    public Sex getSex(){
-        return sex;
-    }
-
-    public void setSex(Sex sex){
-        this.sex = sex;
-    }
-
-    public String getServiceId(){
-        return serviceId;
-    }
-
-    public void setServiceId(String serviceId){
-        this.serviceId = serviceId;
-    }
-
-    @Override
-    public Date getCreateTime(){
-        return createTime;
-    }
-
-    @Override
-    public void setCreateTime(Date createTime){
-        this.createTime = createTime;
-    }
-
-    @Override
-    public Date getUpdateTime(){
-        return updateTime;
-    }
-
-    @Override
-    public void setUpdateTime(Date updateTime){
-        this.updateTime = updateTime;
     }
 }

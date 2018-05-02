@@ -33,4 +33,9 @@ public interface IMUserService{
      * 微信号登录
      */
     IMUser loginByWechat(String wxno, String phone, String imei);
+
+    /**
+     * 微信登录
+     */
+    IMUser loginByService(String username, String password);
 }

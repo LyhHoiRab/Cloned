@@ -4,10 +4,11 @@ import java.util.Map;
 
 public interface ConstsService{
 
-    /**
-     * 微信状态常量
-     */
     Map<Object, Object> wechatStatus();
 
     Map<Object, Object> appStatus();
+
+    Map<Object, Object> sex();
+
+    Map<Object, Object> messageType();
 }

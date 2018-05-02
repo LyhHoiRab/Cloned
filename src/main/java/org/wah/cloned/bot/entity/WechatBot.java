@@ -200,12 +200,4 @@ public class WechatBot{
             }
         }
     }
-
-    /**
-     * 好友消息验证
-     */
-    @Bind(msgType = MsgType.ADD_FRIEND)
-    public void addFriend(WeChatMessage message){
-        this.getWechatApi().verify(message.getRaw().getRecommend());
-    }
 }

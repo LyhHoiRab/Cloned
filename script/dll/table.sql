@@ -84,7 +84,9 @@ CREATE TABLE `organization` (
 CREATE TABLE `wechat_friend` (
   `id` varchar(32) NOT NULL,
   `wechat_id` varchar(32) NOT NULL,
-  `nickname` varchar(50) DEFAULT NULL,
+  `service_id` varchar(32) DEFAULT NULL,
+  `wxno` varchar(32) DEFAULT NULL,
+  `nickname` varchar(256) DEFAULT NULL,
   `remarkname` varchar(32) NOT NULL,
   `head_img_url` varchar(255) DEFAULT NULL,
   `sex` tinyint(1) DEFAULT '0',

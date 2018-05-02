@@ -30,4 +30,18 @@ public class ConstsRestController{
 
         return new Response<Map<Object, Object>>("查询成功", result);
     }
+
+    @RequestMapping(value = "/sex", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<Map<Object, Object>> sex(){
+        Map<Object, Object> result = constsService.sex();
+
+        return new Response<Map<Object, Object>>("查询成功", result);
+    }
+
+    @RequestMapping(value = "/messageType", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<Map<Object, Object>> messageType(){
+        Map<Object, Object> result = constsService.messageType();
+
+        return new Response<Map<Object, Object>>("查询成功", result);
+    }
 }

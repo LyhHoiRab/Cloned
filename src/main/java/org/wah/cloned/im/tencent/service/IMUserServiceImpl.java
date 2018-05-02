@@ -118,4 +118,15 @@ public class IMUserServiceImpl implements IMUserService{
 
         return imUserDao.getWechatByWxno(wxno);
     }
+
+    /**
+     * 微信登录
+     */
+    @Override
+    public IMUser loginByService(String username, String password){
+        Assert.hasText(username, "客服登录账号不能为空");
+        Assert.hasText(password, "客服登录密码不能为空");
+
+        return imUserDao.getServiceByUsernameAndPassword(username, password);
+    }
 }

@@ -21,6 +21,11 @@ public interface AllocationMapper{
     void update(List<Allocation> list);
 
     /**
+     * 删除
+     */
+    void deleteByServiceId(String serviceId);
+
+    /**
      * 设置默认概率
      */
     void setDefaultProbability(String wechatId);

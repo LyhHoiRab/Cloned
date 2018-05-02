@@ -47,3 +47,17 @@
         <div class="gridStyle" ng-grid="gridOptions"></div><!-- table -->
     </div><!-- container -->
 </div><!-- table bar -->
+
+<script type="text/ng-template" id="modal">
+    <div class="modal-header">
+        <h3>{{modal.wxno}}</h3></h3>
+    </div><!-- model header -->
+
+    <div class="modal-body">
+        <img src="{{modal.qrcodeSrc}}" width="300">
+    </div><!-- modal body -->
+
+    <div class="modal-footer">
+        <button class="btn" ng-click="closeModal()">关闭</button>
+    </div><!-- modal footer -->
+</script>

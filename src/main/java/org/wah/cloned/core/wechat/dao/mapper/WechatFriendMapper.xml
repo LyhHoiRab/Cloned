@@ -6,6 +6,7 @@
     <resultMap id="friend" type="org.wah.cloned.core.wechat.entity.WechatFriend">
         <id     column="id"           property="id"         javaType="java.lang.String"/>
         <result column="wechat_id"    property="wechatId"   javaType="java.lang.String"/>
+        <result column="wxno"         property="wxno"       javaType="java.lang.String"/>
         <result column="nickname"     property="nickname"   javaType="java.lang.String"/>
         <result column="remarkname"   property="remarkname" javaType="java.lang.String"/>
         <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
@@ -13,6 +14,12 @@
         <result column="service_id"   property="serviceId"  javaType="java.lang.String"/>
         <result column="create_time"  property="createTime" javaType="java.util.Date"/>
         <result column="update_time"  property="updateTime" javaType="java.util.Date"/>
+        <association property="wechat" resultMap="wechat" columnPrefix="we_"/>
+    </resultMap>
+
+    <resultMap id="wechat" type="org.wah.cloned.core.wechat.entity.Wechat">
+        <id     column="id"              property="id"             javaType="java.lang.String"/>
+        <result column="wxno"            property="wxno"           javaType="java.lang.String"/>
     </resultMap>
 
     <sql id="WHERE_COLUMN">
@@ -168,6 +175,7 @@
                nickname,
                remarkname,
                sex,
+               wxno,
                head_img_url,
                create_time
           ) VALUE (
@@ -177,6 +185,7 @@
                #{nickname,    jdbcType=VARCHAR},
                #{remarkname,  jdbcType=VARCHAR},
                #{sex,         typeHandler=sexHandler},
+               #{wxno,        jdbcType=VARCHAR},
                #{headImgUrl,  jdbcType=VARCHAR},
                #{createTime,  jdbcType=TIMESTAMP}
           )
@@ -190,6 +199,9 @@
              </if>
              <if test="nickname != null">
                  nickname = #{nickname, jdbcType=VARCHAR},
+             </if>
+             <if test="wxno != null">
+                 wxno = #{wxno, jdbcType=VARCHAR},
              </if>
              <if test="remarkname != null and remarkname != ''">
                  remarkname = #{remarkname, jdbcType=VARCHAR},
@@ -219,8 +231,14 @@
     </select>
 
     <select id="findByParams" resultMap="friend">
-        SELECT *
-          FROM wechat_friend
+        SELECT w.*,
+               we.id   AS we_id,
+               we.wxno AS we_wxno
+          FROM wechat_friend w
+     LEFT JOIN service s
+            ON s.id = w.service_id
+     LEFT JOIN wechat we
+            ON we.id = w.wechat_id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
 
@@ -246,7 +264,11 @@
 
     <select id="countByParams" resultType="java.lang.Long">
         SELECT COUNT(*)
-          FROM wechat_friend
+          FROM wechat_friend w
+     LEFT JOIN service s
+            ON s.id = w.service_id
+     LEFT JOIN wechat we
+            ON we.id = w.wechat_id
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>

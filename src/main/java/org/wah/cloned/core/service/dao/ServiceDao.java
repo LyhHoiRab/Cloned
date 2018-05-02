@@ -119,4 +119,18 @@ public class ServiceDao{
             throw new DataAccessException(e.getMessage(), e);
         }
     }
+
+    /**
+     * 根据IM应用ID查询
+     */
+    public List<Service> findByIMAppletId(String imAppletId){
+        try{
+            Assert.notNull(imAppletId, "IM应用ID不能为空");
+
+            return mapper.findByIMAppletId(imAppletId);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }

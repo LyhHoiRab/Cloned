@@ -13,4 +13,12 @@
             <bean class="org.wah.cloned.core.service.utils.MessageHandshakeInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
+
+    <bean id="testSocket" class="org.wah.cloned.bot.websocket.TestSocket"/>
+    <websocket:handlers>
+        <websocket:mapping path="/socket/1.0/test" handler="testSocket"/>
+        <websocket:handshake-interceptors>
+            <bean class="org.wah.cloned.core.service.utils.MessageHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
 </beans>

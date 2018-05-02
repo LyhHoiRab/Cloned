@@ -31,7 +31,17 @@ public interface ServiceMapper{
     List<Service> findByParams(@Param("params") Criteria criteria);
 
     /**
+     * 根据企业ID查询
+     */
+    List<Service> findByOrganizationId(String organizationId);
+
+    /**
      * 根据条件查询数量
      */
     Long countByParams(@Param("params") Criteria criteria);
+
+    /**
+     * 根据IM应用ID查询
+     */
+    List<Service> findByIMAppletId(String imAppletId);
 }

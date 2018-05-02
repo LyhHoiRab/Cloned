@@ -300,4 +300,13 @@
          WHERE w.wxno = #{wxno}
            AND t.role = #{role, typeHandler=imRoleHandler}
     </select>
+
+    <select id="getServiceByUsernameAndPassword" resultMap="user">
+        SELECT t.*
+          FROM tencent_im_user t
+     LEFT JOIN service s
+            ON s.id = t.name
+         WHERE s.username = #{username}
+           AND s.password = #{password}
+    </select>
 </mapper>

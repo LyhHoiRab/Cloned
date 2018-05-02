@@ -239,6 +239,21 @@ public class IMUserDao{
     }
 
     /**
+     * 根据账号和密码查询客服
+     */
+    public IMUser getServiceByUsernameAndPassword(String username, String password){
+        try{
+            Assert.hasText(username, "客服登录账号不能为空");
+            Assert.hasText(password, "客服登录密码不能为空");
+
+            return mapper.getServiceByUsernameAndPassword(username, password);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    /**
      * 根据应用ID查询微信
      */
     public List<IMUser> findWechatByAppletId(String appletId){

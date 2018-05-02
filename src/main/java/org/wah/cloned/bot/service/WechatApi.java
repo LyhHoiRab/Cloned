@@ -14,10 +14,10 @@ import io.github.biezhi.wechat.api.request.FileRequest;
 import io.github.biezhi.wechat.api.request.JsonRequest;
 import io.github.biezhi.wechat.api.request.StringRequest;
 import io.github.biezhi.wechat.api.response.*;
-import io.github.biezhi.wechat.utils.QRCodeUtils;
 import io.github.biezhi.wechat.utils.StringUtils;
 import io.github.biezhi.wechat.utils.WeChatUtils;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -47,9 +47,17 @@ public class WechatApi{
     private static final Pattern SYNC_CHECK_PATTERN    = Pattern.compile("window.synccheck=\\{retcode:\"(\\d+)\",selector:\"(\\d+)\"}");
 
     private String uuid;
+
+    @Getter
     private boolean logging;
     private int memberCount;
+
+    @Getter
+    @Setter
     private WechatBot bot;
+
+    @Getter
+    @Setter
     private BotClient client;
 
     /**
@@ -89,6 +97,7 @@ public class WechatApi{
     private Set<String> groupUserNames = new HashSet<String>();
 
     //心跳包线程
+    @Getter
     private Thread thread;
 
     public WechatApi(WechatBot bot){
@@ -103,6 +112,7 @@ public class WechatApi{
         }
 
         this.logging = true;
+        Boolean isLoggedIn = false;
 
         while(logging){
             this.uuid = pushLogin();
@@ -115,7 +125,7 @@ public class WechatApi{
                 this.getQrImage(this.uuid, bot.getConfig().showTerminal());
             }
 
-            Boolean isLoggedIn = false;
+//            Boolean isLoggedIn = false;
             while(isLoggedIn == null || !isLoggedIn){
                 String status = this.checkLogin(this.uuid);
 
@@ -146,16 +156,19 @@ public class WechatApi{
             }
         }
 
-        //初始化
-        this.webInit();
-        this.statusNotify();
-        //加载好友列表
-        this.loadContact(0);
-        //加载群聊信息，群成员
+
+        if(isLoggedIn){
+            //初始化
+            this.webInit();
+            this.statusNotify();
+            //加载好友列表
+            this.loadContact(0);
+            //加载群聊信息，群成员
 //        this.loadGroupList();
 
-        this.startRevive();
-        this.logging = false;
+            this.startRevive();
+            this.logging = false;
+        }
     }
 
     /**
@@ -199,7 +212,7 @@ public class WechatApi{
      */
     private void getQrImage(String uuid, boolean terminalShow){
         String uid    = null != uuid ? uuid : this.uuid;
-        String imgDir = bot.getConfig().assetsDir();
+//        String imgDir = bot.getConfig().assetsDir();
 
         FileResponse fileResponse = this.client.download(new FileRequest(String.format("%s/qrcode/%s", Constant.BASE_URL, uid)));
 
@@ -579,9 +592,9 @@ public class WechatApi{
         String content = message.getContent();
 
         //不处理自己发的消息
-        if(message.getFromUserName().equals(bot.getSession().getUserName())){
-            return null;
-        }
+//        if(message.getFromUserName().equals(bot.getSession().getUserName())){
+//            return null;
+//        }
 
         if(message.isGroup()){
             //如果本地缓存的群名列表没有当前群，则添加进去，下次更新使用
@@ -610,6 +623,8 @@ public class WechatApi{
                                                                                         .text(content)
                                                                                         .wechatId(bot.getWechatId())
                                                                                         .isSelf(message.getFromUserName().equals(bot.getSession().getUserName()));
+
+
 
         Account fromAccount = this.getAccountById(message.getFromUserName());
 
@@ -663,7 +678,7 @@ public class WechatApi{
                 return null;
             // 系统消息
             case SYSTEM:
-                break;
+                return weChatMessageBuilder.build();
             //撤回消息
             case REVOKE_MSG:
                 return weChatMessageBuilder.build();

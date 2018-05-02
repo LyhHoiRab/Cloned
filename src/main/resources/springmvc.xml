@@ -81,11 +81,13 @@
             <value>/api/1.0/register</value>
             <value>/api/1.0/login</value>
             <value>/socket/1.0/bot</value>
+            <value>/socket/1.0/test</value>
             <value>/page/cloned/im/*/service</value>
             <value>/api/1.0/im/user/wechat</value>
-            <value>/api/1.0/im/user/service</value>
+            <value>/api/1.0/im/user/login/service</value>
             <value>/api/1.0/im/user/login/wechat</value>
             <value>/api/1.0/wechat/app/alive</value>
+            <value>/api/1.0/wechatBot/amount/callback</value>
           </list>
         </property>
       </bean>

@@ -6,13 +6,27 @@
     <resultMap id="message" type="org.wah.cloned.core.wechat.entity.Message">
         <id     column="id"              property="id"              javaType="java.lang.String"/>
         <result column="wechat_id"       property="wechatId"        javaType="java.lang.String"/>
-        <result column="remarkname"      property="remarkname"      javaType="java.lang.String"/>
-        <result column="service_id"      property="serviceId"       javaType="java.lang.String"/>
         <result column="text"            property="text"            javaType="java.lang.String"/>
         <result column="type"            property="type"            typeHandler="messageTypeHandler"/>
         <result column="send_by_service" property="sendByService"   javaType="java.lang.Boolean"/>
         <result column="create_time"     property="createTime"      javaType="java.util.Date"/>
         <result column="update_time"     property="updateTime"      javaType="java.util.Date"/>
+        <association property="service" resultMap="service" columnPrefix="s_"/>
+        <association property="friend"  resultMap="friend"  columnPrefix="f_"/>
+    </resultMap>
+
+    <resultMap id="service" type="org.wah.cloned.core.service.entity.Service">
+        <id     column="id"           property="id"         javaType="java.lang.String"/>
+        <result column="username"     property="username"   javaType="java.lang.String"/>
+        <result column="name"         property="name"       javaType="java.lang.String"/>
+    </resultMap>
+
+    <resultMap id="friend" type="org.wah.cloned.core.wechat.entity.WechatFriend">
+        <id     column="id"           property="id"         javaType="java.lang.String"/>
+        <result column="nickname"     property="nickname"   javaType="java.lang.String"/>
+        <result column="remarkname"   property="remarkname" javaType="java.lang.String"/>
+        <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
+        <result column="sex"          property="sex"        typeHandler="sexHandler"/>
     </resultMap>
 
     <sql id="WHERE_COLUMN">
@@ -171,14 +185,14 @@
                send_by_service,
                create_time
           ) VALUE (
-               #{id,            jdbcType=VARCHAR},
-               #{wechatId,      jdbcType=VARCHAR},
-               #{remarkname,    jdbcType=VARCHAR},
-               #{serviceId,     jdbcType=VARCHAR},
-               #{text,          jdbcType=VARCHAR},
-               #{type,          typeHandler=messageTypeHandler},
-               #{sendByService, jdbcType=BOOLEAN},
-               #{createTime,    jdbcType=TIMESTAMP}
+               #{id,                   jdbcType=VARCHAR},
+               #{wechatId,             jdbcType=VARCHAR},
+               #{friend.remarkname,    jdbcType=VARCHAR},
+               #{service.id,           jdbcType=VARCHAR},
+               #{text,                 jdbcType=VARCHAR},
+               #{type,                 typeHandler=messageTypeHandler},
+               #{sendByService,        jdbcType=BOOLEAN},
+               #{createTime,           jdbcType=TIMESTAMP}
           )
     </insert>
 
@@ -187,9 +201,6 @@
          <set>
              <if test="wechatId != null and wechatId != ''">
                  wechat_id = #{wechatId, jdbcType=VARCHAR},
-             </if>
-             <if test="remarkname != null and remarkname != ''">
-                 remarkname = #{remarkname, jdbcType=VARCHAR},
              </if>
              <if test="text != null">
                  text = #{text, jdbcType=VARCHAR},
@@ -208,16 +219,44 @@
     </update>
 
     <select id="getByParams" resultMap="message">
-        SELECT *
-          FROM message
+        SELECT m.*,
+               s.id           AS s_id,
+               s.username     AS s_username,
+               s.name         AS s_name,
+               f.id           AS f_id,
+               f.nickname     AS f_nickname,
+               f.remarkname   AS f_remarkname,
+               f.head_img_url AS f_head_img_url,
+               f.sex          AS f_sex
+          FROM message m
+     LEFT JOIN service s
+            ON s.id = m.service_id
+     LEFT JOIN wechat_friend w
+            ON w.remarkname = m.remarkname
+     LEFT JOIN wechat_friend f
+            ON f.remarkname = m.remarkname
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>
     </select>
 
     <select id="findByParams" resultMap="message">
-        SELECT *
-          FROM message
+        SELECT m.*,
+               s.id           AS s_id,
+               s.username     AS s_username,
+               s.name         AS s_name,
+               f.id           AS f_id,
+               f.nickname     AS f_nickname,
+               f.remarkname   AS f_remarkname,
+               f.head_img_url AS f_head_img_url,
+               f.sex          AS f_sex
+          FROM message m
+     LEFT JOIN service s
+            ON s.id = m.service_id
+     LEFT JOIN wechat_friend w
+            ON w.remarkname = m.remarkname
+     LEFT JOIN wechat_friend f
+            ON f.remarkname = m.remarkname
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
 
@@ -243,7 +282,13 @@
 
     <select id="countByParams" resultType="java.lang.Long">
         SELECT COUNT(*)
-          FROM message
+          FROM message m
+     LEFT JOIN service s
+            ON s.id = m.service_id
+     LEFT JOIN wechat_friend w
+            ON w.remarkname = m.remarkname
+     LEFT JOIN wechat_friend f
+            ON f.remarkname = m.remarkname
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>

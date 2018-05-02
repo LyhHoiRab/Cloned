@@ -32,4 +32,9 @@ public interface ServiceService{
      * 分页查询
      */
     Page<Service> page(PageRequest pageRequest, String organizationId, String wxno, String wechatId, String name);
+
+    /**
+     * 根据IM应用ID查询
+     */
+    List<Service> findByIMAppletId(String imAppletId);
 }

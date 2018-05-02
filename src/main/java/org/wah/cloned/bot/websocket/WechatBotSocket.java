@@ -22,12 +22,16 @@ public class WechatBotSocket extends TextWebSocketHandler{
     public void afterConnectionEstablished(WebSocketSession session) throws Exception{
         String wechatId = (String) session.getAttributes().get("wechatId");
 
+        //添加缓存
         CacheUtils.putSession(wechatId, session);
+        //登录
         wechatBotService.login(wechatId);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception{
-
+        String wechatId = (String) session.getAttributes().get("wechatId");
+        //删除缓存
+        CacheUtils.deleteSession(wechatId);
     }
 }

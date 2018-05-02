@@ -27,6 +27,10 @@ public class CacheUtils{
         }
     }
 
+    public static void deleteBot(String wechatId){
+        bots.remove(wechatId);
+    }
+
     public static WebSocketSession getSession(String wechatId){
         if(StringUtils.isBlank(wechatId)){
             throw new RuntimeException("微信ID不能为空");
@@ -60,10 +64,11 @@ public class CacheUtils{
         if(session != null && session.isOpen()){
             try{
                 session.close();
-                sessions.remove(wechatId);
             }catch(IOException e){
                 e.printStackTrace();
             }
         }
+
+        sessions.remove(wechatId);
     }
 }

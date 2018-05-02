@@ -17,7 +17,10 @@ public enum WechatStatus implements EnumType{
     ONLINE(1, "在线"),
 
     @SerializedName("2")
-    UNUSUAL(2, "异常");
+    UNUSUAL(2, "异常"),
+
+    @SerializedName("3")
+    LOGGING(3, "登录中");
 
     @Getter
     private int id;

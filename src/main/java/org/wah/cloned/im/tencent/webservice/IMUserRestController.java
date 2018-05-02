@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.wah.cloned.im.tencent.entity.IMUser;
 import org.wah.cloned.im.tencent.service.IMUserService;
 import org.wah.doraemon.security.response.Response;
-import org.wah.doraemon.utils.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value = "/api/1.0/im/user")
-public class IMUserRestController{
+public class
+IMUserRestController{
 
     @Autowired
     private IMUserService imUserService;
@@ -68,5 +68,27 @@ public class IMUserRestController{
         IMUser user = imUserService.loginByWechat(wxno, phone, imei);
 
         return new Response<IMUser>("登录成功", user);
+    }
+
+    /**
+     * 销售登录
+     */
+    @RequestMapping(value = "/login/service", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<IMUser> loginByService(HttpServletResponse response, String username, String password){
+        response.setHeader("Access-Control-Allow-Origin", "*");
+
+        IMUser user = imUserService.loginByService(username, password);
+
+        return new Response<IMUser>("登录成功", user);
+    }
+
+    /**
+     * 根据名称查询
+     */
+    @RequestMapping(value = "/name/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<IMUser> getByName(@PathVariable("name") String name){
+        IMUser user = imUserService.getByName(name);
+
+        return new Response<IMUser>("查询成功", user);
     }
 }

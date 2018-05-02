@@ -9,6 +9,8 @@ import org.wah.doraemon.security.response.Page;
 import org.wah.doraemon.security.response.PageRequest;
 import org.wah.doraemon.security.response.Response;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/1.0/service")
 public class ServiceRestController{
@@ -55,5 +57,15 @@ public class ServiceRestController{
         Page<Service> page = serviceService.page(pageRequest, organizationId, wxno, wechatId, name);
 
         return new Response<Page<Service>>("查询成功", page);
+    }
+
+    /**
+     * 根据IM应用ID查询
+     */
+    @RequestMapping(value = "/find/applet/{imAppletId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<List<Service>> findByIMAppletId(@PathVariable("imAppletId") String imAppletId){
+        List<Service> list = serviceService.findByIMAppletId(imAppletId);
+
+        return new Response<List<Service>>("查询成功", list);
     }
 }

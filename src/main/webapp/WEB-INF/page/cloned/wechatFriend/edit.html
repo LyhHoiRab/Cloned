@@ -1,0 +1,44 @@
+<ol class="breadcrumb">
+    <li>
+        <span>系统设置</span>
+    </li><!-- item -->
+    <li>
+        <a ui-sref="wechatFriend">客户管理</a>
+    </li><!-- item -->
+    <li>
+        <span>修改客户</span>
+    </li><!-- item -->
+</ol><!-- 面包屑 -->
+
+<div class="table-info">
+    <div class="container-fluid">
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">客服</span>
+                <select class="form-control" ng-model="wechatFriend.serviceId" ng-options="service.id as service.name for service in services">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="input-group">
+                <span class="input-group-addon">客户昵称</span>
+                <input type="text" class="form-control" placeholder="客户昵称" ng-model="wechatFriend.nickname">
+            </div>
+        </div><!-- item -->
+
+        <div class="row-group">
+            <div class="button-group">
+                <button type="button" class="btn" ng-click="submit()">
+                    <i class="fa fa-check"></i>
+                    提交
+                </button>
+                <button type="button" class="btn" ng-click="reset()">
+                    <i class="fa fa-close"></i>
+                    重置
+                </button>
+            </div>
+        </div><!-- item -->
+    </div><!-- container -->
+</div><!-- table info -->

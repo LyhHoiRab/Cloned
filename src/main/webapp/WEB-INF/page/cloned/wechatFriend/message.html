@@ -1,0 +1,47 @@
+<ol class="breadcrumb">
+    <li>
+        <span>系统设置</span>
+    </li><!-- item -->
+    <li>
+        <a ui-sref="wechatFriend">客户管理</a>
+    </li><!-- item -->
+    <li>
+        <span>聊天记录</span>
+    </li>
+</ol><!-- 面包屑 -->
+
+<div class="search-bar">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">客服</span>
+                    <input type="text" class="form-control" placeholder="客服" ng-model="serviceName">
+                </div>
+            </div><!-- item -->
+        </div>
+    </div><!-- container -->
+
+    <div class="container-fluid">
+        <button type="button" class="btn" ng-click="search()">
+            <i class="fa fa-search"></i>
+            搜索
+        </button><!-- item -->
+
+        <button type="button" class="btn" ng-click="reset()">
+            <i class="fa fa-retweet"></i>
+            重置
+        </button><!-- item -->
+
+        <button type="button" class="btn" ng-click="refresh()">
+            <i class="fa fa-refresh"></i>
+            刷新
+        </button><!-- item -->
+    </div><!-- container -->
+</div><!-- search bar -->
+
+<div class="table-bar">
+    <div clas="container">
+        <div class="gridStyle" ng-grid="gridOptions"></div><!-- table -->
+    </div><!-- container -->
+</div><!-- table bar -->

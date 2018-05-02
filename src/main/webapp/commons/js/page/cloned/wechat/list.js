@@ -1,7 +1,10 @@
-app.controller('wechatList', function($scope, $http, $state, $stateParams){
+app.controller('wechatList', function($scope, $http, $state, $stateParams, $modal){
     //下拉
-    $scope.status    = {};
-    $scope.appStatis = {};
+    $scope.status        = {};
+    $scope.appStatis     = {};
+    $scope.modal         = {};
+    $scope.socket        = '';
+    $scope.modalInstance = '';
     //查询列表
     $scope.organizationId = $stateParams.organizationId;
     $scope.wxno           = '';
@@ -16,19 +19,8 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
     };
 
     //定义方法
-    $scope.login = function(id){
-
-        var socket = new WebSocket('ws://' + location.host + '/socket/1.0/bot?wechatId=' + id);
-        socket.onopen = function(event){
-
-        };
-        socket.onmessage = function(event){
-            console.log(event.data);
-            window.open(event.data);
-        };
-        socket.onclose = function(event){
-            console.log(id + " is closed");
-        };
+    $scope.login = function(id, wxno){
+        $scope.openModal(id, wxno);
     };
 
     $scope.allocation = function(id){
@@ -121,6 +113,94 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
         });
     };
 
+    $scope.resetBot = function(id){
+        $http({
+            url    : '/api/1.0/wechatBot/reset',
+            method : 'POST',
+            params: {
+                'wechatId' : id
+            },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).success(function(res, status, headers, config){
+            if(res.success){
+                alert(res.msg);
+            }else{
+                alert(res.msg);
+            }
+        }).error(function(response){
+            console.error(response);
+        });
+    };
+
+    $scope.openModal = function(id, wxno){
+         $scope.modalInstance = $modal.open({
+            templateUrl : 'modal',
+            backdrop    : 'static',
+            scope       : $scope
+        });
+
+        $scope.modalInstance.result.then(function(){
+            console.log('modal is closed');
+
+            //关闭socket
+            $scope.closeSocket(id);
+        });
+
+        $scope.modalInstance.opened.then(function(){
+            console.log('modal is opened');
+
+            //设置微信号
+            $scope.modal.wxno = wxno;
+            //打开socket
+            $scope.openSocket(id);
+        });
+    };
+
+    $scope.closeModal = function(){
+        $scope.modal.wxno      = '';
+        $scope.modal.qrcodeSrc = '';
+
+        $scope.modalInstance.close('close');
+    };
+
+    $scope.openSocket = function(id){
+        $scope.socket = new WebSocket('ws://' + location.host + '/socket/1.0/bot?wechatId=' + id);
+
+        $scope.socket.onopen = function(event){
+
+        };
+        $scope.socket.onmessage = function(event){
+            $scope.modal.qrcodeSrc = event.data;
+            $scope.$apply();
+        };
+        $scope.socket.onclose = function(event){
+            console.log(id + " is closed");
+        };
+    };
+
+    $scope.closeSocket = function(id){
+        $http({
+            url    : '/api/1.0/wechatBot/close/socket',
+            method : 'POST',
+            params: {
+                'wechatId' : id
+            },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).success(function(res, status, headers, config){
+            if(res.success){
+
+            }else{
+                alert(res.msg);
+            }
+        }).error(function(response){
+            console.error(response);
+        });
+    };
+
     $scope.$watch('pagingOptions', function(newVal, oldVal){
         if(newVal !== oldVal && (newVal.currentPage !== oldVal.currentPage || newVal.pageSize !== oldVal.pageSize)){
             $scope.getData();
@@ -164,10 +244,10 @@ app.controller('wechatList', function($scope, $http, $state, $stateParams){
         },{
             field        : 'lastCheckTime',
             displayName  : '最近一次检测时间',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"yyyy-MM-dd HH:mm:ss"}}</span></div>'
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD | date:"MM-dd HH:mm"}}</span></div>'
         },{
             displayName  : '操作',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="login(row.getProperty(\'id\'))">[登录]</a><a ng-click="allocation(row.getProperty(\'id\'))">[客服]</a><a ng-click="im(row.getProperty(\'id\'))">[绑定IM]</a></span></div>'
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text><a ng-click="edit(row.getProperty(\'id\'))">[修改]</a><a ng-click="login(row.getProperty(\'id\'), row.getProperty(\'wxno\'))">[登录]</a><a ng-click="allocation(row.getProperty(\'id\'))">[客服]</a><a ng-click="im(row.getProperty(\'id\'))">[绑定IM]</a><a ng-click="resetBot(row.getProperty(\'id\'))">[重置]</a></span></div>'
         }]
     };
 

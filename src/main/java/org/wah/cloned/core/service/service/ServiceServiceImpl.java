@@ -124,4 +124,14 @@ public class ServiceServiceImpl implements ServiceService{
 
         return serviceDao.page(pageRequest, organizationId, wxno, wechatId, name);
     }
+
+    /**
+     * 根据IM应用ID查询
+     */
+    @Override
+    public List<org.wah.cloned.core.service.entity.Service> findByIMAppletId(String imAppletId){
+        Assert.notNull("imAppletId", "IM应用ID不能为空");
+
+        return serviceDao.findByIMAppletId(imAppletId);
+    }
 }

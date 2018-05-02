@@ -111,7 +111,7 @@ public class WechatFriendDao{
             Assert.hasText(wechatId, "微信ID不能为空");
 
             Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("wechatId", wechatId));
+            criteria.and(Restrictions.eq("w.wechatId", wechatId));
 
             return mapper.findByParams(criteria);
         }catch(Exception e){
@@ -123,25 +123,34 @@ public class WechatFriendDao{
     /**
      * 分页查询
      */
-    public Page<WechatFriend> page(PageRequest pageRequest, String wechatId, String nickname, String remarkname, Sex sex){
+    public Page<WechatFriend> page(PageRequest pageRequest, String organizationId, String wechatId, String wxno, String serviceName, String nickname, String remarkname, Sex sex){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
             Criteria criteria = new Criteria();
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
-            criteria.sort(Restrictions.asc("createTime"));
+            criteria.sort(Restrictions.asc("w.createTime"));
 
             if(!StringUtils.isBlank(wechatId)){
-                criteria.and(Restrictions.eq("wechatId", wechatId));
+                criteria.and(Restrictions.eq("w.wechatId", wechatId));
             }
             if(!StringUtils.isBlank(nickname)){
-                criteria.and(Restrictions.like("nickname", nickname));
+                criteria.and(Restrictions.like("w.nickname", nickname));
             }
             if(!StringUtils.isBlank(remarkname)){
-                criteria.and(Restrictions.like("remarkname", remarkname));
+                criteria.and(Restrictions.like("w.remarkname", remarkname));
             }
             if(sex != null){
-                criteria.and(Restrictions.eq("sex", sex.getId()));
+                criteria.and(Restrictions.eq("w.sex", sex.getId()));
+            }
+            if(!StringUtils.isBlank(serviceName)){
+                criteria.and(Restrictions.like("s.name", serviceName));
+            }
+            if(!StringUtils.isBlank(organizationId)){
+                criteria.and(Restrictions.eq("we.organizationId", organizationId));
+            }
+            if(!StringUtils.isBlank(wxno)){
+                criteria.and(Restrictions.like("we.wxno", wxno));
             }
 
             List<WechatFriend> list = mapper.findByParams(criteria);

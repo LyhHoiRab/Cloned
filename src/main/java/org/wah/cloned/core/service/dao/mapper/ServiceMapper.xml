@@ -237,6 +237,16 @@
         </if>
     </select>
 
+    <select id="findByOrganizationId" resultMap="service">
+        SELECT s.*
+          FROM service s
+     LEFT JOIN wechat w
+            ON s.wechat_id = w.id
+     LEFT JOIN organization o
+            ON o.id = w.organization_id
+         WHERE o.id = #{organizationId}
+    </select>
+
     <select id="countByParams" resultType="java.lang.Long">
         SELECT COUNT(*)
           FROM service s
@@ -245,5 +255,13 @@
         <if test="params != null">
             <include refid="WHERE_COLUMN"/>
         </if>
+    </select>
+
+    <select id="findByIMAppletId" resultMap="service">
+        SELECT s.*
+          FROM service s
+     LEFT JOIN tencent_im_user u
+            ON u.name = s.id
+         WHERE u.applet_id = #{imAppletId}
     </select>
 </mapper>

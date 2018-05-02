@@ -31,7 +31,16 @@ public enum MessageType{
     TRANSFER(6, "转账"),
 
     @SerializedName("7")
-    VIDEO(7, "视频");
+    VIDEO(7, "视频"),
+
+    @SerializedName("8")
+    NEW_FRIEND(8, "新好友"),
+
+    @SerializedName("9")
+    NOT_FRIEND(9, "非好友"),
+
+    @SerializedName("10")
+    GET_WXNO(10, "查询微信号");
 
     @Getter
     private int id;

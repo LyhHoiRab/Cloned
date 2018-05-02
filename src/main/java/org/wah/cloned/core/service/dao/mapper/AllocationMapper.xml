@@ -17,7 +17,6 @@
     <resultMap id="service" type="org.wah.cloned.core.service.entity.Service">
         <id     column="id"           property="id"         javaType="java.lang.String"/>
         <result column="wechat_id"    property="wechatId"   javaType="java.lang.String"/>
-        <result column="account_id"   property="accountId"  javaType="java.lang.String"/>
         <result column="name"         property="name"       javaType="java.lang.String"/>
         <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
     </resultMap>
@@ -222,7 +221,6 @@
                s.id           AS s_id,
                s.name         AS s_name,
                s.wechat_id    AS s_wechat_id,
-               s.account_id   AS s_account_id,
                s.head_img_url AS s_head_img_url
           FROM allocation a
      LEFT JOIN service s
@@ -250,7 +248,7 @@
          </if>
     </select>
 
-    <select id="countByParams" resultType="java.lang.Long">
+    <select id="countByParams" resultType="java.lang.Long" >
         SELECT COUNT(*)
           FROM allocation a
      LEFT JOIN service s

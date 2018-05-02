@@ -81,7 +81,7 @@
       <ref bean="updateAppStatusByTimeoutTask"/>
     </property>
     <property name="targetMethod" value="execute"/>
-    <property name="concurrent" value="false"/>
+    <property name="concurrent" value="true"/>
   </bean>
 
   <bean id="updateAppStatusByTimeoutTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">

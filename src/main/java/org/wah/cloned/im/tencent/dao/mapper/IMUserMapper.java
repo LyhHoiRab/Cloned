@@ -50,4 +50,9 @@ public interface IMUserMapper{
      * 根据微信号查询微信查询
      */
     IMUser getWechatByWxno(@Param("wxno") String wxno, @Param("role") IMRole role);
+
+    /**
+     * 根据账号和密码查询客服
+     */
+    IMUser getServiceByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 }

@@ -342,5 +342,66 @@ app.config(['$controllerProvider', '$compileProvider', '$filterProvider', '$prov
                 ]);
             }]
         }
+    }).state('wechatFriend', {
+        url         : '/wechatFriend',
+        templateUrl : '/page/cloned/wechatFriend',
+        controller  : 'wechatFriend',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/wechatFriend/index.js'
+                ]);
+            }]
+        }
+    }).state('wechatFriend.list', {
+        url         : '/list/:organizationId',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechatFriend/list/' + $stateParams.organizationId;
+        },
+        controller  : 'wechatFriendList',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/wechatFriend/list.js'
+                ]);
+            }]
+        }
+    }).state('wechatFriendEdit', {
+        url         : '/wechatFriendEdit/:id',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechatFriend/' + $stateParams.id;
+        },
+        controller  : 'wechatFriendEdit',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/utils.js',
+                    basePath + '/commons/js/plugin/json2/json2.js',
+                    basePath + '/commons/js/plugin/md5/md5.js',
+                    basePath + '/commons/js/page/cloned/wechatFriend/edit.js'
+                ]);
+            }]
+        }
+    }).state('message', {
+        url         : '/message/:remarkname',
+        templateUrl : function($stateParams){
+            return '/page/cloned/wechatFriend/message/' + $stateParams.remarkname;
+        },
+        controller  : 'messageList',
+        resolve     : {
+            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                return $ocLazyLoad.load([
+                    basePath + '/commons/js/plugin/angular-grid/ng-grid.min.css',
+                    basePath + '/commons/js/plugin/angular-grid/theme.css',
+                    basePath + '/commons/css/page/cloned/common.css',
+                    basePath + '/commons/js/page/cloned/wechatFriend/message.js'
+                ]);
+            }]
+        }
     });
 }]);

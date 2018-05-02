@@ -120,7 +120,9 @@ public class IMAppletServiceImpl implements IMAppletService{
         IMUtils.openLogin(admin.getSig(), admin.getAppId(), admin.getName(), wechatUser);
         //客服IM
         List<IMUser> services = imUserDao.findServiceByAppletId(applet.getId());
-        //创建关系
-        IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), wechatUser, services);
+        if(services != null && !services.isEmpty()){
+            //创建关系
+            IMUtils.friendAdd(admin.getSig(), admin.getAppId(), admin.getName(), wechatUser, services);
+        }
     }
 }
